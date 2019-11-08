@@ -1,0 +1,20 @@
+server:
+  port: 9751
+
+spring:
+  application:
+    name: orderService
+
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: configCenter
+
+  profiles:
+    active: local
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6751/eureka/

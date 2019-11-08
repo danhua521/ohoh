@@ -1,0 +1,11 @@
+server:
+  port: 6751
+
+eureka:
+  instance:
+    hostname: registerCenter
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/

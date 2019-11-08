@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: configCenter
+
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/shared
+  profiles:
+    active: native #表明配置中心使用本地文件，而非从git获取
+
+server:
+  port: 7751
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:6751/eureka/
