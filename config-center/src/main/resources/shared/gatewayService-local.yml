@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true #开启基于注册中心的路由表。gateway可以通过开启以下配置来打开根据服务的serviceId来匹配路由,默认是大写
+          lower-case-service-id: true #如果需要小写serviceId
+      routes:
+      - id: userService
+        uri: lb://userService
+        predicates:
+        - Path=/api/user/**
+        filters:
+        - StripPrefix=2
+
+      - id: orderService
+        uri: lb://orderService
+        predicates:
+        - Path=/api/order/**
+        filters:
+        - StripPrefix=2
