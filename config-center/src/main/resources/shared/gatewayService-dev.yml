@@ -10,6 +10,7 @@ spring:
           uri: lb://userService
           predicates:
             - Path=/api/user/**
+            - Method=POST
           filters:
             - StripPrefix=2
 
@@ -17,5 +18,6 @@ spring:
           uri: lb://orderService
           predicates:
             - Path=/api/order/**
+            - Method=POST
           filters:
             - StripPrefix=2

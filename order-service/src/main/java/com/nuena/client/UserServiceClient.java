@@ -18,4 +18,7 @@ public interface UserServiceClient {
     @PostMapping("/userInfo/getUsersListByIds")
     List<Users> getUsersListByIds(@RequestBody List<String> ids);
 
+    @PostMapping("/userInfo/addUser")
+    String addUser(@RequestBody Users users);
+
 }
