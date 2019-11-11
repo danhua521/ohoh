@@ -17,4 +17,8 @@ public class UserServiceClientImpl implements UserServiceClient {
         return null;
     }
 
+    @Override
+    public String addUser(Users users) {
+        return null;
+    }
 }
