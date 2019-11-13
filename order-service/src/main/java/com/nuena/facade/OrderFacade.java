@@ -13,7 +13,6 @@ import com.nuena.vo.OrderListPageVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -60,7 +59,6 @@ public class OrderFacade extends OrderServiceImpl {
         return orderListPageDTOIPage;
     }
 
-    @Transactional
     @PostMapping("/add")
     public String add(@RequestBody Order order){
         save(order);
@@ -68,6 +66,11 @@ public class OrderFacade extends OrderServiceImpl {
         Users users = new Users();
         users.setWxName(order.getAddress());
         String ss = userServiceClient.addUser(users);
+
+        String sss = null;
+        if(sss.equals("")){
+            System.out.println(11);
+        }
 
         return order.getOrderUuid()+"--"+ss;
     }

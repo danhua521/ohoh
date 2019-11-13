@@ -2,11 +2,13 @@ package com.nuena.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.nuena.dto.OrderListPageDTO;
 import com.nuena.entity.Order;
 import com.nuena.facade.OrderFacade;
 import com.nuena.vo.OrderListPageVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,8 @@ public class OrderInfoController {
         return orderFacade.listPage(orderListPageVO);
     }
 
+    @LcnTransaction
+    @Transactional
     @PostMapping("/add")
     public String add(@RequestBody Order order) {
         return orderFacade.add(order);

@@ -1,5 +1,6 @@
 package com.nuena;
 
+import com.codingapi.txlcn.tc.config.EnableDistributedTransaction;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableEurekaClient
 @EnableFeignClients
+@EnableDistributedTransaction
 @MapperScan("com.nuena.mapper")
 public class UserServiceApplication {
 

@@ -1,6 +1,7 @@
 package com.nuena.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.nuena.entity.Users;
 import com.nuena.facade.UsersFacade;
 import com.nuena.vo.UserInfoListPageVO;
@@ -38,6 +39,7 @@ public class UserInfoController {
         return usersFacade.getUsersListByIds(ids);
     }
 
+    @LcnTransaction
     @Transactional
     @PostMapping("/addUser")
     public String addUser(@RequestBody Users users){

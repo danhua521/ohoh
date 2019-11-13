@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>tx-manager</module>
         <module>common</module>
         <module>register-center</module>
         <module>config-center</module>
@@ -38,6 +39,8 @@
         <beetl.version>3.0.13.RELEASE</beetl.version>
         <lombok.version>1.18.8</lombok.version>
         <guava.version>28.1-jre</guava.version>
+        <txlcn-tc.version>5.0.2.RELEASE</txlcn-tc.version>
+        <txlcn-txmsg-netty.version>5.0.2.RELEASE</txlcn-txmsg-netty.version>
     </properties>
 
     <dependencyManagement>
@@ -102,6 +105,18 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
                 <optional>true</optional>
+            </dependency>
+
+            <!-- 分布式事务框架 tx-lcn -->
+            <dependency>
+                <groupId>com.codingapi.txlcn</groupId>
+                <artifactId>txlcn-tc</artifactId>
+                <version>${txlcn-tc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.codingapi.txlcn</groupId>
+                <artifactId>txlcn-txmsg-netty</artifactId>
+                <version>${txlcn-txmsg-netty.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

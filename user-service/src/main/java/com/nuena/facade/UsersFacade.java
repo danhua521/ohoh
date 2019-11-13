@@ -37,11 +37,6 @@ public class UsersFacade extends UsersServiceImpl {
 
     public String addUser(Users users){
         this.save(users);
-        String ss = null;
-        if(ss.equals("")){
-            System.out.println(11);
-        }
-
         return users.getUsersUuid();
     }
 
