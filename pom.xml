@@ -41,6 +41,8 @@
         <guava.version>28.1-jre</guava.version>
         <txlcn-tc.version>5.0.2.RELEASE</txlcn-tc.version>
         <txlcn-txmsg-netty.version>5.0.2.RELEASE</txlcn-txmsg-netty.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
     </properties>
 
     <dependencyManagement>
@@ -117,6 +119,18 @@
                 <groupId>com.codingapi.txlcn</groupId>
                 <artifactId>txlcn-txmsg-netty</artifactId>
                 <version>${txlcn-txmsg-netty.version}</version>
+            </dependency>
+
+            <!-- swagger2 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger-ui.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
