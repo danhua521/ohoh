@@ -1,6 +1,7 @@
 package com.nuena.config;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,6 +22,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    @Value("${swagger.title}")
+    private String swaggerTitle;
+    @Value("${swagger.des}")
+    private String swaggerDes;
+    @Value("${swagger.version}")
+    private String swaggerVersion;
+
     @Bean
     public Docket createRestApi() {
 
@@ -34,11 +42,11 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("小计 API")
-                .description("test")
+                .title(swaggerTitle)
+                .description(swaggerDes)
                 .termsOfServiceUrl("")
                 .contact(new Contact("wd", "", ""))
-                .version("2.0")
+                .version(swaggerVersion)
                 .build();
     }
 

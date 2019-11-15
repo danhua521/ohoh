@@ -26,3 +26,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.nuena.entity
+
+swagger.title: 用户服务
+swagger.des: 用户相关业务
+swagger.version: 0.0.1-SNAPSHOT

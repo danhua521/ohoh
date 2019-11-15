@@ -28,3 +28,7 @@ mybatis-plus:
   type-aliases-package: com.nuena.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+swagger.title: 订单服务
+swagger.des: 订单相关业务
+swagger.version: 0.0.1-SNAPSHOT

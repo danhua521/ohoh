@@ -38,6 +38,7 @@ public class UserInfoController {
         return usersFacade.listPage(userInfoListPageVO);
     }
 
+    @ApiOperation("根据id获取用户")
     @PostMapping("/getUsersListByIds")
     public List<Users> getUsersListByIds(@RequestBody List<String> ids){
         return usersFacade.getUsersListByIds(ids);
@@ -45,6 +46,7 @@ public class UserInfoController {
 
     @LcnTransaction
     @Transactional
+    @ApiOperation("添加用户")
     @PostMapping("/addUser")
     public String addUser(@RequestBody Users users){
         return usersFacade.addUser(users);
