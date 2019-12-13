@@ -3,30 +3,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.nuena</groupId>
-        <artifactId>ohoh</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-
+    <groupId>com.nuena</groupId>
     <artifactId>common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>common</name>
     <packaging>jar</packaging>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <guava.version>28.1-jre</guava.version>
+        <mybatis-plus-boot-starter.version>3.2.0</mybatis-plus-boot-starter.version>
+
+    </properties>
+
+
     <dependencies>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-        </dependency>
+
     </dependencies>
 
 </project>

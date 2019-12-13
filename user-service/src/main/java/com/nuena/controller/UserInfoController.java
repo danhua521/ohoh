@@ -5,8 +5,6 @@ import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.nuena.entity.Users;
 import com.nuena.facade.UsersFacade;
 import com.nuena.vo.UserInfoListPageVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +22,6 @@ import java.util.List;
  * @author rgb
  * @since 2019-11-06
  */
-@Api("用户信息")
 @RestController
 @RequestMapping("/userInfo")
 public class UserInfoController {
@@ -32,13 +29,13 @@ public class UserInfoController {
     @Autowired
     private UsersFacade usersFacade;
 
-    @ApiOperation("列表")
+//    @ApiOperation("列表")
     @PostMapping("/listPage")
     public IPage<Users> listPage(@RequestBody UserInfoListPageVO userInfoListPageVO){
         return usersFacade.listPage(userInfoListPageVO);
     }
 
-    @ApiOperation("根据id获取用户")
+//    @ApiOperation("根据id获取用户")
     @PostMapping("/getUsersListByIds")
     public List<Users> getUsersListByIds(@RequestBody List<String> ids){
         return usersFacade.getUsersListByIds(ids);
@@ -46,7 +43,7 @@ public class UserInfoController {
 
     @LcnTransaction
     @Transactional
-    @ApiOperation("添加用户")
+//    @ApiOperation("添加用户")
     @PostMapping("/addUser")
     public String addUser(@RequestBody Users users){
         return usersFacade.addUser(users);
