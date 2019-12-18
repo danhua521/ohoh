@@ -12,6 +12,7 @@ spring:
             - Path=/api/user/**
             - Method=POST
           filters:
+            - SwaggerHeaderFilter
             - StripPrefix=2
 
         - id: orderService
@@ -20,4 +21,5 @@ spring:
             - Path=/api/order/**
             - Method=POST
           filters:
+            - SwaggerHeaderFilter
             - StripPrefix=2

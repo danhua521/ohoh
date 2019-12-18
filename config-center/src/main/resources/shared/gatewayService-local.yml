@@ -6,18 +6,20 @@ spring:
           enabled: true #开启基于注册中心的路由表。gateway可以通过开启以下配置来打开根据服务的serviceId来匹配路由,默认是大写
           lower-case-service-id: true #如果需要小写serviceId
       routes:
-      - id: userService
-        uri: lb://userService
-        predicates:
-        - Path=/api/user/**
-        - Method=POST
-        filters:
-        - StripPrefix=2
+        - id: userService
+          uri: lb://userService
+          predicates:
+            - Path=/api/user/**
+          # - Method=POST  swagger文档 /v2/api-docs 是get方式，此处如果打开，get会被拒绝，404
+          filters:
+            - SwaggerHeaderFilter
+            - StripPrefix=2
 
-      - id: orderService
-        uri: lb://orderService
-        predicates:
-        - Path=/api/order/**
-        - Method=POST
-        filters:
-        - StripPrefix=2
+        - id: orderService
+          uri: lb://orderService
+          predicates:
+            - Path=/api/order/**
+          # - Method=POST
+          filters:
+            - SwaggerHeaderFilter
+            - StripPrefix=2

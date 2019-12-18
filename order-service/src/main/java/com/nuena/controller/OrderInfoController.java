@@ -7,6 +7,8 @@ import com.nuena.dto.OrderListPageDTO;
 import com.nuena.entity.Order;
 import com.nuena.facade.OrderFacade;
 import com.nuena.vo.OrderListPageVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author rgb
  * @since 2019-11-07
  */
-//@Api
+@Api("订单控制层")
 @RestController
 @RequestMapping("/orderInfo")
 public class OrderInfoController {
@@ -30,13 +32,13 @@ public class OrderInfoController {
     @Autowired
     private OrderFacade orderFacade;
 
-//    @ApiOperation("列表")
+    @ApiOperation("列表")
     @PostMapping("/listPage")
     public IPage<OrderListPageDTO> listPage(@RequestBody OrderListPageVO orderListPageVO) {
         return orderFacade.listPage(orderListPageVO);
     }
 
-//    @ApiOperation("添加订单")
+    @ApiOperation("添加订单")
     @LcnTransaction
     @Transactional
     @PostMapping("/add")
