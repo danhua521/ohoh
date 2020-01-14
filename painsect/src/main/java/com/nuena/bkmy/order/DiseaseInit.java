@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -33,6 +34,8 @@ import java.util.stream.Collectors;
 @Component
 public class DiseaseInit implements ApplicationRunner {
 
+    @Value("${disease.entry.insect.finished}")
+    private boolean disease_entry_insect_finished;
     @Autowired
     @Qualifier("diseaseInfoServiceImpl")
     private DiseaseInfoServiceImpl diseaseInfoService;
@@ -41,6 +44,9 @@ public class DiseaseInit implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        if (disease_entry_insect_finished){
+            return;
+        }
         initData();
     }
 

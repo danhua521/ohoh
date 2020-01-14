@@ -50,5 +50,8 @@ public class DiseaseInfo implements Serializable {
     @TableField("create_time")
     private Date createTime;
 
+    @TableField("remark")
+    private String remark;
+
 
 }

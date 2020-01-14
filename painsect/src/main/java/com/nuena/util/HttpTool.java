@@ -170,12 +170,14 @@ public class HttpTool {
                 if (requestConfig != null) {
                     httpGet.setConfig(requestConfig);
                 }
+                httpGet.addHeader("x-forwarded-for", "183.166.110.166");
                 response = httpClient.execute(httpGet);
             } else if (askType.equals("POST")) {
                 HttpPost httpPost = new HttpPost(url);
                 if (requestConfig != null) {
                     httpPost.setConfig(requestConfig);
                 }
+                httpPost.addHeader("x-forwarded-for", "183.166.110.166");
                 response = httpClient.execute(httpPost);
             }
             HttpEntity responseEntity = response.getEntity();

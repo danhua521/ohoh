@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @Description:
@@ -19,14 +20,14 @@ public class MyTest {
 
     public static void main(String[] args) throws Exception {
 
-        //        String html = HttpTool.get("https://www.baikemy.com/disease/list/0/0?diseaseContentType=A", "utf-8",
-        //                "49.77.210.81", 9999);
-        ////        String html = HttpTool.post("https://www.baikemy.com/disease/detail/1012");
-        //        Document doc = Jsoup.parse(html);
-        //        System.out.println(html);
-        //        System.out.println(doc.getElementsByClass("detail_name").text());
-
-        jbymsjpq();
+//                String html = HttpTool.get("https://www.baikemy.com/disease/detail/1012");
+//        //        String html = HttpTool.post("https://www.baikemy.com/disease/detail/1012");
+//                Document doc = Jsoup.parse(html);
+//                System.out.println(html);
+//                System.out.println(doc.getElementsByClass("detail_name").text());
+        Random rd = new Random();
+        System.out.println(rd.nextInt(10));
+//        jbymsjpq();
 
     }
 
