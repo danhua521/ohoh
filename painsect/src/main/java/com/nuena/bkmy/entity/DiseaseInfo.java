@@ -41,6 +41,12 @@ public class DiseaseInfo implements Serializable {
     @TableField("dis_name")
     private String disName;
 
+    /**
+     * 百科名医网-疾病url
+     */
+    @TableField("dis_url")
+    private String disUrl;
+
     @TableField("create_time")
     private Date createTime;
 
