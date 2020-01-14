@@ -1,5 +1,6 @@
 package com.nuena.bkmy.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,7 +12,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 百科名医网-疾病信息表
  * </p>
  *
  * @author rgb
@@ -20,21 +21,25 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class MybkDiseaseRawData implements Serializable {
+@TableName("mybk_disease_info")
+public class DiseaseInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    /**
+     * 百科名医网-疾病id
+     */
+    @TableField("dis_id")
+    private String disId;
+
+    /**
+     * 百科名医网-疾病名称
+     */
     @TableField("dis_name")
     private String disName;
-
-    @TableField("dis_url")
-    private String disUrl;
-
-    @TableField("dis_html")
-    private String disHtml;
 
     @TableField("create_time")
     private Date createTime;

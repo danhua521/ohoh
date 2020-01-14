@@ -1,16 +1,16 @@
 package com.nuena.bkmy.service;
 
-import com.nuena.bkmy.entity.MybkDiseaseRawData;
+import com.nuena.bkmy.entity.DiseaseInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 百科名医网-疾病信息表 服务类
  * </p>
  *
  * @author rgb
  * @since 2020-01-14
  */
-public interface MybkDiseaseRawDataService extends IService<MybkDiseaseRawData> {
+public interface DiseaseInfoService extends IService<DiseaseInfo> {
 
 }

@@ -24,7 +24,7 @@ spring:
       use-global-data-source-stat: true
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath*:mapper/bkmy/*.xml
   type-aliases-package: com.nuena.bkmy.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

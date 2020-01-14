@@ -70,7 +70,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
-                return projectPath + "/src/main/resources/mapper/"
+                return projectPath + "/src/main/resources/mapper/bkmy/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -86,8 +86,8 @@ public class CodeGenerator {
         strategy.setEntityTableFieldAnnotationEnable(true);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix("t_");
-        strategy.setInclude("mybk_disease_raw_data");
+        strategy.setTablePrefix("mybk_");
+        strategy.setInclude("mybk_disease_raw_data", "mybk_disease_info");
         mpg.setStrategy(strategy);
 
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());

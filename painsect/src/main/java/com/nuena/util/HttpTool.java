@@ -159,8 +159,8 @@ public class HttpTool {
             if (StringUtil.isNotBlank(proxyIp) && proxyPort != null) {
                 HttpHost httpHost = new HttpHost(proxyIp, proxyPort);
                 requestConfig = RequestConfig.custom()
-                        .setConnectTimeout(1000000)//设置连接超时时间,单位毫秒
-                        .setSocketTimeout(1000000)//设置读取超时时间,单位毫秒
+                        .setConnectTimeout(10000)//设置连接超时时间,单位毫秒
+                        .setSocketTimeout(10000)//设置读取超时时间,单位毫秒
                         .setProxy(httpHost)//设置代理
                         .build();
             }
