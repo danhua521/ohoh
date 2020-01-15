@@ -87,7 +87,13 @@ public class CodeGenerator {
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("mybk_");
-        strategy.setInclude("mybk_disease_raw_data", "mybk_disease_info", "mybk_dept_info");
+        strategy.setInclude(
+                "mybk_disease_raw_data",
+                "mybk_disease_info",
+                "mybk_dept_info",
+                "mybk_symptom_info",
+                "mybk_symptom_raw_data"
+        );
         mpg.setStrategy(strategy);
 
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 百科名医网 服务实现类
+ * 百科名医网-疾病html表 服务实现类
  * </p>
  *
  * @author rgb
