@@ -41,3 +41,5 @@ disease.html.insect.finished: true
 dept.insect.finished: true
 ##症状条目爬取是否完成
 symptom.entry.insect.finished: true
+##症状html爬取是否完成
+symptom.html.insect.finished: false
