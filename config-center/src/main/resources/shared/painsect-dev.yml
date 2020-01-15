@@ -40,4 +40,8 @@ dept.insect.finished: true
 ##症状条目爬取是否完成
 symptom.entry.insect.finished: true
 ##症状html爬取是否完成
-symptom.html.insect.finished: false
+symptom.html.insect.finished: true
+##检查条目爬取是否完成
+examine.entry.insect.finished: false
+##检查html爬取是否完成
+examine.html.insect.finished: false
