@@ -1,16 +1,16 @@
 package com.nuena.bkmy.mapper;
 
-import com.nuena.bkmy.entity.DiseaseRawData;
+import com.nuena.bkmy.entity.DeptInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 百科名医网 Mapper 接口
+ * 百科名医网-科室信息表 Mapper 接口
  * </p>
  *
  * @author rgb
  * @since 2020-01-15
  */
-public interface DiseaseRawDataMapper extends BaseMapper<DiseaseRawData> {
+public interface DeptInfoMapper extends BaseMapper<DeptInfo> {
 
 }

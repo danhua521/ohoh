@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 百科名医网-疾病信息表
+ * 百科名医网-科室信息表
  * </p>
  *
  * @author rgb
@@ -21,8 +21,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("mybk_disease_info")
-public class DiseaseInfo implements Serializable {
+@TableName("mybk_dept_info")
+public class DeptInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,22 +30,28 @@ public class DiseaseInfo implements Serializable {
     private Long id;
 
     /**
-     * 百科名医网-疾病id
+     * 百科名医网-科室id
      */
-    @TableField("dis_id")
-    private String disId;
+    @TableField("dept_id")
+    private String deptId;
 
     /**
-     * 百科名医网-疾病名称
+     * 百科名医网-科室名称
      */
-    @TableField("dis_name")
-    private String disName;
+    @TableField("dept_name")
+    private String deptName;
 
     /**
-     * 百科名医网-疾病url
+     * 百科名医网-父科室id
      */
-    @TableField("dis_url")
-    private String disUrl;
+    @TableField("parent_dept_id")
+    private String parentDeptId;
+
+    /**
+     * 百科名医网-父科室名称
+     */
+    @TableField("parent_dept_name")
+    private String parentDeptName;
 
     @TableField("create_time")
     private Date createTime;

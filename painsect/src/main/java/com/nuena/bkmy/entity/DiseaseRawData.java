@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-01-14
+ * @since 2020-01-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -55,6 +55,9 @@ public class DiseaseRawData implements Serializable {
 
     @TableField("create_time")
     private Date createTime;
+
+    @TableField("remark")
+    private String remark;
 
 
 }

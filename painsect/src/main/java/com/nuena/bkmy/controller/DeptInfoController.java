@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 百科名医网 前端控制器
+ * 百科名医网-科室信息表 前端控制器
  * </p>
  *
  * @author rgb
  * @since 2020-01-15
  */
 @RestController
-@RequestMapping("/disease-raw-data")
-public class DiseaseRawDataController {
+@RequestMapping("/dept-info")
+public class DeptInfoController {
 
 }

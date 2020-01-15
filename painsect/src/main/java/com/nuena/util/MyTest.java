@@ -20,15 +20,15 @@ public class MyTest {
 
     public static void main(String[] args) throws Exception {
 
-//                String html = HttpTool.get("https://www.baikemy.com/disease/detail/1012");
+                String html = HttpTool.post("https://www.baikemy.com/disease/department/list/13","utf-8");
 //        //        String html = HttpTool.post("https://www.baikemy.com/disease/detail/1012");
 //                Document doc = Jsoup.parse(html);
 //                System.out.println(html);
 //                System.out.println(doc.getElementsByClass("detail_name").text());
-        Random rd = new Random();
-        System.out.println(rd.nextInt(10));
+//        Random rd = new Random();
+//        System.out.println(rd.nextInt(10));
 //        jbymsjpq();
-
+        System.out.println(html);
     }
 
     /**
