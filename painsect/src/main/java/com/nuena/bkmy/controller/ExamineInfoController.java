@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author rgb
- * @since 2020-01-15
+ * @since 2020-01-16
  */
 @RestController
 @RequestMapping("/examine-info")

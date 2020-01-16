@@ -26,7 +26,7 @@ import java.util.List;
  * @author: rengb
  * @time: 2020/1/14 15:45
  */
-@Order(1)
+@Order(6)
 @Component
 public class SymptomInit implements ApplicationRunner {
 

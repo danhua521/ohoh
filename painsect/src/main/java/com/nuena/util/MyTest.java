@@ -1,6 +1,7 @@
 package com.nuena.util;
 
 import com.google.common.collect.Lists;
+import com.nuena.bkmy.entity.DeptInfo;
 import com.nuena.bkmy.entity.DiseaseInfo;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +21,7 @@ public class MyTest {
 
     public static void main(String[] args) throws Exception {
 
-                String html = HttpTool.post("https://www.baikemy.com/disease/department/list/13","utf-8");
+//                String html = HttpTool.post("https://www.baikemy.com/disease/list/0/0?diseaseContentType=A");
 //        //        String html = HttpTool.post("https://www.baikemy.com/disease/detail/1012");
 //                Document doc = Jsoup.parse(html);
 //                System.out.println(html);
@@ -28,7 +29,15 @@ public class MyTest {
 //        Random rd = new Random();
 //        System.out.println(rd.nextInt(10));
 //        jbymsjpq();
-        System.out.println(html);
+//        System.out.println(html);
+        List<String> deptInfoList = Lists.newArrayList();
+        deptInfoList.add("rgb");
+        deptInfoList.add("yyk");
+        deptInfoList.add(0,"cs");
+
+        System.out.println(deptInfoList);
+
+
     }
 
     /**

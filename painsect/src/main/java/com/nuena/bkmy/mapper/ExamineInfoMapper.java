@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rgb
- * @since 2020-01-15
+ * @since 2020-01-16
  */
 public interface ExamineInfoMapper extends BaseMapper<ExamineInfo> {
 

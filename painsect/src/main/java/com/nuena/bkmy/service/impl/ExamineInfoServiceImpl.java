@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author rgb
- * @since 2020-01-15
+ * @since 2020-01-16
  */
 @Service
 public class ExamineInfoServiceImpl extends ServiceImpl<ExamineInfoMapper, ExamineInfo> implements ExamineInfoService {

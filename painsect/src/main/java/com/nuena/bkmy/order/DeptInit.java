@@ -7,6 +7,8 @@ import com.nuena.bkmy.entity.DeptInfo;
 import com.nuena.bkmy.facade.DeptInfoFacade;
 import com.nuena.bkmy.service.impl.DeptInfoServiceImpl;
 import com.nuena.util.HttpTool;
+import com.nuena.util.ListUtil;
+import com.nuena.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @Description:
@@ -39,6 +42,7 @@ public class DeptInit implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+//        System.out.println(ResourceUtils.getURL("classpath:").getPath());
         if (dept_insect_finished) {
             return;
         }
@@ -49,31 +53,71 @@ public class DeptInit implements ApplicationRunner {
      * 初始化，插入科室信息
      */
     private void initData() {
-        List<DeptInfo> saveDeptInfoList = Lists.newArrayList();
+        QueryWrapper<DeptInfo> deptInfoQe = new QueryWrapper<>();
+        deptInfoFacade.remove(deptInfoQe);
 
-        QueryWrapper<DeptInfo> deptInfoQe1 = new QueryWrapper<>();
-        deptInfoQe1.isNotNull("parent_dept_id");
-        deptInfoFacade.remove(deptInfoQe1);
+        DeptInfo deptInfo = new DeptInfo();
+        deptInfo.setDeptId("0");
+        deptInfo.setDeptName("全部");
+        deptInfo.setCreateTime(new Date());
 
-        QueryWrapper<DeptInfo> deptInfoQe2 = new QueryWrapper<>();
-        deptInfoQe2.isNull("parent_dept_id");
-        List<DeptInfo> parentDepts = deptInfoFacade.list(deptInfoQe2);
-        parentDepts.forEach(parentDept -> {
-            String deptDataJson = HttpTool.post("https://www.baikemy.com/disease/department/list/" + parentDept.getDeptId(), "utf-8");
+        List<DeptInfo> saveDeptInfoList = searchDept(deptInfo, new Random());
+        saveDeptInfoList.add(0, deptInfo);
+
+        deptInfoService.saveBatch(saveDeptInfoList);
+    }
+
+    /**
+     * 递归挖取科室目录
+     *
+     * @param deptInfo
+     * @param rd
+     * @return
+     */
+    private List<DeptInfo> searchDept(DeptInfo deptInfo, Random rd) {
+        List<DeptInfo> ret = Lists.newArrayList();
+
+        List<DeptInfo> sonDeptList = getSonDeptByParDept(deptInfo, rd);
+        if (ListUtil.isNotEmpty(sonDeptList)) {
+            sonDeptList.forEach(sonDept -> {
+                ret.addAll(searchDept(sonDept, rd));
+            });
+            ret.addAll(sonDeptList);
+        }
+
+        return ret;
+    }
+
+    /**
+     * 根据父级部门获取子级部门
+     *
+     * @param deptInfo
+     * @param rd
+     * @return
+     */
+    private List<DeptInfo> getSonDeptByParDept(DeptInfo deptInfo, Random rd) {
+        try {
+            Thread.sleep(1000 * rd.nextInt(8) + 2000);
+        } catch (Exception e) {
+        }
+
+        List<DeptInfo> deptInfoList = Lists.newArrayList();
+        String deptDataJson = HttpTool.post("https://www.baikemy.com/disease/department/list/" + deptInfo.getDeptId(), "utf-8");
+        System.out.println(deptDataJson);
+        if (StringUtil.isNotBlank(deptDataJson)) {
             Map<String, Object> msgMap = (Map) JSON.parse(deptDataJson);
             List<Map<String, Object>> mapList = (List<Map<String, Object>>) msgMap.get("data");
             mapList.forEach(map -> {
-                DeptInfo deptInfo = new DeptInfo();
-                deptInfo.setDeptId(map.get("dId").toString());
-                deptInfo.setDeptName(map.get("name").toString());
-                deptInfo.setParentDeptId(parentDept.getDeptId());
-                deptInfo.setParentDeptName(parentDept.getDeptName());
-                deptInfo.setCreateTime(new Date());
-                saveDeptInfoList.add(deptInfo);
+                DeptInfo sonDeptInfo = new DeptInfo();
+                sonDeptInfo.setDeptId(map.get("dId").toString());
+                sonDeptInfo.setDeptName(map.get("name").toString());
+                sonDeptInfo.setParentDeptId(deptInfo.getDeptId());
+                sonDeptInfo.setParentDeptName(deptInfo.getDeptName());
+                sonDeptInfo.setCreateTime(new Date());
+                deptInfoList.add(sonDeptInfo);
             });
-        });
-
-        deptInfoService.saveBatch(saveDeptInfoList);
+        }
+        return deptInfoList;
     }
 
 }

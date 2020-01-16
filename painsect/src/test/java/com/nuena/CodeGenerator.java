@@ -94,7 +94,13 @@ public class CodeGenerator {
                 "mybk_symptom_info",
                 "mybk_symptom_raw_data",
                 "mybk_examine_info",
-                "mybk_examine_raw_data"
+                "mybk_examine_raw_data",
+                "mybk_prevent_info",
+                "mybk_prevent_raw_data",
+                "mybk_nurse_info",
+                "mybk_nurse_raw_data",
+                "mybk_treat_info",
+                "mybk_treat_raw_data"
         );
         mpg.setStrategy(strategy);
 

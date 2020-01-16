@@ -23,7 +23,7 @@ import java.util.Random;
  * @author: rengb
  * @time: 2020/1/14 15:45
  */
-@Order(2)
+@Order(5)
 @Component
 public class ExamineHtmlInit implements ApplicationRunner {
 

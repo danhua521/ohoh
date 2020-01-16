@@ -8,6 +8,8 @@ import com.nuena.bkmy.entity.DiseaseInfo;
 import com.nuena.bkmy.facade.DiseaseInfoFacade;
 import com.nuena.bkmy.service.impl.DiseaseInfoServiceImpl;
 import com.nuena.util.FileUtil;
+import com.nuena.util.HttpTool;
+import com.nuena.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
  * @author: rengb
  * @time: 2020/1/14 15:45
  */
-@Order(1)
+@Order(2)
 @Component
 public class DiseaseInit implements ApplicationRunner {
 
@@ -44,7 +46,7 @@ public class DiseaseInit implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (disease_entry_insect_finished){
+        if (disease_entry_insect_finished) {
             return;
         }
         initData();
@@ -55,16 +57,15 @@ public class DiseaseInit implements ApplicationRunner {
      */
     private void initData() {
         QueryWrapper<DiseaseInfo> diseaseInfoQe = new QueryWrapper<>();
-        diseaseInfoQe.like("dis_url","/disease/detail");
         diseaseInfoFacade.remove(diseaseInfoQe);
 
         Date now = new Date();
         List<DiseaseInfo> diseaseInfoList = Lists.newArrayList();
         diseaseInfoList.addAll(getDisFromJbym());
 
-        List<String> disIdList = diseaseInfoList.stream().map(i->i.getDisId()).collect(Collectors.toList());
-        for (DiseaseInfo i:getDisFromJsonTxt()){
-            if (!disIdList.contains(i.getDisId())){
+        List<String> disIdList = diseaseInfoList.stream().map(i -> i.getDisId()).collect(Collectors.toList());
+        for (DiseaseInfo i : getDisFromJsonTxt()) {
+            if (!disIdList.contains(i.getDisId())) {
                 diseaseInfoList.add(i);
             }
         }
@@ -108,7 +109,10 @@ public class DiseaseInit implements ApplicationRunner {
      */
     private List<DiseaseInfo> getDisFromJbym() {
         List<DiseaseInfo> diseaseInfoList = Lists.newArrayList();
-        String html = FileUtil.fileRead("C:\\Users\\Administrator\\Desktop\\百科名医网\\疾病页面.txt");
+        String html = HttpTool.post("https://www.baikemy.com/disease/list/0/0?diseaseContentType=A");
+        if (StringUtil.isBlank(html)) {
+            return diseaseInfoList;
+        }
         Document doc = Jsoup.parse(html);
         Element typeInfoElement = doc.getElementsByClass("typeInfo").last();
         Elements typeInfoLiElements = typeInfoElement.getElementsByClass("typeInfo_Li");

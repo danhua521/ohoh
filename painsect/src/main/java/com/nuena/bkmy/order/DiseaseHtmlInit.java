@@ -23,7 +23,7 @@ import java.util.Random;
  * @author: rengb
  * @time: 2020/1/14 15:45
  */
-@Order(2)
+@Order(3)
 @Component
 public class DiseaseHtmlInit implements ApplicationRunner {
 
