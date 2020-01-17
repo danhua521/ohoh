@@ -24,7 +24,7 @@ public class ExamineRawDataFacade extends ExamineRawDataServiceImpl {
     private ExamineInfoFacade examineInfoFacade;
 
     /**
-     * 处理单个疾病
+     * 处理单个检查
      *
      * @param examineInfo
      */

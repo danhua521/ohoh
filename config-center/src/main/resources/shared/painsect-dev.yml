@@ -45,3 +45,15 @@ symptom.html.insect.finished: true
 examine.entry.insect.finished: true
 ##检查html爬取是否完成
 examine.html.insect.finished: true
+##治疗条目爬取是否完成
+treat.entry.insect.finished: false
+##治疗html爬取是否完成
+treat.html.insect.finished: false
+##预防条目爬取是否完成
+prevent.entry.insect.finished: false
+##预防html爬取是否完成
+prevent.html.insect.finished: false
+##护理条目爬取是否完成
+nurse.entry.insect.finished: false
+##护理html爬取是否完成
+nurse.html.insect.finished: false

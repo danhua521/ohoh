@@ -1,6 +1,6 @@
 package com.nuena.bkmy.order;
 
-import com.nuena.bkmy.facade.SymptomInfoFacade;
+import com.nuena.bkmy.facade.NurseInfoFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -13,21 +13,21 @@ import org.springframework.stereotype.Component;
  * @author: rengb
  * @time: 2020/1/14 15:45
  */
-@Order(6)
+@Order(12)
 @Component
-public class SymptomInit implements ApplicationRunner {
+public class NurseInit implements ApplicationRunner {
 
-    @Value("${symptom.entry.insect.finished}")
-    private boolean symptom_entry_insect_finished;
+    @Value("${nurse.entry.insect.finished}")
+    private boolean nurse_entry_insect_finished;
     @Autowired
-    private SymptomInfoFacade symptomInfoFacade;
+    private NurseInfoFacade nurseInfoFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (symptom_entry_insect_finished) {
+        if (nurse_entry_insect_finished) {
             return;
         }
-        symptomInfoFacade.initData();
+        nurseInfoFacade.initData();
     }
 
 }

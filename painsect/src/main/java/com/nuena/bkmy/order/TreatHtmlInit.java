@@ -1,8 +1,8 @@
 package com.nuena.bkmy.order;
 
-import com.nuena.bkmy.entity.SymptomInfo;
-import com.nuena.bkmy.facade.SymptomInfoFacade;
-import com.nuena.bkmy.facade.SymptomRawDataFacade;
+import com.nuena.bkmy.entity.TreatInfo;
+import com.nuena.bkmy.facade.TreatInfoFacade;
+import com.nuena.bkmy.facade.TreatRawDataFacade;
 import com.nuena.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,28 +18,28 @@ import java.util.List;
  * @author: rengb
  * @time: 2020/1/14 15:45
  */
-@Order(7)
+@Order(9)
 @Component
-public class SymptomHtmlInit implements ApplicationRunner {
+public class TreatHtmlInit implements ApplicationRunner {
 
-    @Value("${symptom.html.insect.finished}")
-    private boolean symptom_html_insect_finished;
+    @Value("${treat.html.insect.finished}")
+    private boolean treat_html_insect_finished;
     @Autowired
-    private SymptomRawDataFacade symptomRawDataFacade;
+    private TreatRawDataFacade treatRawDataFacade;
     @Autowired
-    private SymptomInfoFacade symptomInfoFacade;
+    private TreatInfoFacade treatInfoFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (symptom_html_insect_finished) {
+        if (treat_html_insect_finished) {
             return;
         }
 
-        List<SymptomInfo> symptomInfoList = null;
-        while (ListUtil.isNotEmpty(symptomInfoList = symptomInfoFacade.getNullHtmlSym())) {
-            symptomInfoList.forEach(i -> {
+        List<TreatInfo> treatInfoList = null;
+        while (ListUtil.isNotEmpty(treatInfoList = treatInfoFacade.getNullHtmlTrt())) {
+            treatInfoList.forEach(i -> {
                 try {
-                    symptomRawDataFacade.everySymHtml(i);
+                    treatRawDataFacade.everyTrtHtml(i);
                 } catch (Exception e) {
                 }
             });
