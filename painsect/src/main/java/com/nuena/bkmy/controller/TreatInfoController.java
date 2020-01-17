@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author rgb
- * @since 2020-01-16
+ * @since 2020-01-17
  */
 @RestController
 @RequestMapping("/treat-info")

@@ -59,3 +59,7 @@ prevent.html.insect.finished: false
 nurse.entry.insect.finished: false
 ##护理html爬取是否完成
 nurse.html.insect.finished: false
+##中医条目爬取是否完成
+chinmed.entry.insect.finished: false
+##中医html爬取是否完成
+chinmed.html.insect.finished: false

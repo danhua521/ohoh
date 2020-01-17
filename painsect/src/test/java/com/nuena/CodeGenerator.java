@@ -100,7 +100,9 @@ public class CodeGenerator {
                 "mybk_nurse_info",
                 "mybk_nurse_raw_data",
                 "mybk_treat_info",
-                "mybk_treat_raw_data"
+                "mybk_treat_raw_data",
+                "mybk_chinmed_info",
+                "mybk_chinmed_raw_data"
         );
         mpg.setStrategy(strategy);
 
