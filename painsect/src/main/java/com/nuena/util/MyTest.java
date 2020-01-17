@@ -21,10 +21,10 @@ public class MyTest {
 
     public static void main(String[] args) throws Exception {
 
-                String html = HttpTool.post("https://www.baikemy.com/disease/high/flow/list/86","utf-8");
-        System.out.println(html);
+//                String html = HttpTool.post("https://www.baikemy.com/disease/high/flow/list/86","utf-8");
+//        System.out.println(html);
 //        //        String html = HttpTool.post("https://www.baikemy.com/disease/detail/1012");
-                Document doc = Jsoup.parse(html);
+//                Document doc = Jsoup.parse(html);
 //       Elements ets = doc.getElementsByClass("index_top_left_content").first().select("a");
 //       ets.forEach(i->{
 //           String href = i.attr("href");
@@ -43,7 +43,9 @@ public class MyTest {
 //        deptInfoList.add(0,"cs");
 //
 //        System.out.println(deptInfoList);
-
+        String ss = "/disease/detail/850";
+        System.out.println(ss.lastIndexOf("/"));
+        System.out.println(ss.substring(ss.lastIndexOf("/")+1));
 
     }
 

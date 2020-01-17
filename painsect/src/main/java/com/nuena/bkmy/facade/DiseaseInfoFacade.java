@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.nuena.bkmy.entity.DiseaseInfo;
 import com.nuena.bkmy.service.impl.DiseaseInfoServiceImpl;
 import com.nuena.util.HttpTool;
+import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -35,11 +37,10 @@ public class DiseaseInfoFacade extends DiseaseInfoServiceImpl {
 
     /**
      * 初始化，插入疾病信息
+     * 1.从首页拉取疾病；2.从疾病首页拉取疾病；3.前2部分合并去重；4.和数据库现存疾病比对，找出新增的疾病
      */
+    @Transactional
     public void initData() {
-        QueryWrapper<DiseaseInfo> diseaseInfoQe = new QueryWrapper<>();
-        remove(diseaseInfoQe);
-
         List<DiseaseInfo> diseaseInfoList = Lists.newArrayList();
         diseaseInfoList.addAll(getDisFromJbsy());
 
@@ -50,7 +51,10 @@ public class DiseaseInfoFacade extends DiseaseInfoServiceImpl {
             }
         }
 
-        diseaseInfoList = diseaseInfoList.stream().distinct().collect(Collectors.toList());
+        diseaseInfoList = filterExistDis(diseaseInfoList.stream().distinct().collect(Collectors.toList()));
+        if (ListUtil.isEmpty(diseaseInfoList)) {
+            return;
+        }
         Date now = new Date();
         diseaseInfoList.forEach(i -> {
             i.setCreateTime(now);
@@ -116,7 +120,7 @@ public class DiseaseInfoFacade extends DiseaseInfoServiceImpl {
             String disName = typeInfoLiElement.text();
             if (!disName.equals("更多")) {
                 String href = typeInfoLiElement.select("a").attr("href");
-                String disId = href.substring(16);
+                String disId = href.substring(href.lastIndexOf("/") + 1);
                 DiseaseInfo diseaseInfo = new DiseaseInfo();
                 diseaseInfo.setDisId(disId);
                 diseaseInfo.setDisName(disName);
@@ -125,6 +129,40 @@ public class DiseaseInfoFacade extends DiseaseInfoServiceImpl {
             }
         });
         return diseaseInfoList;
+    }
+
+    /**
+     * 过滤掉数据库已经存在的疾病
+     *
+     * @param diseaseInfoList
+     * @return
+     */
+    private List<DiseaseInfo> filterExistDis(List<DiseaseInfo> diseaseInfoList) {
+        List<DiseaseInfo> retList = Lists.newArrayList();
+
+        QueryWrapper<DiseaseInfo> diseaseInfoQe = new QueryWrapper<>();
+        diseaseInfoQe.select("dis_id");
+        List<String> disIdList = list(diseaseInfoQe).stream().map(i -> i.getDisId()).collect(Collectors.toList());
+
+        diseaseInfoList.forEach(i -> {
+            if (!disIdList.contains(i.getDisId())) {
+                retList.add(i);
+            }
+        });
+
+        return retList;
+    }
+
+    /**
+     * 获取未拉取html的疾病
+     *
+     * @return
+     */
+    public List<DiseaseInfo> getNullHtmlDis() {
+        QueryWrapper<DiseaseInfo> diseaseInfoQe = new QueryWrapper<>();
+        diseaseInfoQe.isNull("remark");
+        diseaseInfoQe.select("id", "dis_id", "dis_name", "dis_url");
+        return list(diseaseInfoQe);
     }
 
 }

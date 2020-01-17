@@ -34,7 +34,7 @@ swagger.des: 爬虫相关业务
 swagger.version: 0.0.1-SNAPSHOT
 
 ##疾病条目爬取是否完成
-disease.entry.insect.finished: false
+disease.entry.insect.finished: true
 ##疾病html爬取是否完成
 disease.html.insect.finished: true
 ##科室爬取是否完成

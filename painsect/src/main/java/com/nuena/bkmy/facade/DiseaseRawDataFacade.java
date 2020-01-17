@@ -1,7 +1,16 @@
 package com.nuena.bkmy.facade;
 
+import com.nuena.bkmy.entity.DiseaseInfo;
+import com.nuena.bkmy.entity.DiseaseRawData;
 import com.nuena.bkmy.service.impl.DiseaseRawDataServiceImpl;
+import com.nuena.util.HttpTool;
+import com.nuena.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.Random;
 
 /**
  * @Description:
@@ -10,4 +19,38 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DiseaseRawDataFacade extends DiseaseRawDataServiceImpl {
+
+    @Autowired
+    private DiseaseInfoFacade diseaseInfoFacade;
+
+    /**
+     * 处理单个疾病
+     *
+     * @param diseaseInfo
+     */
+    @Transactional
+    public void everyDisHtml(DiseaseInfo diseaseInfo) {
+        try {
+            Random rd = new Random();
+            Thread.sleep(1000 * rd.nextInt(11) + 2000);
+        } catch (Exception e) {
+        }
+
+        String html = HttpTool.get(diseaseInfo.getDisUrl());
+        if (StringUtil.isBlank(html)) {
+            return;
+        }
+
+        DiseaseRawData diseaseRawData = new DiseaseRawData();
+        diseaseRawData.setDisId(diseaseInfo.getDisId());
+        diseaseRawData.setDisName(diseaseInfo.getDisName());
+        diseaseRawData.setDisUrl(diseaseInfo.getDisUrl());
+        diseaseRawData.setDisHtml(html);
+        diseaseRawData.setCreateTime(new Date());
+        save(diseaseRawData);
+
+        diseaseInfo.setRemark("1");
+        diseaseInfoFacade.updateById(diseaseInfo);
+    }
+
 }
