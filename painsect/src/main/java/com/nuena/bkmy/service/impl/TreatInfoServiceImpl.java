@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author rgb
- * @since 2020-01-17
+ * @since 2020-01-19
  */
 @Service
 public class TreatInfoServiceImpl extends ServiceImpl<TreatInfoMapper, TreatInfo> implements TreatInfoService {

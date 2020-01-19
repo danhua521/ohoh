@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rgb
- * @since 2020-01-17
+ * @since 2020-01-19
  */
 public interface PreventInfoMapper extends BaseMapper<PreventInfo> {
 

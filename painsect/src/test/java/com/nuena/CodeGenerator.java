@@ -102,7 +102,14 @@ public class CodeGenerator {
                 "mybk_treat_info",
                 "mybk_treat_raw_data",
                 "mybk_chinmed_info",
-                "mybk_chinmed_raw_data"
+                "mybk_chinmed_raw_data",
+                "mybk_disease_analysis",
+                "mybk_symptom_analysis",
+                "mybk_examine_analysis",
+                "mybk_treat_analysis",
+                "mybk_chinmed_analysis",
+                "mybk_prevent_analysis",
+                "mybk_nurse_analysis"
         );
         mpg.setStrategy(strategy);
 
