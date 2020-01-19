@@ -2,6 +2,8 @@ package com.nuena.util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * @Description:
@@ -46,5 +48,34 @@ public class FileUtil {
         return ret;
     }
 
+    /**
+     * 写文件
+     *
+     * @param path
+     * @param fileName
+     * @param content
+     * @return
+     */
+    public static boolean fileWrite(String path, String fileName, String content) {
+        boolean flag = false;
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(path + "\\" + fileName);
+            fw.write(content);
+            fw.close();
+            flag = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fw != null) {
+                    fw.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return flag;
+    }
 
 }

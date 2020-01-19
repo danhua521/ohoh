@@ -46,18 +46,20 @@ examine.entry.insect.finished: true
 ##检查html爬取是否完成
 examine.html.insect.finished: true
 ##治疗条目爬取是否完成
-treat.entry.insect.finished: false
+treat.entry.insect.finished: true
 ##治疗html爬取是否完成
-treat.html.insect.finished: false
+treat.html.insect.finished: true
 ##预防条目爬取是否完成
-prevent.entry.insect.finished: false
+prevent.entry.insect.finished: true
 ##预防html爬取是否完成
-prevent.html.insect.finished: false
+prevent.html.insect.finished: true
 ##护理条目爬取是否完成
-nurse.entry.insect.finished: false
+nurse.entry.insect.finished: true
 ##护理html爬取是否完成
-nurse.html.insect.finished: false
+nurse.html.insect.finished: true
 ##中医条目爬取是否完成
-chinmed.entry.insect.finished: false
+chinmed.entry.insect.finished: true
 ##中医html爬取是否完成
-chinmed.html.insect.finished: false
+chinmed.html.insect.finished: true
+##疾病html解析是否完成
+disease.html.analysis.finished: false

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author: rengb
  * @time: 2020/1/17 17:05
  */
-@Order(16)
+@Order(1600)
 @Component
 public class DiseaseItemAnalysis implements ApplicationRunner {
 
@@ -33,21 +33,21 @@ public class DiseaseItemAnalysis implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<String> list = Lists.newArrayList();
-        QueryWrapper<DiseaseRawData> diseaseRawDataQe = new QueryWrapper<>();
-        diseaseRawDataQe.select("dis_html");
-        diseaseRawDataFacade.list(diseaseRawDataQe).forEach(i->{
-            list.addAll(anaEvery(i.getDisHtml()));
-        });
-
-        System.out.println(list);
-        Map<String, Long> result =
-                list.stream().collect(
-                        Collectors.groupingBy(
-                                Function.identity(), Collectors.counting()
-                        )
-                );
-        System.out.println(result);
+//        List<String> list = Lists.newArrayList();
+//        QueryWrapper<DiseaseRawData> diseaseRawDataQe = new QueryWrapper<>();
+//        diseaseRawDataQe.select("dis_html");
+//        diseaseRawDataFacade.list(diseaseRawDataQe).forEach(i->{
+//            list.addAll(anaEvery(i.getDisHtml()));
+//        });
+//
+//        System.out.println(list);
+//        Map<String, Long> result =
+//                list.stream().collect(
+//                        Collectors.groupingBy(
+//                                Function.identity(), Collectors.counting()
+//                        )
+//                );
+//        System.out.println(result);
     }
 
     private List<String> anaEvery(String html){

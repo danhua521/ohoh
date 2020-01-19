@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +66,17 @@ public class MyTest {
 //        Document doc2 = Jsoup.parse(html2);
 //
 //        System.out.println(doc2.text().replaceAll("@ab98cdef","\r\n"));
+
+        String path="C:\\Users\\Administrator\\Desktop\\百科名医网\\"; String fileName="tt.txt";
+        FileWriter fw = new FileWriter(path + "\\" + fileName);
+        fw.write(specialityVersionText);
+        fw.close();
+
+
+
+
+
+
     }
 
 }
