@@ -1,5 +1,6 @@
 package com.nuena.bkmy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.bkmy.entity.ChinmedInfo;
 import com.nuena.bkmy.entity.ChinmedRawData;
 import com.nuena.bkmy.service.impl.ChinmedRawDataServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,6 +53,17 @@ public class ChinmedRawDataFacade extends ChinmedRawDataServiceImpl {
 
         chinmedInfo.setRemark("1");
         chinmedInfoFacade.updateById(chinmedInfo);
+    }
+
+    /**
+     * 获取所有的未解析html
+     *
+     * @return
+     */
+    public List<ChinmedRawData> getNoAnalysisChinmedRawData() {
+        QueryWrapper<ChinmedRawData> chinmedRawDataQe = new QueryWrapper<>();
+        chinmedRawDataQe.isNull("remark");
+        return list(chinmedRawDataQe);
     }
 
 }

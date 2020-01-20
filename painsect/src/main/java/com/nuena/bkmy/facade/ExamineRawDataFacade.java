@@ -1,5 +1,6 @@
 package com.nuena.bkmy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.bkmy.entity.ExamineInfo;
 import com.nuena.bkmy.entity.ExamineRawData;
 import com.nuena.bkmy.service.impl.ExamineRawDataServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,6 +53,17 @@ public class ExamineRawDataFacade extends ExamineRawDataServiceImpl {
 
         examineInfo.setRemark("1");
         examineInfoFacade.updateById(examineInfo);
+    }
+
+    /**
+     * 获取所有的未解析html
+     *
+     * @return
+     */
+    public List<ExamineRawData> getNoAnalysisExamineRawData() {
+        QueryWrapper<ExamineRawData> examineRawDataQe = new QueryWrapper<>();
+        examineRawDataQe.isNull("remark");
+        return list(examineRawDataQe);
     }
 
 }

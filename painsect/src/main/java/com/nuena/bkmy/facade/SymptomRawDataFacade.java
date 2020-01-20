@@ -1,5 +1,6 @@
 package com.nuena.bkmy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.bkmy.entity.SymptomInfo;
 import com.nuena.bkmy.entity.SymptomRawData;
 import com.nuena.bkmy.service.impl.SymptomRawDataServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,6 +53,17 @@ public class SymptomRawDataFacade extends SymptomRawDataServiceImpl {
 
         symptomInfo.setRemark("1");
         symptomInfoFacade.updateById(symptomInfo);
+    }
+
+    /**
+     * 获取所有的未解析html
+     *
+     * @return
+     */
+    public List<SymptomRawData> getNoAnalysisSymptomRawData() {
+        QueryWrapper<SymptomRawData> symptomRawDataQe = new QueryWrapper<>();
+        symptomRawDataQe.isNull("remark");
+        return list(symptomRawDataQe);
     }
 
 }

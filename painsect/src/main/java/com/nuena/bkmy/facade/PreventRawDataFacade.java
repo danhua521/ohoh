@@ -1,5 +1,6 @@
 package com.nuena.bkmy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.bkmy.entity.PreventInfo;
 import com.nuena.bkmy.entity.PreventRawData;
 import com.nuena.bkmy.service.impl.PreventRawDataServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,6 +53,17 @@ public class PreventRawDataFacade extends PreventRawDataServiceImpl {
 
         preventInfo.setRemark("1");
         preventInfoFacade.updateById(preventInfo);
+    }
+
+    /**
+     * 获取所有的未解析html
+     *
+     * @return
+     */
+    public List<PreventRawData> getNoAnalysisPreventRawData() {
+        QueryWrapper<PreventRawData> preventRawDataQe = new QueryWrapper<>();
+        preventRawDataQe.isNull("remark");
+        return list(preventRawDataQe);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.nuena.bkmy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.bkmy.entity.TreatInfo;
 import com.nuena.bkmy.entity.TreatRawData;
 import com.nuena.bkmy.service.impl.TreatRawDataServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -53,4 +55,15 @@ public class TreatRawDataFacade extends TreatRawDataServiceImpl {
         treatInfoFacade.updateById(treatInfo);
     }
 
+    /**
+     * 获取所有的未解析html
+     *
+     * @return
+     */
+    public List<TreatRawData> getNoAnalysisTreatRawData() {
+        QueryWrapper<TreatRawData> treatRawDataQe = new QueryWrapper<>();
+        treatRawDataQe.isNull("remark");
+        return list(treatRawDataQe);
+    }
+    
 }

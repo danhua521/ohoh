@@ -1,5 +1,6 @@
 package com.nuena.bkmy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.bkmy.entity.NurseInfo;
 import com.nuena.bkmy.entity.NurseRawData;
 import com.nuena.bkmy.service.impl.NurseRawDataServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,6 +53,17 @@ public class NurseRawDataFacade extends NurseRawDataServiceImpl {
 
         nurseInfo.setRemark("1");
         nurseInfoFacade.updateById(nurseInfo);
+    }
+
+    /**
+     * 获取所有的未解析html
+     *
+     * @return
+     */
+    public List<NurseRawData> getNoAnalysisNurseRawData() {
+        QueryWrapper<NurseRawData> nurseRawDataQe = new QueryWrapper<>();
+        nurseRawDataQe.isNull("remark");
+        return list(nurseRawDataQe);
     }
 
 }

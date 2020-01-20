@@ -62,4 +62,16 @@ chinmed.entry.insect.finished: true
 ##中医html爬取是否完成
 chinmed.html.insect.finished: true
 ##疾病html解析是否完成
-disease.html.analysis.finished: false
+disease.html.analysis.finished: true
+##症状html解析是否完成
+symptom.html.analysis.finished: false
+##检查html解析是否完成
+examine.html.analysis.finished: false
+##治疗html解析是否完成
+treat.html.analysis.finished: false
+##中医html解析是否完成
+chinmed.html.analysis.finished: false
+##预防html解析是否完成
+prevent.html.analysis.finished: false
+##护理html解析是否完成
+nurse.html.analysis.finished: false
