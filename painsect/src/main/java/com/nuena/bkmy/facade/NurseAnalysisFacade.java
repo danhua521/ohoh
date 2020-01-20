@@ -43,7 +43,7 @@ public class NurseAnalysisFacade extends NurseAnalysisServiceImpl {
         String txtOfHtml = null;
         for (NurseRawData nurseRawData : nurseRawDataList) {
             txtOfHtml = analysisEveryHtml(nurseRawData.getNurHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\护理", nurseRawData.getNurName() + "_" + nurseRawData.getNurId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\护理", nurseRawData.getNurName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + nurseRawData.getNurId() + ".txt", txtOfHtml)) {
                 NurseAnalysis nurseAnalysis = new NurseAnalysis();
                 nurseAnalysis.setNurId(nurseRawData.getNurId());
                 nurseAnalysis.setNurName(nurseRawData.getNurName());

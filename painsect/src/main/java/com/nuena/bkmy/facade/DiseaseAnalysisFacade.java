@@ -43,7 +43,7 @@ public class DiseaseAnalysisFacade extends DiseaseAnalysisServiceImpl {
         String txtOfHtml = null;
         for (DiseaseRawData diseaseRawData : diseaseRawDataList) {
             txtOfHtml = analysisEveryHtml(diseaseRawData.getDisHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\疾病", diseaseRawData.getDisName() + "_" + diseaseRawData.getDisId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\疾病", diseaseRawData.getDisName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + diseaseRawData.getDisId() + ".txt", txtOfHtml)) {
                 DiseaseAnalysis diseaseAnalysis = new DiseaseAnalysis();
                 diseaseAnalysis.setDisId(diseaseRawData.getDisId());
                 diseaseAnalysis.setDisName(diseaseRawData.getDisName());

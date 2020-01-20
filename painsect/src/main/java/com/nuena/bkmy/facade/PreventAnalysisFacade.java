@@ -43,7 +43,7 @@ public class PreventAnalysisFacade extends PreventAnalysisServiceImpl {
         String txtOfHtml = null;
         for (PreventRawData preventRawData : preventRawDataList) {
             txtOfHtml = analysisEveryHtml(preventRawData.getPvtHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\预防", preventRawData.getPvtName() + "_" + preventRawData.getPvtId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\预防", preventRawData.getPvtName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + preventRawData.getPvtId() + ".txt", txtOfHtml)) {
                 PreventAnalysis preventAnalysis = new PreventAnalysis();
                 preventAnalysis.setPvtId(preventRawData.getPvtId());
                 preventAnalysis.setPvtName(preventRawData.getPvtName());

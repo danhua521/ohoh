@@ -43,7 +43,7 @@ public class TreatAnalysisFacade extends TreatAnalysisServiceImpl {
         String txtOfHtml = null;
         for (TreatRawData treatRawData : treatRawDataList) {
             txtOfHtml = analysisEveryHtml(treatRawData.getTrtHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\治疗", treatRawData.getTrtName() + "_" + treatRawData.getTrtId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\治疗", treatRawData.getTrtName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + treatRawData.getTrtId() + ".txt", txtOfHtml)) {
                 TreatAnalysis treatAnalysis = new TreatAnalysis();
                 treatAnalysis.setTrtId(treatRawData.getTrtId());
                 treatAnalysis.setTrtName(treatRawData.getTrtName());

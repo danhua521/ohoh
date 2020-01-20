@@ -43,7 +43,7 @@ public class SymptomAnalysisFacade extends SymptomAnalysisServiceImpl {
         String txtOfHtml = null;
         for (SymptomRawData symptomRawData : symptomRawDataList) {
             txtOfHtml = analysisEveryHtml(symptomRawData.getSymHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\症状", symptomRawData.getSymName() + "_" + symptomRawData.getSymId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\症状", symptomRawData.getSymName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + symptomRawData.getSymId() + ".txt", txtOfHtml)) {
                 SymptomAnalysis symptomAnalysis = new SymptomAnalysis();
                 symptomAnalysis.setSymId(symptomRawData.getSymId());
                 symptomAnalysis.setSymName(symptomRawData.getSymName());

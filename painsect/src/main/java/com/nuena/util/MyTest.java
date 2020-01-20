@@ -27,18 +27,18 @@ public class MyTest {
 
     public static void main(String[] args) throws Exception {
 
-        String contentHtml = FileUtil.fileRead("C:\\Users\\Administrator\\Desktop\\百科名医网\\test.txt");
-        Document contentDoc = Jsoup.parse(contentHtml);
-
-        contentDoc.getElementsByClass("s_directory_flag").forEach(i->{
-            i.appendText("@ab98cdef");
-        });
-
-        String specialityVersionHtml = contentDoc.getElementById("specialityVersion").html().replaceAll("<br>","@ab98cdef");
-        Document specialityVersionDoc = Jsoup.parse(specialityVersionHtml);
-        String specialityVersionText = specialityVersionDoc.text().replaceAll("@ab98cdef","\r\n");
-
-        System.out.println(specialityVersionText);
+//        String contentHtml = FileUtil.fileRead("C:\\Users\\Administrator\\Desktop\\百科名医网\\test.txt");
+//        Document contentDoc = Jsoup.parse(contentHtml);
+//
+//        contentDoc.getElementsByClass("s_directory_flag").forEach(i->{
+//            i.appendText("@ab98cdef");
+//        });
+//
+//        String specialityVersionHtml = contentDoc.getElementById("specialityVersion").html().replaceAll("<br>","@ab98cdef");
+//        Document specialityVersionDoc = Jsoup.parse(specialityVersionHtml);
+//        String specialityVersionText = specialityVersionDoc.text().replaceAll("@ab98cdef","\r\n");
+//
+//        System.out.println(specialityVersionText);
 
 //        List<String> items =
 //                Arrays.asList("apple", "apple", "banana",
@@ -67,10 +67,15 @@ public class MyTest {
 //
 //        System.out.println(doc2.text().replaceAll("@ab98cdef","\r\n"));
 
-        String path="C:\\Users\\Administrator\\Desktop\\百科名医网\\"; String fileName="tt.txt";
-        FileWriter fw = new FileWriter(path + "\\" + fileName);
-        fw.write(specialityVersionText);
-        fw.close();
+//        String path="C:/Users/Administrator/Desktop/百科名医网/"; String fileName="尺骨干下1\\/3骨折合并下尺关节脱位切开复位内固定术.txt";
+//        FileWriter fw = new FileWriter(path + "\\" + fileName);
+//        fw.write("123");
+//        fw.close();
+
+        String msg = "鼻型结外NK\\T细胞/淋巴瘤_51393838158593.txt";
+
+        System.out.println(msg);
+//        File file = new File("");
 
 
 

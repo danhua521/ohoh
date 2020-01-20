@@ -43,7 +43,7 @@ public class ExamineAnalysisFacade extends ExamineAnalysisServiceImpl {
         String txtOfHtml = null;
         for (ExamineRawData examineRawData : examineRawDataList) {
             txtOfHtml = analysisEveryHtml(examineRawData.getExaHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\检查", examineRawData.getExaName() + "_" + examineRawData.getExaId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\检查", examineRawData.getExaName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + examineRawData.getExaId() + ".txt", txtOfHtml)) {
                 ExamineAnalysis examineAnalysis = new ExamineAnalysis();
                 examineAnalysis.setExaId(examineRawData.getExaId());
                 examineAnalysis.setExaName(examineRawData.getExaName());

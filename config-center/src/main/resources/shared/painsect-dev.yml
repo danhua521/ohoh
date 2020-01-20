@@ -64,14 +64,14 @@ chinmed.html.insect.finished: true
 ##疾病html解析是否完成
 disease.html.analysis.finished: true
 ##症状html解析是否完成
-symptom.html.analysis.finished: false
+symptom.html.analysis.finished: true
 ##检查html解析是否完成
-examine.html.analysis.finished: false
+examine.html.analysis.finished: true
 ##治疗html解析是否完成
-treat.html.analysis.finished: false
+treat.html.analysis.finished: true
 ##中医html解析是否完成
-chinmed.html.analysis.finished: false
+chinmed.html.analysis.finished: true
 ##预防html解析是否完成
-prevent.html.analysis.finished: false
+prevent.html.analysis.finished: true
 ##护理html解析是否完成
-nurse.html.analysis.finished: false
+nurse.html.analysis.finished: true

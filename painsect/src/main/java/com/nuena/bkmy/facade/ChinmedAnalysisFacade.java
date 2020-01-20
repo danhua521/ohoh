@@ -43,7 +43,7 @@ public class ChinmedAnalysisFacade extends ChinmedAnalysisServiceImpl {
         String txtOfHtml = null;
         for (ChinmedRawData chinmedRawData : chinmedRawDataList) {
             txtOfHtml = analysisEveryHtml(chinmedRawData.getChdHtml());
-            if (FileUtil.fileWrite("D:\\百科名医\\中医", chinmedRawData.getChdName() + "_" + chinmedRawData.getChdId() + ".txt", txtOfHtml)) {
+            if (FileUtil.fileWrite("D:\\百科名医\\中医", chinmedRawData.getChdName().replaceAll("\\\\", "fanxiegang").replaceAll("/", "xiegang") + "_" + chinmedRawData.getChdId() + ".txt", txtOfHtml)) {
                 ChinmedAnalysis chinmedAnalysis = new ChinmedAnalysis();
                 chinmedAnalysis.setChdId(chinmedRawData.getChdId());
                 chinmedAnalysis.setChdName(chinmedRawData.getChdName());
