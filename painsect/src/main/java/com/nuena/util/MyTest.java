@@ -16,6 +16,8 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -80,8 +82,30 @@ public class MyTest {
 
         //        String msg = "鼻型结外NK\\T细胞/淋巴瘤_51393838158593.txt";
 
-        System.out.println(parsePdf("C:\\Users\\Administrator\\Desktop\\tt9\\西氏内科学(中文第22版上册).pdf"));
+//        System.out.println(parsePdf("C:\\Users\\Administrator\\Desktop\\tt9\\西氏内科学(中文第22版上册).pdf"));
         //        File file = new File("");
+
+
+
+        String contentHtml = HttpTool.get("http://jib.xywy.com/html/a.html");
+        System.out.println(contentHtml);
+//        System.out.println(contentHtml);
+//        String msg = EnDecodeUtil.encode(contentHtml);
+//        System.out.println(msg);
+//        System.out.println(EnDecodeUtil.decode(msg));
+//        Document contentDoc = Jsoup.parse(contentHtml);
+//        Element jblistConEarElement = contentDoc.getElementsByClass("jblist-con-ear").first();
+//        Elements aElements = jblistConEarElement.getElementsByClass("ks-zm-list").select("a");
+//        System.out.println(aElements.size());
+//        aElements.forEach(i->{
+//            String href = i.attr("href");
+//            System.out.println(href.substring(8,href.indexOf(".htm")));
+//        });
+//        String zimus = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z";
+//        System.out.println(zimus.split(",").length);
+//        String nritong = contentDoc.getElementsByClass("jib-articl").first().text();
+//        System.out.println(nritong);
+//        FileUtil.fileWrite("F:\\迅雷下载","dte",nritong);
     }
 
     public static String getFileType(String path) {

@@ -24,7 +24,7 @@ spring:
       use-global-data-source-stat: true
 
 mybatis-plus:
-  mapper-locations: classpath*:mapper/bkmy/*.xml
+  mapper-locations: classpath*:mapper/bkmy/*.xml,classpath*:mapper/xywy/*.xml
   type-aliases-package: com.nuena.bkmy.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -77,3 +77,5 @@ chinmed.html.analysis.finished: true
 prevent.html.analysis.finished: true
 ##护理html解析是否完成
 nurse.html.analysis.finished: true
+##寻医---疾病id爬取是否完成
+xywy.disease.id.insect.finished: false

@@ -51,7 +51,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.nuena.bkmy");
+        pc.setParent("com.nuena.xywy");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");
@@ -70,7 +70,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
-                return projectPath + "/src/main/resources/mapper/bkmy/"
+                return projectPath + "/src/main/resources/mapper/xywy/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -86,30 +86,31 @@ public class CodeGenerator {
         strategy.setEntityTableFieldAnnotationEnable(true);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix("mybk_");
+        strategy.setTablePrefix("xywy_");
         strategy.setInclude(
-                "mybk_disease_raw_data",
-                "mybk_disease_info",
-                "mybk_dept_info",
-                "mybk_symptom_info",
-                "mybk_symptom_raw_data",
-                "mybk_examine_info",
-                "mybk_examine_raw_data",
-                "mybk_prevent_info",
-                "mybk_prevent_raw_data",
-                "mybk_nurse_info",
-                "mybk_nurse_raw_data",
-                "mybk_treat_info",
-                "mybk_treat_raw_data",
-                "mybk_chinmed_info",
-                "mybk_chinmed_raw_data",
-                "mybk_disease_analysis",
-                "mybk_symptom_analysis",
-                "mybk_examine_analysis",
-                "mybk_treat_analysis",
-                "mybk_chinmed_analysis",
-                "mybk_prevent_analysis",
-                "mybk_nurse_analysis"
+//                "mybk_disease_raw_data",
+//                "mybk_disease_info",
+//                "mybk_dept_info",
+//                "mybk_symptom_info",
+//                "mybk_symptom_raw_data",
+//                "mybk_examine_info",
+//                "mybk_examine_raw_data",
+//                "mybk_prevent_info",
+//                "mybk_prevent_raw_data",
+//                "mybk_nurse_info",
+//                "mybk_nurse_raw_data",
+//                "mybk_treat_info",
+//                "mybk_treat_raw_data",
+//                "mybk_chinmed_info",
+//                "mybk_chinmed_raw_data",
+//                "mybk_disease_analysis",
+//                "mybk_symptom_analysis",
+//                "mybk_examine_analysis",
+//                "mybk_treat_analysis",
+//                "mybk_chinmed_analysis",
+//                "mybk_prevent_analysis",
+//                "mybk_nurse_analysis"
+                "xywy_disease_lib"
         );
         mpg.setStrategy(strategy);
 
