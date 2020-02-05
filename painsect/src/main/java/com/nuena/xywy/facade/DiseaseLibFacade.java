@@ -1,5 +1,6 @@
 package com.nuena.xywy.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.nuena.util.DateUtil;
 import com.nuena.util.HttpTool;
@@ -32,7 +33,7 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
     private DiseaseLibServiceImpl diseaseLibService;
 
     @Transactional
-    public void initData() {
+    public void initDisIdData() {
         List<DiseaseLib> diseaseLibList = Lists.newArrayList();
         String zimus = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z";
         for (String zimu : zimus.split(",")) {
@@ -90,6 +91,75 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
             retList.add(diseaseLib);
         });
         return retList;
+    }
+
+    /**
+     * 获取未下载html的疾病列表
+     *
+     * @return
+     */
+    public List<DiseaseLib> getNoLoadHtmlDiseases() {
+        QueryWrapper<DiseaseLib> diseaseLibQe = new QueryWrapper<>();
+        diseaseLibQe.eq("is_htmls_load", 0);
+        return list(diseaseLibQe);
+    }
+
+    /**
+     * 下载疾病的各个模块html
+     *
+     * @param diseaseLib
+     */
+    @Transactional
+    public void loadHtml(DiseaseLib diseaseLib) {
+        String synopsisHtml = loadHtml(diseaseLib.getSynopsisUrl());
+        String etiologyHtml = loadHtml(diseaseLib.getEtiologyUrl());
+        String preventHtml = loadHtml(diseaseLib.getPreventUrl());
+        String complicationHtml = loadHtml(diseaseLib.getComplicationUrl());
+        String symptomHtml = loadHtml(diseaseLib.getSymptomUrl());
+        String examineHtml = loadHtml(diseaseLib.getExamineUrl());
+        String discernHtml = loadHtml(diseaseLib.getDiscernUrl());
+        String treatHtml = loadHtml(diseaseLib.getTreatUrl());
+        String nurseHtml = loadHtml(diseaseLib.getNurseUrl());
+        String healthHtml = loadHtml(diseaseLib.getHealthUrl());
+
+        if (StringUtil.isNotBlank(synopsisHtml)
+                && StringUtil.isNotBlank(etiologyHtml)
+                && StringUtil.isNotBlank(preventHtml)
+                && StringUtil.isNotBlank(complicationHtml)
+                && StringUtil.isNotBlank(symptomHtml)
+                && StringUtil.isNotBlank(examineHtml)
+                && StringUtil.isNotBlank(discernHtml)
+                && StringUtil.isNotBlank(treatHtml)
+                && StringUtil.isNotBlank(nurseHtml)
+                && StringUtil.isNotBlank(healthHtml)) {
+            diseaseLib.setSynopsisHtml(synopsisHtml);
+            diseaseLib.setEtiologyHtml(etiologyHtml);
+            diseaseLib.setPreventHtml(preventHtml);
+            diseaseLib.setComplicationHtml(complicationHtml);
+            diseaseLib.setSymptomHtml(symptomHtml);
+            diseaseLib.setExamineHtml(examineHtml);
+            diseaseLib.setDiscernHtml(discernHtml);
+            diseaseLib.setTreatHtml(treatHtml);
+            diseaseLib.setNurseHtml(nurseHtml);
+            diseaseLib.setHealthHtml(healthHtml);
+            diseaseLib.setIsHtmlsLoad(1);
+            updateById(diseaseLib);
+        }
+    }
+
+    /**
+     * 下载html
+     *
+     * @param url
+     * @return
+     */
+    private String loadHtml(String url) {
+        try {
+            Random rd = new Random();
+            Thread.sleep(1000 * rd.nextInt(11) + 2000);
+        } catch (Exception e) {
+        }
+        return HttpTool.post(url);
     }
 
 }

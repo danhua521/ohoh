@@ -77,3 +77,5 @@ prevent.html.analysis.finished: true
 nurse.html.analysis.finished: true
 ##寻医---疾病id爬取是否完成
 xywy.disease.id.insect.finished: false
+##寻医---疾病各模块html爬取是否完成
+xywy.disease.html.insect.finished: false
