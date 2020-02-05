@@ -18,7 +18,7 @@ import java.util.List;
  * @time: 2020/1/14 15:45
  */
 @Order(2)
-@Component
+@Component("xywyDiseaseHtmlInit")
 public class DiseaseHtmlInit implements ApplicationRunner {
 
     @Value("${xywy.disease.html.insect.finished}")
