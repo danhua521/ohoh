@@ -155,14 +155,16 @@ public class HttpTool {
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         CloseableHttpResponse response = null;
         try {
+            RequestConfig.Builder builder = RequestConfig.custom()
+                    .setConnectTimeout(10000)//设置连接超时时间,单位毫秒
+                    .setSocketTimeout(10000);//设置读取超时时间,单位毫秒
             RequestConfig requestConfig = null;
             if (StringUtil.isNotBlank(proxyIp) && proxyPort != null) {
                 HttpHost httpHost = new HttpHost(proxyIp, proxyPort);
-                requestConfig = RequestConfig.custom()
-                        .setConnectTimeout(10000)//设置连接超时时间,单位毫秒
-                        .setSocketTimeout(10000)//设置读取超时时间,单位毫秒
-                        .setProxy(httpHost)//设置代理
+                requestConfig = builder.setProxy(httpHost)//设置代理
                         .build();
+            } else {
+                requestConfig = builder.build();
             }
 
             if (askType.equals("GET")) {
