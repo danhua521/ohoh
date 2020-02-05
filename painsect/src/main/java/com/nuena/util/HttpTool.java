@@ -182,12 +182,14 @@ public class HttpTool {
                 httpPost.addHeader("x-forwarded-for", "183.166.110.166");
                 response = httpClient.execute(httpPost);
             }
-            HttpEntity responseEntity = response.getEntity();
-            if (responseEntity != null) {
-                if (StringUtil.isNotBlank(backCharCode)) {
-                    ret = EntityUtils.toString(responseEntity, backCharCode);
-                } else {
-                    ret = EntityUtils.toString(responseEntity);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity responseEntity = response.getEntity();
+                if (responseEntity != null) {
+                    if (StringUtil.isNotBlank(backCharCode)) {
+                        ret = EntityUtils.toString(responseEntity, backCharCode);
+                    } else {
+                        ret = EntityUtils.toString(responseEntity);
+                    }
                 }
             }
         } catch (Exception e) {
