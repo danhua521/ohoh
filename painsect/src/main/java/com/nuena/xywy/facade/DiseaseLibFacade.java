@@ -3,6 +3,7 @@ package com.nuena.xywy.facade;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.nuena.util.DateUtil;
+import com.nuena.util.EnDecodeUtil;
 import com.nuena.util.HttpTool;
 import com.nuena.util.StringUtil;
 import com.nuena.xywy.entity.DiseaseLib;
@@ -155,11 +156,11 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
      */
     private String loadHtml(String url) {
         try {
-            Random rd = new Random();
-            Thread.sleep(1000 * rd.nextInt(11) + 2000);
+            Thread.sleep(2000);
         } catch (Exception e) {
         }
-        return HttpTool.post(url);
+        String html = HttpTool.post(url);
+        return StringUtil.isNotBlank(html) ? EnDecodeUtil.encode(html) : html;
     }
 
 }
