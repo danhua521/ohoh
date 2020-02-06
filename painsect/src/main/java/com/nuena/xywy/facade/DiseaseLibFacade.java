@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @Description:
@@ -57,8 +56,7 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
      */
     private List<DiseaseLib> getDiseases(String zimu) {
         try {
-            Random rd = new Random();
-            Thread.sleep(1000 * rd.nextInt(11) + 2000);
+            Thread.sleep(2000);
         } catch (Exception e) {
         }
         List<DiseaseLib> retList = Lists.newArrayList();
@@ -102,6 +100,7 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
     public List<DiseaseLib> getNoLoadHtmlDiseases() {
         QueryWrapper<DiseaseLib> diseaseLibQe = new QueryWrapper<>();
         diseaseLibQe.eq("is_htmls_load", 0);
+        diseaseLibQe.last("limit 0,5");
         return list(diseaseLibQe);
     }
 
@@ -155,12 +154,20 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
      * @return
      */
     private String loadHtml(String url) {
+        String ret = null;
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (Exception e) {
         }
         String html = HttpTool.post(url);
-        return StringUtil.isNotBlank(html) ? EnDecodeUtil.encode(html) : html;
+        if (StringUtil.isNotBlank(html)) {
+            Document doc = Jsoup.parse(html);
+            Element jibArticlElement = doc.getElementsByClass("jib-articl").first();
+            if (jibArticlElement != null) {
+                ret = EnDecodeUtil.encode(jibArticlElement.outerHtml());
+            }
+        }
+        return ret;
     }
 
 }
