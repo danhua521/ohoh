@@ -82,6 +82,6 @@ xywy.disease.id.insect.finished: true
 ##寻医---疾病各模块html爬取是否完成
 xywy.disease.html.insect.finished: false
 ##39健康---疾病id爬取是否完成
-sjjk.disease.id.insect.finished: false
+sjjk.disease.id.insect.finished: true
 ##39健康---疾病各模块html爬取是否完成
 sjjk.disease.html.insect.finished: false

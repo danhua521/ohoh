@@ -165,7 +165,7 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
     private String loadHtml(String url) {
         String ret = null;
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {
         }
         String html = HttpTool.post(url);
