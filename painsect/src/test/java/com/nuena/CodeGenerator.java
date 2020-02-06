@@ -51,7 +51,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.nuena.xywy");
+        pc.setParent("com.nuena.sjjk");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");
@@ -70,7 +70,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
-                return projectPath + "/src/main/resources/mapper/xywy/"
+                return projectPath + "/src/main/resources/mapper/sjjk/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -86,7 +86,7 @@ public class CodeGenerator {
         strategy.setEntityTableFieldAnnotationEnable(true);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix("xywy_");
+        strategy.setTablePrefix("");
         strategy.setInclude(
 //                "mybk_disease_raw_data",
 //                "mybk_disease_info",
@@ -110,7 +110,8 @@ public class CodeGenerator {
 //                "mybk_chinmed_analysis",
 //                "mybk_prevent_analysis",
 //                "mybk_nurse_analysis"
-                "xywy_disease_lib"
+//                "xywy_disease_lib"
+                  "sjjk_disease_lib"
         );
         mpg.setStrategy(strategy);
 
