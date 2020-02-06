@@ -173,6 +173,12 @@ public class HttpTool {
                     httpGet.setConfig(requestConfig);
                 }
                 httpGet.addHeader("x-forwarded-for", "183.166.110.166");
+//                httpGet.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+//                httpGet.addHeader("Accept-Encoding", "gzip, deflate");
+//                httpGet.addHeader("Accept-Language", "zh-CN,zh;q=0.8");
+                httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
+//                httpGet.addHeader("Content-Type", "text/html; charset=UTF-8");
+//                httpGet.addHeader("Connection", "Keep-Alive");
                 response = httpClient.execute(httpGet);
             } else if (askType.equals("POST")) {
                 HttpPost httpPost = new HttpPost(url);
@@ -180,6 +186,7 @@ public class HttpTool {
                     httpPost.setConfig(requestConfig);
                 }
                 httpPost.addHeader("x-forwarded-for", "183.166.110.166");
+                httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36");
                 response = httpClient.execute(httpPost);
             }
             if (response.getStatusLine().getStatusCode() == 200) {
