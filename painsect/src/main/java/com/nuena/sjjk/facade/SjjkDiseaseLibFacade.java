@@ -55,7 +55,7 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
      */
     private List<SjjkDiseaseLib> getDiseases(int yeshu) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {
         }
         List<SjjkDiseaseLib> retList = Lists.newArrayList();
@@ -148,6 +148,9 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
             diseaseLib.setTreatHtml(treatHtml);
             diseaseLib.setNurseHtml(nurseHtml);
             diseaseLib.setHealthHtml(healthHtml);
+            diseaseLib.setMedviceHtml(medviceHtml);
+            diseaseLib.setDrugHtml(drugHtml);
+            diseaseLib.setAskanswerHtml(askanswerHtml);
             diseaseLib.setIsHtmlsLoad(1);
             updateById(diseaseLib);
         }
@@ -167,11 +170,11 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
         }
         String html = HttpTool.post(url);
         if (StringUtil.isNotBlank(html)) {
-            Document doc = Jsoup.parse(html);
-            Element jibArticlElement = doc.getElementsByClass("jib-articl").first();
-            if (jibArticlElement != null) {
-                ret = EnDecodeUtil.encode(jibArticlElement.outerHtml());
-            }
+//            Document doc = Jsoup.parse(html);
+//            Element jibArticlElement = doc.getElementsByClass("jib-articl").first();
+//            if (jibArticlElement != null) {
+//                ret = EnDecodeUtil.encode(jibArticlElement.outerHtml());
+//            }
         }
         return ret;
     }
