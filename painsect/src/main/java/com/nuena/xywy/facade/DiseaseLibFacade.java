@@ -100,7 +100,6 @@ public class DiseaseLibFacade extends DiseaseLibServiceImpl {
     public List<DiseaseLib> getNoLoadHtmlDiseases() {
         QueryWrapper<DiseaseLib> diseaseLibQe = new QueryWrapper<>();
         diseaseLibQe.eq("is_htmls_load", 0);
-        diseaseLibQe.last("limit 0,5");
         return list(diseaseLibQe);
     }
 
