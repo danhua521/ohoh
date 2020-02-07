@@ -43,10 +43,10 @@ public class CodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/painsect?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://223.93.170.82:23506/painsect?useUnicode=true&useSSL=false&characterEncoding=utf8");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("root");
+        dsc.setPassword("diagbot@20180822");
         mpg.setDataSource(dsc);
 
         // 包配置
@@ -111,7 +111,7 @@ public class CodeGenerator {
 //                "mybk_prevent_analysis",
 //                "mybk_nurse_analysis"
 //                "xywy_disease_lib"
-                "sjjk_disease_lib",
+//                "sjjk_disease_lib",
                 "sjjk_disease_synopsis",
                 "sjjk_disease_etiology",
                 "sjjk_disease_prevent",

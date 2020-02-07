@@ -30,6 +30,12 @@ public class SjjkDiseaseSynopsis implements Serializable {
     private Long id;
 
     /**
+     * 疾病库主表id
+     */
+    @TableField("dis_lib_id")
+    private Long disLibId;
+
+    /**
      * 疾病id
      */
     @TableField("dis_id")
