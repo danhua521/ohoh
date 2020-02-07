@@ -2,7 +2,19 @@ package com.nuena.sjjk.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.nuena.sjjk.entity.SjjkDiseaseComplication;
+import com.nuena.sjjk.entity.SjjkDiseaseDiscern;
+import com.nuena.sjjk.entity.SjjkDiseaseDrug;
+import com.nuena.sjjk.entity.SjjkDiseaseEtiology;
+import com.nuena.sjjk.entity.SjjkDiseaseExamine;
+import com.nuena.sjjk.entity.SjjkDiseaseHealth;
 import com.nuena.sjjk.entity.SjjkDiseaseLib;
+import com.nuena.sjjk.entity.SjjkDiseaseMedvice;
+import com.nuena.sjjk.entity.SjjkDiseaseNurse;
+import com.nuena.sjjk.entity.SjjkDiseasePrevent;
+import com.nuena.sjjk.entity.SjjkDiseaseSymptom;
+import com.nuena.sjjk.entity.SjjkDiseaseSynopsis;
+import com.nuena.sjjk.entity.SjjkDiseaseTreat;
 import com.nuena.sjjk.service.impl.SjjkDiseaseLibServiceImpl;
 import com.nuena.util.DateUtil;
 import com.nuena.util.EnDecodeUtil;
@@ -31,6 +43,30 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
     @Autowired
     @Qualifier("sjjkDiseaseLibServiceImpl")
     private SjjkDiseaseLibServiceImpl diseaseLibService;
+    @Autowired
+    private SjjkDiseaseSynopsisFacade sjjkDiseaseSynopsisFacade;
+    @Autowired
+    private SjjkDiseaseEtiologyFacade sjjkDiseaseEtiologyFacade;
+    @Autowired
+    private SjjkDiseasePreventFacade sjjkDiseasePreventFacade;
+    @Autowired
+    private SjjkDiseaseComplicationFacade sjjkDiseaseComplicationFacade;
+    @Autowired
+    private SjjkDiseaseSymptomFacade sjjkDiseaseSymptomFacade;
+    @Autowired
+    private SjjkDiseaseExamineFacade sjjkDiseaseExamineFacade;
+    @Autowired
+    private SjjkDiseaseDiscernFacade sjjkDiseaseDiscernFacade;
+    @Autowired
+    private SjjkDiseaseTreatFacade sjjkDiseaseTreatFacade;
+    @Autowired
+    private SjjkDiseaseNurseFacade sjjkDiseaseNurseFacade;
+    @Autowired
+    private SjjkDiseaseHealthFacade sjjkDiseaseHealthFacade;
+    @Autowired
+    private SjjkDiseaseMedviceFacade sjjkDiseaseMedviceFacade;
+    @Autowired
+    private SjjkDiseaseDrugFacade sjjkDiseaseDrugFacade;
 
     @Transactional
     public void initDisIdData() {
@@ -126,8 +162,7 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
         String medviceHtml = loadHtml(diseaseLib.getMedviceUrl(), "content");
         String drugHtml = loadHtml(diseaseLib.getDrugUrl(), "fl730");
 
-        SjjkDiseaseLib diseaseLibUp = null;
-        long id = diseaseLib.getId();
+        Date now = DateUtil.now();
         if (StringUtil.isNotBlank(synopsisHtml)
                 && StringUtil.isNotBlank(etiologyHtml)
                 && StringUtil.isNotBlank(preventHtml)
@@ -139,66 +174,117 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
                 && StringUtil.isNotBlank(nurseHtml)
                 && StringUtil.isNotBlank(healthHtml)
                 && StringUtil.isNotBlank(drugHtml)) {
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setSynopsisHtml(synopsisHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseSynopsis sjjkDiseaseSynopsis = new SjjkDiseaseSynopsis();
+            sjjkDiseaseSynopsis.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseSynopsis.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseSynopsis.setSynopsisUrl(diseaseLib.getSynopsisUrl());
+            sjjkDiseaseSynopsis.setSynopsisHtml(synopsisHtml);
+            sjjkDiseaseSynopsis.setCreateTime(now);
+            sjjkDiseaseSynopsis.setModifyTime(now);
+            sjjkDiseaseSynopsisFacade.save(sjjkDiseaseSynopsis);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setEtiologyHtml(etiologyHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseEtiology sjjkDiseaseEtiology = new SjjkDiseaseEtiology();
+            sjjkDiseaseEtiology.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseEtiology.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseEtiology.setEtiologyUrl(diseaseLib.getEtiologyUrl());
+            sjjkDiseaseEtiology.setEtiologyHtml(etiologyHtml);
+            sjjkDiseaseEtiology.setCreateTime(now);
+            sjjkDiseaseEtiology.setModifyTime(now);
+            sjjkDiseaseEtiologyFacade.save(sjjkDiseaseEtiology);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setPreventHtml(preventHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseasePrevent sjjkDiseasePrevent = new SjjkDiseasePrevent();
+            sjjkDiseasePrevent.setDisId(diseaseLib.getDisId());
+            sjjkDiseasePrevent.setDisName(diseaseLib.getDisName());
+            sjjkDiseasePrevent.setPreventUrl(diseaseLib.getPreventUrl());
+            sjjkDiseasePrevent.setPreventHtml(preventHtml);
+            sjjkDiseasePrevent.setCreateTime(now);
+            sjjkDiseasePrevent.setModifyTime(now);
+            sjjkDiseasePreventFacade.save(sjjkDiseasePrevent);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setComplicationHtml(complicationHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseComplication sjjkDiseaseComplication = new SjjkDiseaseComplication();
+            sjjkDiseaseComplication.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseComplication.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseComplication.setComplicationUrl(diseaseLib.getComplicationUrl());
+            sjjkDiseaseComplication.setComplicationHtml(complicationHtml);
+            sjjkDiseaseComplication.setCreateTime(now);
+            sjjkDiseaseComplication.setModifyTime(now);
+            sjjkDiseaseComplicationFacade.save(sjjkDiseaseComplication);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setSymptomHtml(symptomHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseSymptom sjjkDiseaseSymptom = new SjjkDiseaseSymptom();
+            sjjkDiseaseSymptom.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseSymptom.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseSymptom.setSymptomUrl(diseaseLib.getSymptomUrl());
+            sjjkDiseaseSymptom.setSymptomHtml(symptomHtml);
+            sjjkDiseaseSymptom.setCreateTime(now);
+            sjjkDiseaseSymptom.setModifyTime(now);
+            sjjkDiseaseSymptomFacade.save(sjjkDiseaseSymptom);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setExamineHtml(examineHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseExamine sjjkDiseaseExamine = new SjjkDiseaseExamine();
+            sjjkDiseaseExamine.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseExamine.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseExamine.setExamineUrl(diseaseLib.getExamineUrl());
+            sjjkDiseaseExamine.setExamineHtml(examineHtml);
+            sjjkDiseaseExamine.setCreateTime(now);
+            sjjkDiseaseExamine.setModifyTime(now);
+            sjjkDiseaseExamineFacade.save(sjjkDiseaseExamine);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setDiscernHtml(discernHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseDiscern sjjkDiseaseDiscern = new SjjkDiseaseDiscern();
+            sjjkDiseaseDiscern.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseDiscern.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseDiscern.setDiscernUrl(diseaseLib.getDiscernUrl());
+            sjjkDiseaseDiscern.setDiscernHtml(discernHtml);
+            sjjkDiseaseDiscern.setCreateTime(now);
+            sjjkDiseaseDiscern.setModifyTime(now);
+            sjjkDiseaseDiscernFacade.save(sjjkDiseaseDiscern);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setTreatHtml(treatHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseTreat sjjkDiseaseTreat = new SjjkDiseaseTreat();
+            sjjkDiseaseTreat.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseTreat.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseTreat.setTreatUrl(diseaseLib.getTreatUrl());
+            sjjkDiseaseTreat.setTreatHtml(treatHtml);
+            sjjkDiseaseTreat.setCreateTime(now);
+            sjjkDiseaseTreat.setModifyTime(now);
+            sjjkDiseaseTreatFacade.save(sjjkDiseaseTreat);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setNurseHtml(nurseHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseNurse sjjkDiseaseNurse = new SjjkDiseaseNurse();
+            sjjkDiseaseNurse.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseNurse.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseNurse.setNurseUrl(diseaseLib.getNurseUrl());
+            sjjkDiseaseNurse.setNurseHtml(nurseHtml);
+            sjjkDiseaseNurse.setCreateTime(now);
+            sjjkDiseaseNurse.setModifyTime(now);
+            sjjkDiseaseNurseFacade.save(sjjkDiseaseNurse);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setHealthHtml(healthHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseHealth sjjkDiseaseHealth = new SjjkDiseaseHealth();
+            sjjkDiseaseHealth.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseHealth.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseHealth.setHealthUrl(diseaseLib.getHealthUrl());
+            sjjkDiseaseHealth.setHealthHtml(healthHtml);
+            sjjkDiseaseHealth.setCreateTime(now);
+            sjjkDiseaseHealth.setModifyTime(now);
+            sjjkDiseaseHealthFacade.save(sjjkDiseaseHealth);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setMedviceHtml(medviceHtml);
-            updateById(diseaseLibUp);
+            SjjkDiseaseMedvice sjjkDiseaseMedvice = new SjjkDiseaseMedvice();
+            sjjkDiseaseMedvice.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseMedvice.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseMedvice.setMedviceUrl(diseaseLib.getMedviceUrl());
+            sjjkDiseaseMedvice.setMedviceHtml(medviceHtml);
+            sjjkDiseaseMedvice.setCreateTime(now);
+            sjjkDiseaseMedvice.setModifyTime(now);
+            sjjkDiseaseMedviceFacade.save(sjjkDiseaseMedvice);
 
-            diseaseLibUp = new SjjkDiseaseLib();
-            diseaseLibUp.setId(id);
-            diseaseLibUp.setDrugHtml(drugHtml);
-            diseaseLibUp.setIsHtmlsLoad(1);
-            updateById(diseaseLibUp);
+            SjjkDiseaseDrug sjjkDiseaseDrug = new SjjkDiseaseDrug();
+            sjjkDiseaseDrug.setDisId(diseaseLib.getDisId());
+            sjjkDiseaseDrug.setDisName(diseaseLib.getDisName());
+            sjjkDiseaseDrug.setDrugUrl(diseaseLib.getDrugUrl());
+            sjjkDiseaseDrug.setDrugHtml(drugHtml);
+            sjjkDiseaseDrug.setCreateTime(now);
+            sjjkDiseaseDrug.setModifyTime(now);
+            sjjkDiseaseDrugFacade.save(sjjkDiseaseDrug);
+
+            diseaseLib.setIsHtmlsLoad(1);
+            diseaseLib.setModifyTime(now);
+            updateById(diseaseLib);
         }
     }
 
