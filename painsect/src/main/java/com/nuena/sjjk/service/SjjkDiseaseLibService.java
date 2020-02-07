@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author rgb
- * @since 2020-02-06
+ * @since 2020-02-07
  */
 public interface SjjkDiseaseLibService extends IService<SjjkDiseaseLib> {
 

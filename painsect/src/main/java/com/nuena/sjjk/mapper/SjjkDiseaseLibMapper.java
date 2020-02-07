@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rgb
- * @since 2020-02-06
+ * @since 2020-02-07
  */
 public interface SjjkDiseaseLibMapper extends BaseMapper<SjjkDiseaseLib> {
 

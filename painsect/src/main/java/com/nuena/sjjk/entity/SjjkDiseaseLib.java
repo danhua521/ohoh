@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-02-06
+ * @since 2020-02-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -277,6 +277,9 @@ public class SjjkDiseaseLib implements Serializable {
 
     @TableField("create_time")
     private Date createTime;
+
+    @TableField("modify_time")
+    private Date modifyTime;
 
     /**
      * 所有html是否下载完成  0-否  1-是

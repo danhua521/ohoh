@@ -111,7 +111,19 @@ public class CodeGenerator {
 //                "mybk_prevent_analysis",
 //                "mybk_nurse_analysis"
 //                "xywy_disease_lib"
-                  "sjjk_disease_lib"
+                "sjjk_disease_lib",
+                "sjjk_disease_synopsis",
+                "sjjk_disease_etiology",
+                "sjjk_disease_prevent",
+                "sjjk_disease_complication",
+                "sjjk_disease_symptom",
+                "sjjk_disease_examine",
+                "sjjk_disease_discern",
+                "sjjk_disease_treat",
+                "sjjk_disease_nurse",
+                "sjjk_disease_health",
+                "sjjk_disease_medvice",
+                "sjjk_disease_drug"
         );
         mpg.setStrategy(strategy);
 
