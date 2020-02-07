@@ -38,6 +38,7 @@ public class DiseaseHtmlInit implements ApplicationRunner {
                 try {
                     diseaseLibFacade.loadHtml(i);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }

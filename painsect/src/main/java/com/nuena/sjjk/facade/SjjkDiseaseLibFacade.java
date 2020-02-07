@@ -126,6 +126,8 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
         String medviceHtml = loadHtml(diseaseLib.getMedviceUrl(), "content");
         String drugHtml = loadHtml(diseaseLib.getDrugUrl(), "fl730");
 
+        SjjkDiseaseLib diseaseLibUp = null;
+        long id = diseaseLib.getId();
         if (StringUtil.isNotBlank(synopsisHtml)
                 && StringUtil.isNotBlank(etiologyHtml)
                 && StringUtil.isNotBlank(preventHtml)
@@ -137,20 +139,66 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
                 && StringUtil.isNotBlank(nurseHtml)
                 && StringUtil.isNotBlank(healthHtml)
                 && StringUtil.isNotBlank(drugHtml)) {
-            diseaseLib.setSynopsisHtml(synopsisHtml);
-            diseaseLib.setEtiologyHtml(etiologyHtml);
-            diseaseLib.setPreventHtml(preventHtml);
-            diseaseLib.setComplicationHtml(complicationHtml);
-            diseaseLib.setSymptomHtml(symptomHtml);
-            diseaseLib.setExamineHtml(examineHtml);
-            diseaseLib.setDiscernHtml(discernHtml);
-            diseaseLib.setTreatHtml(treatHtml);
-            diseaseLib.setNurseHtml(nurseHtml);
-            diseaseLib.setHealthHtml(healthHtml);
-            diseaseLib.setMedviceHtml(medviceHtml);
-            diseaseLib.setDrugHtml(drugHtml);
-            diseaseLib.setIsHtmlsLoad(1);
-            updateById(diseaseLib);
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setSynopsisHtml(synopsisHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setEtiologyHtml(etiologyHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setPreventHtml(preventHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setComplicationHtml(complicationHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setSymptomHtml(symptomHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setExamineHtml(examineHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setDiscernHtml(discernHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setTreatHtml(treatHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setNurseHtml(nurseHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setHealthHtml(healthHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setMedviceHtml(medviceHtml);
+            updateById(diseaseLibUp);
+
+            diseaseLibUp = new SjjkDiseaseLib();
+            diseaseLibUp.setId(id);
+            diseaseLibUp.setDrugHtml(drugHtml);
+            diseaseLibUp.setIsHtmlsLoad(1);
+            updateById(diseaseLibUp);
         }
     }
 
