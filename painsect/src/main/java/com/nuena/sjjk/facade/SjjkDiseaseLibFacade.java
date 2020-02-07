@@ -113,19 +113,18 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
      */
     @Transactional
     public void loadHtml(SjjkDiseaseLib diseaseLib) {
-        String synopsisHtml = loadHtml(diseaseLib.getSynopsisUrl());
-        String etiologyHtml = loadHtml(diseaseLib.getEtiologyUrl());
-        String preventHtml = loadHtml(diseaseLib.getPreventUrl());
-        String complicationHtml = loadHtml(diseaseLib.getComplicationUrl());
-        String symptomHtml = loadHtml(diseaseLib.getSymptomUrl());
-        String examineHtml = loadHtml(diseaseLib.getExamineUrl());
-        String discernHtml = loadHtml(diseaseLib.getDiscernUrl());
-        String treatHtml = loadHtml(diseaseLib.getTreatUrl());
-        String nurseHtml = loadHtml(diseaseLib.getNurseUrl());
-        String healthHtml = loadHtml(diseaseLib.getHealthUrl());
-        String medviceHtml = loadHtml(diseaseLib.getMedviceUrl());
-        String drugHtml = loadHtml(diseaseLib.getDrugUrl());
-        String askanswerHtml = loadHtml(diseaseLib.getAskanswerUrl());
+        String synopsisHtml = loadHtml(diseaseLib.getSynopsisUrl(), "list_left");
+        String etiologyHtml = loadHtml(diseaseLib.getEtiologyUrl(), "list_left");
+        String preventHtml = loadHtml(diseaseLib.getPreventUrl(), "list_left");
+        String complicationHtml = loadHtml(diseaseLib.getComplicationUrl(), "list_left");
+        String symptomHtml = loadHtml(diseaseLib.getSymptomUrl(), "list_left");
+        String examineHtml = loadHtml(diseaseLib.getExamineUrl(), "list_left");
+        String discernHtml = loadHtml(diseaseLib.getDiscernUrl(), "list_left");
+        String treatHtml = loadHtml(diseaseLib.getTreatUrl(), "list_left");
+        String nurseHtml = loadHtml(diseaseLib.getNurseUrl(), "list_left");
+        String healthHtml = loadHtml(diseaseLib.getHealthUrl(), "list_left");
+        String medviceHtml = loadHtml(diseaseLib.getMedviceUrl(), "content");
+        String drugHtml = loadHtml(diseaseLib.getDrugUrl(), "fl730");
 
         if (StringUtil.isNotBlank(synopsisHtml)
                 && StringUtil.isNotBlank(etiologyHtml)
@@ -150,7 +149,6 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
             diseaseLib.setHealthHtml(healthHtml);
             diseaseLib.setMedviceHtml(medviceHtml);
             diseaseLib.setDrugHtml(drugHtml);
-            diseaseLib.setAskanswerHtml(askanswerHtml);
             diseaseLib.setIsHtmlsLoad(1);
             updateById(diseaseLib);
         }
@@ -160,22 +158,24 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
      * 下载html
      *
      * @param url
+     * @param modelName
      * @return
      */
-    private String loadHtml(String url) {
+    private String loadHtml(String url, String modelName) {
         String ret = null;
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (Exception e) {
         }
         String html = HttpTool.post(url);
         if (StringUtil.isNotBlank(html)) {
-//            Document doc = Jsoup.parse(html);
-//            Element jibArticlElement = doc.getElementsByClass("jib-articl").first();
-//            if (jibArticlElement != null) {
-//                ret = EnDecodeUtil.encode(jibArticlElement.outerHtml());
-//            }
+            Document doc = Jsoup.parse(html);
+            Element modelNameElement = doc.getElementsByClass("modelName").first();
+            if (modelNameElement != null) {
+                ret = EnDecodeUtil.encode(modelNameElement.outerHtml());
+            }
         }
         return ret;
     }
+    
 }
