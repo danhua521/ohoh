@@ -170,12 +170,12 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
         String html = HttpTool.post(url);
         if (StringUtil.isNotBlank(html)) {
             Document doc = Jsoup.parse(html);
-            Element modelNameElement = doc.getElementsByClass("modelName").first();
+            Element modelNameElement = doc.getElementsByClass(modelName).first();
             if (modelNameElement != null) {
                 ret = EnDecodeUtil.encode(modelNameElement.outerHtml());
             }
         }
         return ret;
     }
-    
+
 }
