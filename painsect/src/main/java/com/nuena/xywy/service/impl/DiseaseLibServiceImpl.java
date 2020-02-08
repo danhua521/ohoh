@@ -1,6 +1,5 @@
 package com.nuena.xywy.service.impl;
 
-import com.nuena.xywy.entity.DiseaseLib;
 import com.nuena.xywy.mapper.DiseaseLibMapper;
 import com.nuena.xywy.service.DiseaseLibService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

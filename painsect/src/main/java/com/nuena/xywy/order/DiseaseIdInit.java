@@ -1,6 +1,6 @@
 package com.nuena.xywy.order;
 
-import com.nuena.xywy.facade.DiseaseLibFacade;
+import com.nuena.xywy.facade.XywyDiseaseLibFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -20,14 +20,14 @@ public class DiseaseIdInit implements ApplicationRunner {
     @Value("${xywy.disease.id.insect.finished}")
     private boolean disease_id_insect_finished;
     @Autowired
-    private DiseaseLibFacade diseaseLibFacade;
+    private XywyDiseaseLibFacade xywyDiseaseLibFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if (disease_id_insect_finished) {
             return;
         }
-        diseaseLibFacade.initDisIdData();
+        xywyDiseaseLibFacade.initDisIdData();
     }
 
 }

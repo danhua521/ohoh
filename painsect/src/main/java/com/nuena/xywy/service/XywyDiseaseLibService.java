@@ -1,5 +1,6 @@
 package com.nuena.xywy.service;
 
+import com.nuena.xywy.entity.XywyDiseaseLib;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -8,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author rgb
- * @since 2020-02-05
+ * @since 2020-02-08
  */
-public interface DiseaseLibService extends IService<DiseaseLib> {
+public interface XywyDiseaseLibService extends IService<XywyDiseaseLib> {
 
 }

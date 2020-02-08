@@ -1,5 +1,6 @@
 package com.nuena.xywy.mapper;
 
+import com.nuena.xywy.entity.XywyDiseaseLib;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -8,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rgb
- * @since 2020-02-05
+ * @since 2020-02-08
  */
-public interface DiseaseLibMapper extends BaseMapper<DiseaseLib> {
+public interface XywyDiseaseLibMapper extends BaseMapper<XywyDiseaseLib> {
 
 }

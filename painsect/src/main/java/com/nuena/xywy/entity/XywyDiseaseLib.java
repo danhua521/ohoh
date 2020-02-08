@@ -16,13 +16,13 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-02-05
+ * @since 2020-02-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("xywy_disease_lib")
-public class DiseaseLib implements Serializable {
+public class XywyDiseaseLib implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -223,6 +223,9 @@ public class DiseaseLib implements Serializable {
 
     @TableField("create_time")
     private Date createTime;
+
+    @TableField("modify_time")
+    private Date modifyTime;
 
     /**
      * 所有html是否下载完成  0-否  1-是

@@ -1,8 +1,8 @@
 package com.nuena.xywy.order;
 
 import com.nuena.util.ListUtil;
-import com.nuena.xywy.entity.DiseaseLib;
-import com.nuena.xywy.facade.DiseaseLibFacade;
+import com.nuena.xywy.entity.XywyDiseaseLib;
+import com.nuena.xywy.facade.XywyDiseaseLibFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -24,7 +24,7 @@ public class DiseaseHtmlInit implements ApplicationRunner {
     @Value("${xywy.disease.html.insect.finished}")
     private boolean disease_html_insect_finished;
     @Autowired
-    private DiseaseLibFacade diseaseLibFacade;
+    private XywyDiseaseLibFacade xywyDiseaseLibFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -32,12 +32,13 @@ public class DiseaseHtmlInit implements ApplicationRunner {
             return;
         }
 
-        List<DiseaseLib> diseaseLibList = null;
-        while (ListUtil.isNotEmpty(diseaseLibList = diseaseLibFacade.getNoLoadHtmlDiseases())) {
+        List<XywyDiseaseLib> diseaseLibList = null;
+        while (ListUtil.isNotEmpty(diseaseLibList = xywyDiseaseLibFacade.getNoLoadHtmlDiseases())) {
             diseaseLibList.forEach(i -> {
                 try {
-                    diseaseLibFacade.loadHtml(i);
+                    xywyDiseaseLibFacade.loadHtml(i);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }

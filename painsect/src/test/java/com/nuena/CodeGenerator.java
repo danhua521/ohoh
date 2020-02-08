@@ -51,7 +51,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.nuena.sjjk");
+        pc.setParent("com.nuena.xywy");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");
@@ -70,7 +70,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
-                return projectPath + "/src/main/resources/mapper/sjjk/"
+                return projectPath + "/src/main/resources/mapper/xywy/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -111,19 +111,18 @@ public class CodeGenerator {
 //                "mybk_prevent_analysis",
 //                "mybk_nurse_analysis"
 //                "xywy_disease_lib"
-//                "sjjk_disease_lib",
-                "sjjk_disease_synopsis",
-                "sjjk_disease_etiology",
-                "sjjk_disease_prevent",
-                "sjjk_disease_complication",
-                "sjjk_disease_symptom",
-                "sjjk_disease_examine",
-                "sjjk_disease_discern",
-                "sjjk_disease_treat",
-                "sjjk_disease_nurse",
-                "sjjk_disease_health",
-                "sjjk_disease_medvice",
-                "sjjk_disease_drug"
+//                "xywy_disease_lib",
+                "xywy_disease_lib",
+                "xywy_disease_synopsis",
+                "xywy_disease_etiology",
+                "xywy_disease_prevent",
+                "xywy_disease_complication",
+                "xywy_disease_symptom",
+                "xywy_disease_examine",
+                "xywy_disease_discern",
+                "xywy_disease_treat",
+                "xywy_disease_nurse",
+                "xywy_disease_health"
         );
         mpg.setStrategy(strategy);
 
