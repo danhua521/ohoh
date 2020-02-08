@@ -298,7 +298,7 @@ public class XywyDiseaseLibFacade extends XywyDiseaseLibServiceImpl {
     private String loadHtml(String url) {
         String ret = null;
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (Exception e) {
         }
         String html = HttpTool.post(url);
