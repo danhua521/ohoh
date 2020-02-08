@@ -1,6 +1,7 @@
 package com.nuena.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,6 +61,10 @@ public class FileUtil {
         boolean flag = false;
         FileWriter fw = null;
         try {
+            File dicPath = new File(path);
+            if (!dicPath.exists()) {
+                dicPath.mkdirs();
+            }
             fw = new FileWriter(path + "\\" + fileName);
             fw.write(content);
             fw.close();

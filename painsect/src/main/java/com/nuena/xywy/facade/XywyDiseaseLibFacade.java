@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.nuena.util.DateUtil;
 import com.nuena.util.EnDecodeUtil;
+import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
+import com.nuena.util.JsoupUtil;
 import com.nuena.util.StringUtil;
 import com.nuena.xywy.entity.XywyDiseaseComplication;
 import com.nuena.xywy.entity.XywyDiseaseDiscern;
@@ -17,7 +19,17 @@ import com.nuena.xywy.entity.XywyDiseasePrevent;
 import com.nuena.xywy.entity.XywyDiseaseSymptom;
 import com.nuena.xywy.entity.XywyDiseaseSynopsis;
 import com.nuena.xywy.entity.XywyDiseaseTreat;
+import com.nuena.xywy.service.impl.XywyDiseaseComplicationServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseDiscernServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseEtiologyServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseExamineServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseHealthServiceImpl;
 import com.nuena.xywy.service.impl.XywyDiseaseLibServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseNurseServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseasePreventServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseSymptomServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseSynopsisServiceImpl;
+import com.nuena.xywy.service.impl.XywyDiseaseTreatServiceImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,8 +39,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -44,23 +59,53 @@ public class XywyDiseaseLibFacade extends XywyDiseaseLibServiceImpl {
     @Autowired
     private XywyDiseaseSynopsisFacade xywyDiseaseSynopsisFacade;
     @Autowired
+    @Qualifier("xywyDiseaseSynopsisServiceImpl")
+    private XywyDiseaseSynopsisServiceImpl xywyDiseaseSynopsisService;
+    @Autowired
     private XywyDiseaseEtiologyFacade xywyDiseaseEtiologyFacade;
+    @Autowired
+    @Qualifier("xywyDiseaseEtiologyServiceImpl")
+    private XywyDiseaseEtiologyServiceImpl xywyDiseaseEtiologyService;
     @Autowired
     private XywyDiseasePreventFacade xywyDiseasePreventFacade;
     @Autowired
+    @Qualifier("xywyDiseasePreventServiceImpl")
+    private XywyDiseasePreventServiceImpl xywyDiseasePreventService;
+    @Autowired
     private XywyDiseaseComplicationFacade xywyDiseaseComplicationFacade;
+    @Autowired
+    @Qualifier("xywyDiseaseComplicationServiceImpl")
+    private XywyDiseaseComplicationServiceImpl xywyDiseaseComplicationService;
     @Autowired
     private XywyDiseaseSymptomFacade xywyDiseaseSymptomFacade;
     @Autowired
+    @Qualifier("xywyDiseaseSymptomServiceImpl")
+    private XywyDiseaseSymptomServiceImpl xywyDiseaseSymptomService;
+    @Autowired
     private XywyDiseaseExamineFacade xywyDiseaseExamineFacade;
+    @Autowired
+    @Qualifier("xywyDiseaseExamineServiceImpl")
+    private XywyDiseaseExamineServiceImpl xywyDiseaseExamineService;
     @Autowired
     private XywyDiseaseDiscernFacade xywyDiseaseDiscernFacade;
     @Autowired
+    @Qualifier("xywyDiseaseDiscernServiceImpl")
+    private XywyDiseaseDiscernServiceImpl xywyDiseaseDiscernService;
+    @Autowired
     private XywyDiseaseTreatFacade xywyDiseaseTreatFacade;
+    @Autowired
+    @Qualifier("xywyDiseaseTreatServiceImpl")
+    private XywyDiseaseTreatServiceImpl xywyDiseaseTreatService;
     @Autowired
     private XywyDiseaseNurseFacade xywyDiseaseNurseFacade;
     @Autowired
+    @Qualifier("xywyDiseaseNurseServiceImpl")
+    private XywyDiseaseNurseServiceImpl xywyDiseaseNurseService;
+    @Autowired
     private XywyDiseaseHealthFacade xywyDiseaseHealthFacade;
+    @Autowired
+    @Qualifier("xywyDiseaseHealthServiceImpl")
+    private XywyDiseaseHealthServiceImpl xywyDiseaseHealthService;
 
     @Transactional
     public void initDisIdData() {
@@ -310,6 +355,260 @@ public class XywyDiseaseLibFacade extends XywyDiseaseLibServiceImpl {
             }
         }
         return ret;
+    }
+
+    @Transactional
+    public void analysis() {
+        analysisSynopsis();
+        analysisEtiology();
+        analysisPrevent();
+        analysisComplication();
+        analysisSymptom();
+        analysisExamine();
+        analysisDiscern();
+        analysisTreat();
+        analysisNurse();
+        analysisHealth();
+    }
+
+    /**
+     * 解析--简介
+     */
+    private void analysisSynopsis() {
+        List<XywyDiseaseSynopsis> xywyDiseaseSynopsisList = xywyDiseaseSynopsisFacade.list();
+        List<XywyDiseaseLib> xywyDiseaseLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        xywyDiseaseSynopsisList.forEach(xywyDiseaseSynopsis -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseSynopsis.getSynopsisHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseSynopsis.setSynopsisAnaytxt(anaTxt);
+            xywyDiseaseSynopsis.setModifyTime(now);
+
+            String title = jibArticlElement.getElementsByClass("jib-articl-tit").first().text();
+            title = title.substring(0, title.length() - 5);
+            XywyDiseaseLib xywyDiseaseLib = new XywyDiseaseLib();
+            xywyDiseaseLib.setId(xywyDiseaseSynopsis.getDisLibId());
+            xywyDiseaseLib.setDisName(title);
+            xywyDiseaseLib.setIsHtmlsAnay(1);
+            xywyDiseaseLib.setModifyTime(now);
+            xywyDiseaseLibList.add(xywyDiseaseLib);
+        });
+
+        xywyDiseaseSynopsisService.updateBatchById(xywyDiseaseSynopsisList);
+        xywyDiseaseLibService.updateBatchById(xywyDiseaseLibList);
+    }
+
+    /**
+     * 解析--病因
+     */
+    private void analysisEtiology() {
+        List<XywyDiseaseEtiology> xywyDiseaseEtiologyList = xywyDiseaseEtiologyFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseEtiologyList.forEach(xywyDiseaseEtiology -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseEtiology.getEtiologyHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseEtiology.setEtiologyAnaytxt(anaTxt);
+            xywyDiseaseEtiology.setModifyTime(now);
+        });
+        xywyDiseaseEtiologyService.updateBatchById(xywyDiseaseEtiologyList);
+    }
+
+    /**
+     * 解析--预防
+     */
+    private void analysisPrevent() {
+        List<XywyDiseasePrevent> xywyDiseasePreventList = xywyDiseasePreventFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseasePreventList.forEach(xywyDiseasePrevent -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseasePrevent.getPreventHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseasePrevent.setPreventAnaytxt(anaTxt);
+            xywyDiseasePrevent.setModifyTime(now);
+        });
+        xywyDiseasePreventService.updateBatchById(xywyDiseasePreventList);
+    }
+
+    /**
+     * 解析--并发症
+     */
+    private void analysisComplication() {
+        List<XywyDiseaseComplication> xywyDiseaseComplicationList = xywyDiseaseComplicationFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseComplicationList.forEach(xywyDiseaseComplication -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseComplication.getComplicationHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseComplication.setComplicationAnaytxt(anaTxt);
+            xywyDiseaseComplication.setModifyTime(now);
+        });
+        xywyDiseaseComplicationService.updateBatchById(xywyDiseaseComplicationList);
+    }
+
+    /**
+     * 解析--症状
+     */
+    private void analysisSymptom() {
+        List<XywyDiseaseSymptom> xywyDiseaseSymptomList = xywyDiseaseSymptomFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseSymptomList.forEach(xywyDiseaseSymptom -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseSymptom.getSymptomHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseSymptom.setSymptomAnaytxt(anaTxt);
+            xywyDiseaseSymptom.setModifyTime(now);
+        });
+        xywyDiseaseSymptomService.updateBatchById(xywyDiseaseSymptomList);
+    }
+
+    /**
+     * 解析--检查
+     */
+    private void analysisExamine() {
+        List<XywyDiseaseExamine> xywyDiseaseExamineList = xywyDiseaseExamineFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseExamineList.forEach(xywyDiseaseExamine -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseExamine.getExamineHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseExamine.setExamineAnaytxt(anaTxt);
+            xywyDiseaseExamine.setModifyTime(now);
+        });
+        xywyDiseaseExamineService.updateBatchById(xywyDiseaseExamineList);
+    }
+
+    /**
+     * 解析--诊断鉴别
+     */
+    private void analysisDiscern() {
+        List<XywyDiseaseDiscern> xywyDiseaseDiscernList = xywyDiseaseDiscernFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseDiscernList.forEach(xywyDiseaseDiscern -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseDiscern.getDiscernHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseDiscern.setDiscernAnaytxt(anaTxt);
+            xywyDiseaseDiscern.setModifyTime(now);
+        });
+        xywyDiseaseDiscernService.updateBatchById(xywyDiseaseDiscernList);
+    }
+
+    /**
+     * 解析--治疗
+     */
+    private void analysisTreat() {
+        List<XywyDiseaseTreat> xywyDiseaseTreatList = xywyDiseaseTreatFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseTreatList.forEach(xywyDiseaseTreat -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseTreat.getTreatHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseTreat.setTreatAnaytxt(anaTxt);
+            xywyDiseaseTreat.setModifyTime(now);
+        });
+        xywyDiseaseTreatService.updateBatchById(xywyDiseaseTreatList);
+    }
+
+    /**
+     * 解析--护理
+     */
+    private void analysisNurse() {
+        List<XywyDiseaseNurse> xywyDiseaseNurseList = xywyDiseaseNurseFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseNurseList.forEach(xywyDiseaseNurse -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseNurse.getNurseHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseNurse.setNurseAnaytxt(anaTxt);
+            xywyDiseaseNurse.setModifyTime(now);
+        });
+        xywyDiseaseNurseService.updateBatchById(xywyDiseaseNurseList);
+    }
+
+    /**
+     * 解析--饮食健康
+     */
+    private void analysisHealth() {
+        List<XywyDiseaseHealth> xywyDiseaseHealthList = xywyDiseaseHealthFacade.list();
+        Date now = DateUtil.now();
+        xywyDiseaseHealthList.forEach(xywyDiseaseHealth -> {
+            Document jibArticlElement = Jsoup.parse(EnDecodeUtil.decode(xywyDiseaseHealth.getHealthHtml()));
+            String anaTxt = JsoupUtil.clean(jibArticlElement.outerHtml());
+            xywyDiseaseHealth.setHealthAnaytxt(anaTxt);
+            xywyDiseaseHealth.setModifyTime(now);
+        });
+        xywyDiseaseHealthService.updateBatchById(xywyDiseaseHealthList);
+    }
+
+    /**
+     * 文件生成
+     */
+    public void fileGener() {
+        QueryWrapper<XywyDiseaseLib> xywyDiseaseLibQe = new QueryWrapper<>();
+        xywyDiseaseLibQe.eq("is_htmls_anay", 1);
+        xywyDiseaseLibQe.select("id", "dis_name");
+        List<XywyDiseaseLib> xywyDiseaseLibList = list(xywyDiseaseLibQe);
+
+        QueryWrapper<XywyDiseaseSynopsis> xywyDiseaseSynopsisQe = new QueryWrapper<>();
+        xywyDiseaseSynopsisQe.select("dis_lib_id", "synopsis_anaytxt");
+        Map<Long, String> xywyDiseaseSynopsisMap = xywyDiseaseSynopsisFacade.list(xywyDiseaseSynopsisQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseSynopsis::getDisLibId, XywyDiseaseSynopsis::getSynopsisAnaytxt));
+
+        QueryWrapper<XywyDiseaseEtiology> xywyDiseaseEtiologyQe = new QueryWrapper<>();
+        xywyDiseaseEtiologyQe.select("dis_lib_id", "etiology_anaytxt");
+        Map<Long, String> xywyDiseaseEtiologyMap = xywyDiseaseEtiologyFacade.list(xywyDiseaseEtiologyQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseEtiology::getDisLibId, XywyDiseaseEtiology::getEtiologyAnaytxt));
+
+        QueryWrapper<XywyDiseasePrevent> xywyDiseasePreventQe = new QueryWrapper<>();
+        xywyDiseasePreventQe.select("dis_lib_id", "prevent_anaytxt");
+        Map<Long, String> xywyDiseasePreventMap = xywyDiseasePreventFacade.list(xywyDiseasePreventQe)
+                .stream().collect(Collectors.toMap(XywyDiseasePrevent::getDisLibId, XywyDiseasePrevent::getPreventAnaytxt));
+
+        QueryWrapper<XywyDiseaseComplication> xywyDiseaseComplicationQe = new QueryWrapper<>();
+        xywyDiseaseComplicationQe.select("dis_lib_id", "complication_anaytxt");
+        Map<Long, String> xywyDiseaseComplicationMap = xywyDiseaseComplicationFacade.list(xywyDiseaseComplicationQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseComplication::getDisLibId, XywyDiseaseComplication::getComplicationAnaytxt));
+
+        QueryWrapper<XywyDiseaseSymptom> xywyDiseaseSymptomQe = new QueryWrapper<>();
+        xywyDiseaseSymptomQe.select("dis_lib_id", "symptom_anaytxt");
+        Map<Long, String> xywyDiseaseSymptomMap = xywyDiseaseSymptomFacade.list(xywyDiseaseSymptomQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseSymptom::getDisLibId, XywyDiseaseSymptom::getSymptomAnaytxt));
+
+        QueryWrapper<XywyDiseaseExamine> xywyDiseaseExamineQe = new QueryWrapper<>();
+        xywyDiseaseExamineQe.select("dis_lib_id", "examine_anaytxt");
+        Map<Long, String> xywyDiseaseExamineMap = xywyDiseaseExamineFacade.list(xywyDiseaseExamineQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseExamine::getDisLibId, XywyDiseaseExamine::getExamineAnaytxt));
+
+        QueryWrapper<XywyDiseaseDiscern> xywyDiseaseDiscernQe = new QueryWrapper<>();
+        xywyDiseaseDiscernQe.select("dis_lib_id", "discern_anaytxt");
+        Map<Long, String> xywyDiseaseDiscernMap = xywyDiseaseDiscernFacade.list(xywyDiseaseDiscernQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseDiscern::getDisLibId, XywyDiseaseDiscern::getDiscernAnaytxt));
+
+        QueryWrapper<XywyDiseaseTreat> xywyDiseaseTreatQe = new QueryWrapper<>();
+        xywyDiseaseTreatQe.select("dis_lib_id", "treat_anaytxt");
+        Map<Long, String> xywyDiseaseTreatMap = xywyDiseaseTreatFacade.list(xywyDiseaseTreatQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseTreat::getDisLibId, XywyDiseaseTreat::getTreatAnaytxt));
+
+        QueryWrapper<XywyDiseaseNurse> xywyDiseaseNurseQe = new QueryWrapper<>();
+        xywyDiseaseNurseQe.select("dis_lib_id", "nurse_anaytxt");
+        Map<Long, String> xywyDiseaseNurseMap = xywyDiseaseNurseFacade.list(xywyDiseaseNurseQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseNurse::getDisLibId, XywyDiseaseNurse::getNurseAnaytxt));
+
+        QueryWrapper<XywyDiseaseHealth> xywyDiseaseHealthQe = new QueryWrapper<>();
+        xywyDiseaseHealthQe.select("dis_lib_id", "health_anaytxt");
+        Map<Long, String> xywyDiseaseHealthMap = xywyDiseaseHealthFacade.list(xywyDiseaseHealthQe)
+                .stream().collect(Collectors.toMap(XywyDiseaseHealth::getDisLibId, XywyDiseaseHealth::getHealthAnaytxt));
+
+        xywyDiseaseLibList.forEach(xywyDiseaseLib -> {
+            String path = "F:\\寻医问药\\" + xywyDiseaseLib.getDisName();
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            FileUtil.fileWrite(path, "简介", xywyDiseaseSynopsisMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "病因", xywyDiseaseEtiologyMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "预防", xywyDiseasePreventMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "并发症", xywyDiseaseComplicationMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "症状", xywyDiseaseSymptomMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "检查", xywyDiseaseExamineMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "诊断鉴别", xywyDiseaseDiscernMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "治疗", xywyDiseaseTreatMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "护理", xywyDiseaseNurseMap.get(xywyDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "饮食保健", xywyDiseaseHealthMap.get(xywyDiseaseLib.getId()));
+        });
     }
 
 }

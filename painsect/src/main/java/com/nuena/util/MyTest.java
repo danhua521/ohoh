@@ -109,16 +109,19 @@ public class MyTest {
 //        FileUtil.fileWrite("F:\\迅雷下载","dte",nritong);
 
 //        System.out.println("任"+"\r\n"+"国宾");
-
-        String contentHtml = HttpTool.get("http://jbk.39.net/wcda/cyyp/");
+//
+        String contentHtml = HttpTool.get("http://jib.xywy.com/il_sii/gaishu/6935.htm");
         Document contentDoc = Jsoup.parse(contentHtml);
-
-
-        Element fl730Element = contentDoc.getElementsByClass("fl730").first();
-
-        Elements drugListElement = fl730Element.getElementsByClass("drug-list").select("h4");
-        String anaTxt = JsoupUtil.clean(drugListElement.outerHtml());
-        System.out.println(anaTxt);
+//
+//
+        Element fl730Element = contentDoc.getElementsByClass("jib-articl-tit").first();
+        String title = fl730Element.text();
+        title = title.substring(0, title.length() - 5);
+        System.out.println(title);
+//        System.out.println(title);
+//        Elements drugListElement = fl730Element.getElementsByClass("drug-list").select("h4");
+//        String anaTxt = JsoupUtil.clean(drugListElement.outerHtml());
+//        System.out.println(anaTxt);
 
 //        String title = listLeftElement.getElementsByClass("disease_box").first().getElementsByClass("disease_title").first().text();
 //        title = title.substring(0,title.length()-2);
@@ -137,6 +140,12 @@ public class MyTest {
 //
 //        System.out.println(disName);
 //        System.out.println(jii);
+
+//        File file = new File("F:\\迅雷下载\\ter\\rgb\\002");
+//        if (!file.exists()){
+//            file.mkdirs();
+//        }
+//        FileUtil.fileWrite("F:\\迅雷下载\\ter\\rgb\\002","tt","fefefe");
 
     }
 

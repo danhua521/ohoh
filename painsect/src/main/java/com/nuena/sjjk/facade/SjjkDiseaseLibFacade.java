@@ -30,6 +30,7 @@ import com.nuena.sjjk.service.impl.SjjkDiseaseSynopsisServiceImpl;
 import com.nuena.sjjk.service.impl.SjjkDiseaseTreatServiceImpl;
 import com.nuena.util.DateUtil;
 import com.nuena.util.EnDecodeUtil;
+import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
 import com.nuena.util.JsoupUtil;
 import com.nuena.util.StringUtil;
@@ -42,8 +43,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -640,6 +644,96 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
             sjjkDiseaseDrug.setModifyTime(now);
         });
         sjjkDiseaseDrugService.updateBatchById(sjjkDiseaseDrugList);
+    }
+
+    /**
+     * 文件生成
+     */
+    public void fileGener() {
+        QueryWrapper<SjjkDiseaseLib> sjjkDiseaseLibQe = new QueryWrapper<>();
+        sjjkDiseaseLibQe.eq("is_htmls_anay", 1);
+        sjjkDiseaseLibQe.select("id", "dis_name");
+        List<SjjkDiseaseLib> sjjkDiseaseLibList = list(sjjkDiseaseLibQe);
+
+        QueryWrapper<SjjkDiseaseSynopsis> sjjkDiseaseSynopsisQe = new QueryWrapper<>();
+        sjjkDiseaseSynopsisQe.select("dis_lib_id", "synopsis_anaytxt");
+        Map<Long, String> sjjkDiseaseSynopsisMap = sjjkDiseaseSynopsisFacade.list(sjjkDiseaseSynopsisQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseSynopsis::getDisLibId, SjjkDiseaseSynopsis::getSynopsisAnaytxt));
+
+        QueryWrapper<SjjkDiseaseEtiology> sjjkDiseaseEtiologyQe = new QueryWrapper<>();
+        sjjkDiseaseEtiologyQe.select("dis_lib_id", "etiology_anaytxt");
+        Map<Long, String> sjjkDiseaseEtiologyMap = sjjkDiseaseEtiologyFacade.list(sjjkDiseaseEtiologyQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseEtiology::getDisLibId, SjjkDiseaseEtiology::getEtiologyAnaytxt));
+
+        QueryWrapper<SjjkDiseasePrevent> sjjkDiseasePreventQe = new QueryWrapper<>();
+        sjjkDiseasePreventQe.select("dis_lib_id", "prevent_anaytxt");
+        Map<Long, String> sjjkDiseasePreventMap = sjjkDiseasePreventFacade.list(sjjkDiseasePreventQe)
+                .stream().collect(Collectors.toMap(SjjkDiseasePrevent::getDisLibId, SjjkDiseasePrevent::getPreventAnaytxt));
+
+        QueryWrapper<SjjkDiseaseComplication> sjjkDiseaseComplicationQe = new QueryWrapper<>();
+        sjjkDiseaseComplicationQe.select("dis_lib_id", "complication_anaytxt");
+        Map<Long, String> sjjkDiseaseComplicationMap = sjjkDiseaseComplicationFacade.list(sjjkDiseaseComplicationQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseComplication::getDisLibId, SjjkDiseaseComplication::getComplicationAnaytxt));
+
+        QueryWrapper<SjjkDiseaseSymptom> sjjkDiseaseSymptomQe = new QueryWrapper<>();
+        sjjkDiseaseSymptomQe.select("dis_lib_id", "symptom_anaytxt");
+        Map<Long, String> sjjkDiseaseSymptomMap = sjjkDiseaseSymptomFacade.list(sjjkDiseaseSymptomQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseSymptom::getDisLibId, SjjkDiseaseSymptom::getSymptomAnaytxt));
+
+        QueryWrapper<SjjkDiseaseExamine> sjjkDiseaseExamineQe = new QueryWrapper<>();
+        sjjkDiseaseExamineQe.select("dis_lib_id", "examine_anaytxt");
+        Map<Long, String> sjjkDiseaseExamineMap = sjjkDiseaseExamineFacade.list(sjjkDiseaseExamineQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseExamine::getDisLibId, SjjkDiseaseExamine::getExamineAnaytxt));
+
+        QueryWrapper<SjjkDiseaseDiscern> sjjkDiseaseDiscernQe = new QueryWrapper<>();
+        sjjkDiseaseDiscernQe.select("dis_lib_id", "discern_anaytxt");
+        Map<Long, String> sjjkDiseaseDiscernMap = sjjkDiseaseDiscernFacade.list(sjjkDiseaseDiscernQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseDiscern::getDisLibId, SjjkDiseaseDiscern::getDiscernAnaytxt));
+
+        QueryWrapper<SjjkDiseaseTreat> sjjkDiseaseTreatQe = new QueryWrapper<>();
+        sjjkDiseaseTreatQe.select("dis_lib_id", "treat_anaytxt");
+        Map<Long, String> sjjkDiseaseTreatMap = sjjkDiseaseTreatFacade.list(sjjkDiseaseTreatQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseTreat::getDisLibId, SjjkDiseaseTreat::getTreatAnaytxt));
+
+        QueryWrapper<SjjkDiseaseNurse> sjjkDiseaseNurseQe = new QueryWrapper<>();
+        sjjkDiseaseNurseQe.select("dis_lib_id", "nurse_anaytxt");
+        Map<Long, String> sjjkDiseaseNurseMap = sjjkDiseaseNurseFacade.list(sjjkDiseaseNurseQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseNurse::getDisLibId, SjjkDiseaseNurse::getNurseAnaytxt));
+
+        QueryWrapper<SjjkDiseaseHealth> sjjkDiseaseHealthQe = new QueryWrapper<>();
+        sjjkDiseaseHealthQe.select("dis_lib_id", "health_anaytxt");
+        Map<Long, String> sjjkDiseaseHealthMap = sjjkDiseaseHealthFacade.list(sjjkDiseaseHealthQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseHealth::getDisLibId, SjjkDiseaseHealth::getHealthAnaytxt));
+
+        QueryWrapper<SjjkDiseaseMedvice> sjjkDiseaseMedviceQe = new QueryWrapper<>();
+        sjjkDiseaseMedviceQe.select("dis_lib_id", "medvice_anaytxt");
+        Map<Long, String> sjjkDiseaseMedviceMap = sjjkDiseaseMedviceFacade.list(sjjkDiseaseMedviceQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseMedvice::getDisLibId, SjjkDiseaseMedvice::getMedviceAnaytxt));
+
+        QueryWrapper<SjjkDiseaseDrug> sjjkDiseaseDrugQe = new QueryWrapper<>();
+        sjjkDiseaseDrugQe.select("dis_lib_id", "drug_anaytxt");
+        Map<Long, String> sjjkDiseaseDrugMap = sjjkDiseaseDrugFacade.list(sjjkDiseaseDrugQe)
+                .stream().collect(Collectors.toMap(SjjkDiseaseDrug::getDisLibId, SjjkDiseaseDrug::getDrugAnaytxt));
+
+        sjjkDiseaseLibList.forEach(sjjkDiseaseLib -> {
+            String path = "F:\\39健康\\" + sjjkDiseaseLib.getDisName();
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            FileUtil.fileWrite(path, "简介", sjjkDiseaseSynopsisMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "病因", sjjkDiseaseEtiologyMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "预防", sjjkDiseasePreventMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "并发症", sjjkDiseaseComplicationMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "症状", sjjkDiseaseSymptomMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "检查", sjjkDiseaseExamineMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "诊断鉴别", sjjkDiseaseDiscernMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "治疗", sjjkDiseaseTreatMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "护理", sjjkDiseaseNurseMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "饮食保健", sjjkDiseaseHealthMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "就诊", sjjkDiseaseMedviceMap.get(sjjkDiseaseLib.getId()));
+            FileUtil.fileWrite(path, "用药", sjjkDiseaseDrugMap.get(sjjkDiseaseLib.getId()));
+        });
     }
 
 }
