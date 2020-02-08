@@ -15,10 +15,23 @@ import com.nuena.sjjk.entity.SjjkDiseasePrevent;
 import com.nuena.sjjk.entity.SjjkDiseaseSymptom;
 import com.nuena.sjjk.entity.SjjkDiseaseSynopsis;
 import com.nuena.sjjk.entity.SjjkDiseaseTreat;
+import com.nuena.sjjk.service.impl.SjjkDiseaseComplicationServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseDiscernServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseDrugServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseEtiologyServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseExamineServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseHealthServiceImpl;
 import com.nuena.sjjk.service.impl.SjjkDiseaseLibServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseMedviceServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseNurseServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseasePreventServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseSymptomServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseSynopsisServiceImpl;
+import com.nuena.sjjk.service.impl.SjjkDiseaseTreatServiceImpl;
 import com.nuena.util.DateUtil;
 import com.nuena.util.EnDecodeUtil;
 import com.nuena.util.HttpTool;
+import com.nuena.util.JsoupUtil;
 import com.nuena.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -46,27 +59,63 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
     @Autowired
     private SjjkDiseaseSynopsisFacade sjjkDiseaseSynopsisFacade;
     @Autowired
+    @Qualifier("sjjkDiseaseSynopsisServiceImpl")
+    private SjjkDiseaseSynopsisServiceImpl sjjkDiseaseSynopsisService;
+    @Autowired
     private SjjkDiseaseEtiologyFacade sjjkDiseaseEtiologyFacade;
+    @Autowired
+    @Qualifier("sjjkDiseaseEtiologyServiceImpl")
+    private SjjkDiseaseEtiologyServiceImpl sjjkDiseaseEtiologyService;
     @Autowired
     private SjjkDiseasePreventFacade sjjkDiseasePreventFacade;
     @Autowired
+    @Qualifier("sjjkDiseasePreventServiceImpl")
+    private SjjkDiseasePreventServiceImpl sjjkDiseasePreventService;
+    @Autowired
     private SjjkDiseaseComplicationFacade sjjkDiseaseComplicationFacade;
+    @Autowired
+    @Qualifier("sjjkDiseaseComplicationServiceImpl")
+    private SjjkDiseaseComplicationServiceImpl sjjkDiseaseComplicationService;
     @Autowired
     private SjjkDiseaseSymptomFacade sjjkDiseaseSymptomFacade;
     @Autowired
+    @Qualifier("sjjkDiseaseSymptomServiceImpl")
+    private SjjkDiseaseSymptomServiceImpl sjjkDiseaseSymptomService;
+    @Autowired
     private SjjkDiseaseExamineFacade sjjkDiseaseExamineFacade;
+    @Autowired
+    @Qualifier("sjjkDiseaseExamineServiceImpl")
+    private SjjkDiseaseExamineServiceImpl sjjkDiseaseExamineService;
     @Autowired
     private SjjkDiseaseDiscernFacade sjjkDiseaseDiscernFacade;
     @Autowired
+    @Qualifier("sjjkDiseaseDiscernServiceImpl")
+    private SjjkDiseaseDiscernServiceImpl sjjkDiseaseDiscernService;
+    @Autowired
     private SjjkDiseaseTreatFacade sjjkDiseaseTreatFacade;
+    @Autowired
+    @Qualifier("sjjkDiseaseTreatServiceImpl")
+    private SjjkDiseaseTreatServiceImpl sjjkDiseaseTreatService;
     @Autowired
     private SjjkDiseaseNurseFacade sjjkDiseaseNurseFacade;
     @Autowired
+    @Qualifier("sjjkDiseaseNurseServiceImpl")
+    private SjjkDiseaseNurseServiceImpl sjjkDiseaseNurseService;
+    @Autowired
     private SjjkDiseaseHealthFacade sjjkDiseaseHealthFacade;
+    @Autowired
+    @Qualifier("sjjkDiseaseHealthServiceImpl")
+    private SjjkDiseaseHealthServiceImpl sjjkDiseaseHealthService;
     @Autowired
     private SjjkDiseaseMedviceFacade sjjkDiseaseMedviceFacade;
     @Autowired
+    @Qualifier("sjjkDiseaseMedviceServiceImpl")
+    private SjjkDiseaseMedviceServiceImpl sjjkDiseaseMedviceService;
+    @Autowired
     private SjjkDiseaseDrugFacade sjjkDiseaseDrugFacade;
+    @Autowired
+    @Qualifier("sjjkDiseaseDrugServiceImpl")
+    private SjjkDiseaseDrugServiceImpl sjjkDiseaseDrugService;
 
     @Transactional
     public void initDisIdData() {
@@ -348,6 +397,249 @@ public class SjjkDiseaseLibFacade extends SjjkDiseaseLibServiceImpl {
             }
         }
         return ret;
+    }
+
+    @Transactional
+    public void analysis() {
+        analysisSynopsis();
+        analysisEtiology();
+        analysisPrevent();
+        analysisComplication();
+        analysisSymptom();
+        analysisExamine();
+        analysisDiscern();
+        analysisTreat();
+        analysisNurse();
+        analysisHealth();
+        analysisMedvice();
+        analysisDrug();
+    }
+
+    /**
+     * 解析--简介
+     */
+    private void analysisSynopsis() {
+        List<SjjkDiseaseSynopsis> sjjkDiseaseSynopsisList = sjjkDiseaseSynopsisFacade.list();
+        List<SjjkDiseaseLib> sjjkDiseaseLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        sjjkDiseaseSynopsisList.forEach(sjjkDiseaseSynopsis -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseSynopsis.getSynopsisHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("医学视频") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("医学视频"));
+            }
+            if (anaTxt.indexOf("相关文章") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关文章"));
+            }
+            sjjkDiseaseSynopsis.setSynopsisAnaytxt(anaTxt);
+            sjjkDiseaseSynopsis.setModifyTime(now);
+
+            String title = listLeftElement.getElementsByClass("disease_box").first().getElementsByClass("disease_title").first().text();
+            title = title.substring(0, title.length() - 2);
+            SjjkDiseaseLib sjjkDiseaseLib = new SjjkDiseaseLib();
+            sjjkDiseaseLib.setId(sjjkDiseaseSynopsis.getDisLibId());
+            sjjkDiseaseLib.setDisName(title);
+            sjjkDiseaseLib.setIsHtmlsAnay(1);
+            sjjkDiseaseLib.setModifyTime(now);
+            sjjkDiseaseLibList.add(sjjkDiseaseLib);
+        });
+
+        sjjkDiseaseSynopsisService.updateBatchById(sjjkDiseaseSynopsisList);
+        diseaseLibService.updateBatchById(sjjkDiseaseLibList);
+    }
+
+    /**
+     * 解析--病因
+     */
+    private void analysisEtiology() {
+        List<SjjkDiseaseEtiology> sjjkDiseaseEtiologyList = sjjkDiseaseEtiologyFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseEtiologyList.forEach(sjjkDiseaseEtiology -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseEtiology.getEtiologyHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseEtiology.setEtiologyAnaytxt(anaTxt);
+            sjjkDiseaseEtiology.setModifyTime(now);
+        });
+        sjjkDiseaseEtiologyService.updateBatchById(sjjkDiseaseEtiologyList);
+    }
+
+    /**
+     * 解析--预防
+     */
+    private void analysisPrevent() {
+        List<SjjkDiseasePrevent> sjjkDiseasePreventList = sjjkDiseasePreventFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseasePreventList.forEach(sjjkDiseasePrevent -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseasePrevent.getPreventHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseasePrevent.setPreventAnaytxt(anaTxt);
+            sjjkDiseasePrevent.setModifyTime(now);
+        });
+        sjjkDiseasePreventService.updateBatchById(sjjkDiseasePreventList);
+    }
+
+    /**
+     * 解析--并发症
+     */
+    private void analysisComplication() {
+        List<SjjkDiseaseComplication> sjjkDiseaseComplicationList = sjjkDiseaseComplicationFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseComplicationList.forEach(sjjkDiseaseComplication -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseComplication.getComplicationHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseComplication.setComplicationAnaytxt(anaTxt);
+            sjjkDiseaseComplication.setModifyTime(now);
+        });
+        sjjkDiseaseComplicationService.updateBatchById(sjjkDiseaseComplicationList);
+    }
+
+    /**
+     * 解析--症状
+     */
+    private void analysisSymptom() {
+        List<SjjkDiseaseSymptom> sjjkDiseaseSymptomList = sjjkDiseaseSymptomFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseSymptomList.forEach(sjjkDiseaseSymptom -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseSymptom.getSymptomHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseSymptom.setSymptomAnaytxt(anaTxt);
+            sjjkDiseaseSymptom.setModifyTime(now);
+        });
+        sjjkDiseaseSymptomService.updateBatchById(sjjkDiseaseSymptomList);
+    }
+
+    /**
+     * 解析--检查
+     */
+    private void analysisExamine() {
+        List<SjjkDiseaseExamine> sjjkDiseaseExamineList = sjjkDiseaseExamineFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseExamineList.forEach(sjjkDiseaseExamine -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseExamine.getExamineHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseExamine.setExamineAnaytxt(anaTxt);
+            sjjkDiseaseExamine.setModifyTime(now);
+        });
+        sjjkDiseaseExamineService.updateBatchById(sjjkDiseaseExamineList);
+    }
+
+    /**
+     * 解析--诊断鉴别
+     */
+    private void analysisDiscern() {
+        List<SjjkDiseaseDiscern> sjjkDiseaseDiscernList = sjjkDiseaseDiscernFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseDiscernList.forEach(sjjkDiseaseDiscern -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseDiscern.getDiscernHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseDiscern.setDiscernAnaytxt(anaTxt);
+            sjjkDiseaseDiscern.setModifyTime(now);
+        });
+        sjjkDiseaseDiscernService.updateBatchById(sjjkDiseaseDiscernList);
+    }
+
+    /**
+     * 解析--治疗
+     */
+    private void analysisTreat() {
+        List<SjjkDiseaseTreat> sjjkDiseaseTreatList = sjjkDiseaseTreatFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseTreatList.forEach(sjjkDiseaseTreat -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseTreat.getTreatHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseTreat.setTreatAnaytxt(anaTxt);
+            sjjkDiseaseTreat.setModifyTime(now);
+        });
+        sjjkDiseaseTreatService.updateBatchById(sjjkDiseaseTreatList);
+    }
+
+    /**
+     * 解析--护理
+     */
+    private void analysisNurse() {
+        List<SjjkDiseaseNurse> sjjkDiseaseNurseList = sjjkDiseaseNurseFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseNurseList.forEach(sjjkDiseaseNurse -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseNurse.getNurseHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseNurse.setNurseAnaytxt(anaTxt);
+            sjjkDiseaseNurse.setModifyTime(now);
+        });
+        sjjkDiseaseNurseService.updateBatchById(sjjkDiseaseNurseList);
+    }
+
+    /**
+     * 解析--饮食健康
+     */
+    private void analysisHealth() {
+        List<SjjkDiseaseHealth> sjjkDiseaseHealthList = sjjkDiseaseHealthFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseHealthList.forEach(sjjkDiseaseHealth -> {
+            Document listLeftElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseHealth.getHealthHtml()));
+            String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+            if (anaTxt.indexOf("相关阅读") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("相关阅读"));
+            }
+            sjjkDiseaseHealth.setHealthAnaytxt(anaTxt);
+            sjjkDiseaseHealth.setModifyTime(now);
+        });
+        sjjkDiseaseHealthService.updateBatchById(sjjkDiseaseHealthList);
+    }
+
+    /**
+     * 解析--就诊
+     */
+    private void analysisMedvice() {
+        List<SjjkDiseaseMedvice> sjjkDiseaseMedviceList = sjjkDiseaseMedviceFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseMedviceList.forEach(sjjkDiseaseMedvice -> {
+            Document contentElement = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseMedvice.getMedviceHtml()));
+            Element contentTextElement = contentElement.getElementById("contentText");
+            String anaTxt = JsoupUtil.clean(contentTextElement.outerHtml());
+            sjjkDiseaseMedvice.setMedviceAnaytxt(anaTxt);
+            sjjkDiseaseMedvice.setModifyTime(now);
+        });
+        sjjkDiseaseMedviceService.updateBatchById(sjjkDiseaseMedviceList);
+    }
+
+    /**
+     * 解析--用药
+     */
+    private void analysisDrug() {
+        List<SjjkDiseaseDrug> sjjkDiseaseDrugList = sjjkDiseaseDrugFacade.list();
+        Date now = DateUtil.now();
+        sjjkDiseaseDrugList.forEach(sjjkDiseaseDrug -> {
+            Document fl730Element = Jsoup.parse(EnDecodeUtil.decode(sjjkDiseaseDrug.getDrugHtml()));
+            Elements drugListElement = fl730Element.getElementsByClass("drug-list").select("h4");
+            String anaTxt = JsoupUtil.clean(drugListElement.outerHtml());
+            sjjkDiseaseDrug.setDrugAnaytxt(anaTxt);
+            sjjkDiseaseDrug.setModifyTime(now);
+        });
+        sjjkDiseaseDrugService.updateBatchById(sjjkDiseaseDrugList);
     }
 
 }

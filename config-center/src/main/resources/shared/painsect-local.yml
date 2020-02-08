@@ -80,8 +80,12 @@ nurse.html.analysis.finished: true
 ##寻医---疾病id爬取是否完成
 xywy.disease.id.insect.finished: true
 ##寻医---疾病各模块html爬取是否完成
-xywy.disease.html.insect.finished: false
+xywy.disease.html.insect.finished: true
+##寻医---疾病各模块html解析是否完成
+xywy.disease.html.analysis.finished: false
 ##39健康---疾病id爬取是否完成
 sjjk.disease.id.insect.finished: true
 ##39健康---疾病各模块html爬取是否完成
 sjjk.disease.html.insect.finished: true
+##39健康---疾病各模块html解析是否完成
+sjjk.disease.html.analysis.finished: true

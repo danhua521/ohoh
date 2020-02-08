@@ -11,6 +11,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.io.File;
@@ -87,8 +88,8 @@ public class MyTest {
 
 
 
-        String contentHtml = HttpTool.get("http://jib.xywy.com/html/a.html");
-        System.out.println(contentHtml);
+
+//        System.out.println(contentHtml);
 //        System.out.println(contentHtml);
 //        String msg = EnDecodeUtil.encode(contentHtml);
 //        System.out.println(msg);
@@ -106,7 +107,80 @@ public class MyTest {
 //        String nritong = contentDoc.getElementsByClass("jib-articl").first().text();
 //        System.out.println(nritong);
 //        FileUtil.fileWrite("F:\\迅雷下载","dte",nritong);
+
+//        System.out.println("任"+"\r\n"+"国宾");
+
+        String contentHtml = HttpTool.get("http://jbk.39.net/wcda/cyyp/");
+        Document contentDoc = Jsoup.parse(contentHtml);
+
+
+        Element fl730Element = contentDoc.getElementsByClass("fl730").first();
+
+        Elements drugListElement = fl730Element.getElementsByClass("drug-list").select("h4");
+        String anaTxt = JsoupUtil.clean(drugListElement.outerHtml());
+        System.out.println(anaTxt);
+
+//        String title = listLeftElement.getElementsByClass("disease_box").first().getElementsByClass("disease_title").first().text();
+//        title = title.substring(0,title.length()-2);
+//        System.out.println(title);
+//        String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
+//        if (anaTxt.indexOf("相关阅读")!=-1){
+//            anaTxt = anaTxt.substring(0,anaTxt.indexOf("相关阅读"));
+//        }
+//
+//
+//        System.out.println(anaTxt);
+//        parse();
+//        Element diseaseBoxElement = listLeftElement.getElementsByClass("disease_box").first();
+//        String disName = diseaseBoxElement.getElementsByClass("disease_title").first().text();
+//        String jii = diseaseBoxElement.getElementsByClass("introduction").first().text();
+//
+//        System.out.println(disName);
+//        System.out.println(jii);
+
     }
+
+    public static void parse(){
+        String htmlStr = "<table id=kbtable >"
+                + "<tr> "
+                + "<td width=123>"
+                + "<div id=12>这里是要获取的数据1</div>"
+                + "<div id=13>这里是要获取的数据2</div>"
+                + "</td>"
+                + "<td width=123>"
+                + "<div id=12>这里是要获取的数据3</div>"
+                + "<div id=13>这里是要获取的数据4</div>"
+                + "</td>	"
+                + "</tr>"
+                + "</table>";
+        Document doc = Jsoup.parse(htmlStr);
+        // 根据id获取table
+        Element table = doc.getElementById("kbtable");
+        // 使用选择器选择该table内所有的<tr> <tr/>
+        Elements trs = table.select("tr");
+        //遍历该表格内的所有的<tr> <tr/>
+        for (int i = 0; i < trs.size(); ++i) {
+            // 获取一个tr
+            Element tr = trs.get(i);
+            // 获取该行的所有td节点
+            Elements tds = tr.select("td");
+            // 选择某一个td节点
+            for (int j = 0; j < tds.size(); ++j) {
+                Element td = tds.get(j);
+                // 获取td节点的所有div
+                Elements divs = td.select("div");
+                // 选择一个div
+                for (int k = 0; k < divs.size(); k++) {
+                    Element div = divs.get(k);
+                    //获取文本信息
+                    String text = div.text();
+                    //输出到控制台
+                    System.out.println(text);
+                }
+            }
+        }
+    }
+
 
     public static String getFileType(String path) {
         try {
