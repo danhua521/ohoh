@@ -110,14 +110,62 @@ public class MyTest {
 
 //        System.out.println("任"+"\r\n"+"国宾");
 //
-        String contentHtml = HttpTool.get("http://jib.xywy.com/il_sii/gaishu/6935.htm");
+        String contentHtml = HttpTool.post("http://www.myzx.cn/jibing/xbt.html");
         Document contentDoc = Jsoup.parse(contentHtml);
-//
-//
-        Element fl730Element = contentDoc.getElementsByClass("jib-articl-tit").first();
-        String title = fl730Element.text();
-        title = title.substring(0, title.length() - 5);
-        System.out.println(title);
+
+        String mediaListHtml = contentDoc.getElementsByClass("media_list").first().outerHtml();
+        mediaListHtml = mediaListHtml.replaceAll("<br>","@ab98cdef");
+
+        Element mediaListElement = Jsoup.parse(mediaListHtml);
+        Element cardListElement = mediaListElement.getElementsByClass("card_list").first();
+        String cardListTxt = JsoupUtil.clean(cardListElement.outerHtml());
+        cardListTxt = cardListTxt
+                .replace("展开全部疾病","")
+                .replace("展开全部症状","")
+                .replace("全部收起","")
+                .replaceAll("@ab98cdef","\r\n");
+
+        StringBuffer sbf = new StringBuffer();
+        String title,content,bigContent;
+        Elements desListElements = mediaListElement.getElementsByClass("des_list");
+        for (Element desListElement:desListElements){
+            title = desListElement.selectFirst("dt").text();
+            content = JsoupUtil.clean(desListElement.selectFirst("dd").outerHtml())
+                    .replaceAll("@ab98cdef","\r\n")
+                    .replaceAll("&nbsp;","");
+            bigContent = JsoupUtil.clean(desListElement.outerHtml())
+                    .replaceAll("@ab98cdef","\r\n")
+                    .replaceAll("&nbsp;","");
+            if (title.equals("疾病介绍")){
+                content = content + "\r\n" + cardListTxt;
+                bigContent = bigContent + "\r\n" + cardListTxt;
+            }else if (title.equals("病因")){
+
+            }else if (title.equals("症状")){
+
+            }else if (title.equals("检查")){
+
+            }else if (title.equals("鉴别")){
+
+            }else if (title.equals("并发症")){
+
+            }else if (title.equals("预防")){
+
+            }else if (title.equals("治疗")){
+
+            }
+            sbf.append(bigContent+"\r\n");
+        }
+        System.out.println(sbf.toString());
+
+
+
+
+//        String anaTxt = JsoupUtil.clean(fl730Element.outerHtml());
+//        System.out.println(anaTxt);
+//        String title = fl730Element.text();
+//        title = title.substring(0, title.length() - 5);
+//        System.out.println(title);
 //        System.out.println(title);
 //        Elements drugListElement = fl730Element.getElementsByClass("drug-list").select("h4");
 //        String anaTxt = JsoupUtil.clean(drugListElement.outerHtml());
