@@ -24,7 +24,7 @@ spring:
       use-global-data-source-stat: true
 
 mybatis-plus:
-  mapper-locations: classpath*:mapper/bkmy/*.xml,classpath*:mapper/xywy/*.xml,classpath*:mapper/sjjk/*.xml
+  mapper-locations: classpath*:mapper/bkmy/*.xml,classpath*:mapper/xywy/*.xml,classpath*:mapper/sjjk/*.xml,classpath*:mapper/myzx/*.xml
   type-aliases-package: com.nuena.bkmy.entity
 
 swagger.title: 爬虫服务
