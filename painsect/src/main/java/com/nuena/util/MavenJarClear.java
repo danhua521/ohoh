@@ -27,6 +27,9 @@ public class MavenJarClear {
         if (file.getName().equals("_remote.repositories")) {
             file.delete();
         }
+        if (file.getName().indexOf("lastUpdated") != -1) {
+            file.delete();
+        }
     }
 
 }
