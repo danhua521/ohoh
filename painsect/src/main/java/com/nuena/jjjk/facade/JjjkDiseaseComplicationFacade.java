@@ -9,5 +9,5 @@ import org.springframework.stereotype.Component;
  * @time: 2020/2/28 11:04
  */
 @Component
-public class JjjkDiseaseComplication extends JjjkDiseaseComplicationServiceImpl {
+public class JjjkDiseaseComplicationFacade extends JjjkDiseaseComplicationServiceImpl {
 }
