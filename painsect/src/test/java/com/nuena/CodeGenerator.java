@@ -51,7 +51,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.nuena.myzx");
+        pc.setParent("com.nuena.jjjk");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");
@@ -70,7 +70,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
-                return projectPath + "/src/main/resources/mapper/myzx/"
+                return projectPath + "/src/main/resources/mapper/jjjk/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });

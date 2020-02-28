@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://223.93.170.82:23506/painsect
+    url: jdbc:mysql://192.168.2.235:3306/painsect
     username: root
     password: diagbot@20180822
     driver-class-name: com.mysql.jdbc.Driver
@@ -24,7 +24,7 @@ spring:
       use-global-data-source-stat: true
 
 mybatis-plus:
-  mapper-locations: classpath*:mapper/bkmy/*.xml,classpath*:mapper/xywy/*.xml,classpath*:mapper/sjjk/*.xml,classpath*:mapper/myzx/*.xml
+  mapper-locations: classpath*:mapper/bkmy/*.xml,classpath*:mapper/xywy/*.xml,classpath*:mapper/sjjk/*.xml,classpath*:mapper/myzx/*.xml,classpath*:mapper/jjjk/*.xml
   type-aliases-package: com.nuena.bkmy.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -101,3 +101,13 @@ myzx.disease.html.insect.finished: true
 myzx.disease.html.analysis.finished: true
 ##名医在线---疾病文件生成是否完成
 myzx.disease.file.gener.finished: true
+##久健---科室爬取是否完成
+jjjk.dept.insect.finished: true
+##久健---疾病id爬取是否完成
+jjjk.disease.id.insect.finished: false
+##久健---疾病各模块html爬取是否完成
+jjjk.disease.html.insect.finished: false
+##久健---疾病各模块html解析是否完成
+jjjk.disease.html.analysis.finished: false
+##久健---疾病各模块文件生成是否完成
+jjjk.disease.file.gener.finished: false

@@ -9,7 +9,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableEurekaClient
-@MapperScan({"com.nuena.bkmy.mapper","com.nuena.xywy.mapper","com.nuena.sjjk.mapper","com.nuena.myzx.mapper"})
+@MapperScan({
+        "com.nuena.bkmy.mapper",
+        "com.nuena.xywy.mapper",
+        "com.nuena.sjjk.mapper",
+        "com.nuena.myzx.mapper",
+        "com.nuena.jjjk.mapper"
+})
 public class PainsectApplication {
 
     public static void main(String[] args) {
