@@ -54,6 +54,7 @@ public class DiseaseIdInit implements ApplicationRunner {
                 }
             });
         }
+        diseaseLibFacade.loadOtherDis();
     }
 
 }

@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-02-28
+ * @since 2020-03-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -28,18 +28,6 @@ public class JjjkDiseaseLib implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
-    /**
-     * 科室id
-     */
-    @TableField("dept_id")
-    private Long deptId;
-
-    /**
-     * 网站的的科室id
-     */
-    @TableField("dept_wz_id")
-    private String deptWzId;
 
     /**
      * 疾病id

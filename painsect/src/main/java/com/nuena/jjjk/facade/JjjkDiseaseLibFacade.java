@@ -1,8 +1,11 @@
 package com.nuena.jjjk.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.nuena.jjjk.entity.JjjkDeptDiseaseMapping;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
 import com.nuena.jjjk.entity.JjjkDiseaseLib;
+import com.nuena.jjjk.service.impl.JjjkDeptDiseaseMappingServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseComplicationServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseDiscernServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseEtiologyServiceImpl;
@@ -28,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -87,36 +92,72 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     @Autowired
     @Qualifier("jjjkDiseaseNurseServiceImpl")
     private JjjkDiseaseNurseServiceImpl jjjkDiseaseNurseService;
+    @Autowired
+    @Qualifier("jjjkDeptDiseaseMappingServiceImpl")
+    private JjjkDeptDiseaseMappingServiceImpl jjjkDeptDiseaseMappingService;
 
     @Transactional
     public void loadDis(JjjkDeptInfo deptInfo) {
-        List<JjjkDiseaseLib> diseaseLibList = getDiseases(deptInfo);
-        if (ListUtil.isNotEmpty(diseaseLibList)) {
-            Date now = DateUtil.now();
-            diseaseLibList.forEach(i -> {
-                i.setDeptId(deptInfo.getId());
-                i.setDeptWzId(deptInfo.getDeptId());
+        Map<String, JjjkDiseaseLib> loadedDisMap = getLoadedDisMap();
+        List<JjjkDeptDiseaseMapping> saveDeptDiseaseMappingList = Lists.newArrayList();
+        List<JjjkDiseaseLib> saveDiseaseLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        getDiseases(deptInfo).forEach(i -> {
+            JjjkDiseaseLib loadedDis = loadedDisMap.get(i.getDisId());
+            if (loadedDis != null) {
+                saveDeptDiseaseMappingList.add(getMapByDeptDis(deptInfo, loadedDis, now));
+            } else {
                 i.setCreateTime(now);
+                saveDiseaseLibList.add(i);
+            }
+        });
+
+        if (ListUtil.isNotEmpty(saveDiseaseLibList)) {
+            jjjkDiseaseLibService.saveBatch(saveDiseaseLibList);
+            saveDiseaseLibList.forEach(i -> {
+                saveDeptDiseaseMappingList.add(getMapByDeptDis(deptInfo, i, now));
             });
-            jjjkDiseaseLibService.saveBatch(diseaseLibList);
+        }
+        if (ListUtil.isNotEmpty(saveDeptDiseaseMappingList)) {
+            jjjkDeptDiseaseMappingService.saveBatch(saveDeptDiseaseMappingList);
         }
     }
 
+    /**
+     * 获取已下载的疾病 map
+     *
+     * @return
+     */
+    private Map<String, JjjkDiseaseLib> getLoadedDisMap() {
+        QueryWrapper<JjjkDiseaseLib> diseaseLibQe = new QueryWrapper<>();
+        diseaseLibQe.select("id,dis_id,dis_name");
+        return list(diseaseLibQe).stream().collect(Collectors.toMap(JjjkDiseaseLib::getDisId, i -> i));
+    }
 
     /**
-     * 根据科室，获取疾病列表(仅仅包含id、名称、各个模块url)
+     * 根据科室，获取网站疾病列表(仅仅包含id、名称、各个模块url)
      *
      * @param deptInfo
      * @return
      */
     private List<JjjkDiseaseLib> getDiseases(JjjkDeptInfo deptInfo) {
+        return pageConsult("https://jb.9939.com/jbzz/" + deptInfo.getDeptId() + "_t1/?page=");
+    }
+
+    /**
+     * 页面轮询
+     *
+     * @param url
+     * @return
+     */
+    private List<JjjkDiseaseLib> pageConsult(String url) {
         List<JjjkDiseaseLib> retList = Lists.newArrayList();
         int page = 0;
-        String url = null;
+        String url_ = null;
         while (page != -1) {
             page++;
-            url = "https://jb.9939.com/jbzz/" + deptInfo.getDeptId() + "_t1/?page=" + page;
-            List<JjjkDiseaseLib> willAddDises = getDiseases(url);
+            url_ = url + page;
+            List<JjjkDiseaseLib> willAddDises = getDiseases(url_);
             if (ListUtil.isNotEmpty(willAddDises)) {
                 retList.addAll(willAddDises);
             } else {
@@ -127,7 +168,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     }
 
     /**
-     * 发送请求，获取疾病列表(仅仅包含id、名称、各个模块url)
+     * 发送请求
      *
      * @param url
      * @return
@@ -168,6 +209,45 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
             throw new RuntimeException("请求未获取到数据！");
         }
         return retList;
+    }
+
+    /**
+     * 由科室和疾病获取映射信息
+     *
+     * @param deptInfo
+     * @param diseaseLib
+     * @param now
+     * @return
+     */
+    private JjjkDeptDiseaseMapping getMapByDeptDis(JjjkDeptInfo deptInfo, JjjkDiseaseLib diseaseLib, Date now) {
+        JjjkDeptDiseaseMapping jjjkDeptDiseaseMapping = new JjjkDeptDiseaseMapping();
+        jjjkDeptDiseaseMapping.setDisId(diseaseLib.getDisId());
+        jjjkDeptDiseaseMapping.setDisLibId(diseaseLib.getId());
+        jjjkDeptDiseaseMapping.setDisName(diseaseLib.getDisName());
+        jjjkDeptDiseaseMapping.setDeptId(deptInfo.getId());
+        jjjkDeptDiseaseMapping.setDeptWzId(deptInfo.getDeptId());
+        jjjkDeptDiseaseMapping.setDeptName(deptInfo.getDeptName());
+        jjjkDeptDiseaseMapping.setCreateTime(now);
+        return jjjkDeptDiseaseMapping;
+    }
+
+    /**
+     * 下载其他无归属科室的疾病
+     */
+    @Transactional
+    public void loadOtherDis() {
+        String url = "https://jb.9939.com/jbzz_t1/?page=";
+        List<JjjkDiseaseLib> disList = pageConsult(url);
+        Map<String, JjjkDiseaseLib> loadedDisMap = getLoadedDisMap();
+        List<JjjkDiseaseLib> saveDiseaseLibList = Lists.newArrayList();
+        disList.forEach(i -> {
+            if (loadedDisMap.get(i.getDisId()) == null) {
+                saveDiseaseLibList.add(i);
+            }
+        });
+        if (ListUtil.isNotEmpty(saveDiseaseLibList)) {
+            jjjkDiseaseLibService.saveBatch(saveDiseaseLibList);
+        }
     }
 
 }

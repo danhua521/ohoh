@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author rgb
- * @since 2020-02-28
+ * @since 2020-03-02
  */
 @Service
 public class JjjkDiseaseLibServiceImpl extends ServiceImpl<JjjkDiseaseLibMapper, JjjkDiseaseLib> implements JjjkDiseaseLibService {
