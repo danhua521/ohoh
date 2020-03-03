@@ -194,15 +194,15 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
                 String disId = href.substring(20, href.lastIndexOf("/"));
                 diseaseLib.setDisId(disId);
                 diseaseLib.setDisName(i.text());
-                diseaseLib.setSynopsisUrl("https://jb.9939.com/" + disId + "jianjie/");
-                diseaseLib.setEtiologyUrl("https://jb.9939.com/" + disId + "by/");
-                diseaseLib.setPreventUrl("https://jb.9939.com/" + disId + "yf/");
-                diseaseLib.setComplicationUrl("https://jb.9939.com/" + disId + "bfz/");
-                diseaseLib.setSymptomUrl("https://jb.9939.com/" + disId + "zz/");
-                diseaseLib.setExamineUrl("https://jb.9939.com/" + disId + "lcjc/");
-                diseaseLib.setDiscernUrl("https://jb.9939.com/" + disId + "jb/");
-                diseaseLib.setTreatUrl("https://jb.9939.com/" + disId + "zl/");
-                diseaseLib.setNurseUrl("https://jb.9939.com/" + disId + "yshl/");
+                diseaseLib.setSynopsisUrl("https://jb.9939.com/" + disId + "/jianjie/");
+                diseaseLib.setEtiologyUrl("https://jb.9939.com/" + disId + "/by/");
+                diseaseLib.setPreventUrl("https://jb.9939.com/" + disId + "/yf/");
+                diseaseLib.setComplicationUrl("https://jb.9939.com/" + disId + "/bfz/");
+                diseaseLib.setSymptomUrl("https://jb.9939.com/" + disId + "/zz/");
+                diseaseLib.setExamineUrl("https://jb.9939.com/" + disId + "/lcjc/");
+                diseaseLib.setDiscernUrl("https://jb.9939.com/" + disId + "/jb/");
+                diseaseLib.setTreatUrl("https://jb.9939.com/" + disId + "/zl/");
+                diseaseLib.setNurseUrl("https://jb.9939.com/" + disId + "/yshl/");
                 retList.add(diseaseLib);
             });
         } else {

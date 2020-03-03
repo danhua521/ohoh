@@ -3,6 +3,7 @@ package com.nuena.jjjk.facade;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.nuena.jjjk.entity.JjjkDeptDiseaseMapping;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
+import com.nuena.jjjk.entity.JjjkDeptSymptomMapping;
 import com.nuena.jjjk.service.impl.JjjkDeptInfoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,8 @@ public class JjjkDeptInfoFacade extends JjjkDeptInfoServiceImpl {
 
     @Autowired
     private JjjkDeptDiseaseMappingFacade jjjkDeptDiseaseMappingFacade;
+    @Autowired
+    private JjjkDeptSymptomMappingFacade jjjkDeptSymptomMappingFacade;
 
     /**
      * 获取未下载疾病的科室
@@ -37,6 +40,26 @@ public class JjjkDeptInfoFacade extends JjjkDeptInfoServiceImpl {
         List<String> loadDisDeptIdList = jjjkDeptDiseaseMappingFacade.list(deptDiseaseMappingQe).stream().map(i -> i.getDeptWzId()).distinct().collect(Collectors.toList());
 
         deptInfoList = deptInfoList.stream().filter(i -> !loadDisDeptIdList.contains(i.getDeptId())).collect(Collectors.toList());
+
+        return deptInfoList;
+    }
+
+    /**
+     * 获取未下载症状的科室
+     *
+     * @return
+     */
+    public List<JjjkDeptInfo> getNoLoadSymDept() {
+        QueryWrapper<JjjkDeptInfo> deptInfoQe = new QueryWrapper<>();
+        deptInfoQe.isNotNull("parent_dept_id");
+        deptInfoQe.ne("parent_dept_id", "0");
+        List<JjjkDeptInfo> deptInfoList = list(deptInfoQe);
+
+        QueryWrapper<JjjkDeptSymptomMapping> deptSymptomMappingQe = new QueryWrapper<>();
+        deptSymptomMappingQe.select("dept_wz_id");
+        List<String> loadSymDeptIdList = jjjkDeptSymptomMappingFacade.list(deptSymptomMappingQe).stream().map(i -> i.getDeptWzId()).distinct().collect(Collectors.toList());
+
+        deptInfoList = deptInfoList.stream().filter(i -> !loadSymDeptIdList.contains(i.getDeptId())).collect(Collectors.toList());
 
         return deptInfoList;
     }
