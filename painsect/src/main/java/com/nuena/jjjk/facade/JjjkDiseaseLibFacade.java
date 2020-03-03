@@ -240,8 +240,10 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
         List<JjjkDiseaseLib> disList = pageConsult(url);
         Map<String, JjjkDiseaseLib> loadedDisMap = getLoadedDisMap();
         List<JjjkDiseaseLib> saveDiseaseLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
         disList.forEach(i -> {
             if (loadedDisMap.get(i.getDisId()) == null) {
+                i.setCreateTime(now);
                 saveDiseaseLibList.add(i);
             }
         });
