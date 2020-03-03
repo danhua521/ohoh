@@ -2,6 +2,7 @@ package com.nuena.jjjk.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
 import com.nuena.jjjk.entity.JjjkDeptSymptomMapping;
 import com.nuena.jjjk.entity.JjjkSymptomLib;
@@ -12,6 +13,7 @@ import com.nuena.jjjk.service.impl.JjjkSymptomLibServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomPreventServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomSynopsisServiceImpl;
 import com.nuena.util.DateUtil;
+import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -216,6 +219,130 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
         if (ListUtil.isNotEmpty(saveSymptomLibList)) {
             jjjkSymptomLibService.saveBatch(saveSymptomLibList);
         }
+    }
+
+    /**
+     * 获取未下载html的症状列表
+     *
+     * @return
+     */
+    public List<JjjkSymptomLib> getNoLoadHtmlSymptoms() {
+        QueryWrapper<JjjkSymptomLib> symptomLibQe = new QueryWrapper<>();
+        symptomLibQe.eq("is_htmls_load", 0);
+        return list(symptomLibQe);
+    }
+
+    /**
+     * 下载各模块HTML到本地
+     * @param path
+     * @param symptomLibList
+     */
+    public void loadHtmlToLocal(String path, List<JjjkSymptomLib> symptomLibList) {
+        File file = new File(path);
+        List<String> loadedSymIdList = Lists.newArrayList(file.listFiles()).stream().map(i -> i.getName()).collect(Collectors.toList());
+        List<JjjkSymptomLib> willLoadSymList = null;
+        Map<String, String> htmlMap = null;
+        while (ListUtil.isNotEmpty(willLoadSymList =
+                symptomLibList.stream().filter(i -> !loadedSymIdList.contains(i.getSymId())).collect(Collectors.toList()))) {
+            for (JjjkSymptomLib willLoadSym : willLoadSymList) {
+                System.out.println("症状：" + willLoadSym.getSymName());
+                try {
+                    htmlMap = getHtmls(willLoadSym);
+                    if (htmlMap != null && htmlMap.size() == 5) {
+                        System.out.println("下载各模块html成功---");
+                        createLocalFiles(path, willLoadSym.getSymId(), htmlMap);
+                        System.out.println("生成文件over---");
+                        loadedSymIdList.add(willLoadSym.getSymId());
+                    } else {
+                        System.out.println("下载各模块html失败---");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成本地html文件
+     *
+     * @param path
+     * @param symId
+     * @param content
+     */
+    private void createLocalFiles(String path, String symId, Map<String, String> content) {
+        String path_ = path + symId;
+        content.keySet().forEach(key -> {
+            FileUtil.fileWrite(path_, key, content.get(key));
+        });
+    }
+
+    /**
+     * 组装包含html 的 map
+     *
+     * @param symptomLib
+     * @return
+     */
+    private Map<String, String> getHtmls(JjjkSymptomLib symptomLib) {
+        Map<String, String> content = Maps.newHashMap();
+        String html = loadHtml(symptomLib.getSynopsisUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("synopsis", html);
+        }
+
+        html = loadHtml(symptomLib.getEtiologyUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("etiology", html);
+        }
+
+        html = loadHtml(symptomLib.getPreventUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("prevent", html);
+        }
+
+        html = loadHtml(symptomLib.getExamineUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("examine", html);
+        }
+
+        html = loadHtml(symptomLib.getHealthUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("health", html);
+        }
+        return content;
+    }
+
+    /**
+     * 拉取html
+     *
+     * @param url
+     * @return
+     */
+    private String loadHtml(String url) {
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+        return HttpTool.get(url);
+    }
+
+    /**
+     * 将下载的各模块html插入到数据库
+     * @param path
+     * @param symptomLibList
+     */
+    public void loadedHtmlIntoDB(String path,List<JjjkSymptomLib> symptomLibList){
+
     }
 
 }
