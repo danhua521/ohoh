@@ -218,7 +218,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
      */
     private List<JjjkDiseaseLib> getDiseases(String url) {
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
         } catch (Exception e) {
         }
         List<JjjkDiseaseLib> retList = Lists.newArrayList();

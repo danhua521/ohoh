@@ -70,7 +70,7 @@ public class SymptomIdInit implements ApplicationRunner {
             noLoadSymPartList.forEach(noLoadSymPart -> {
                 try {
                     symptomLibFacade.loadSym(noLoadSymPart);
-                    loadedDeptIdList.add(noLoadSymPart.getPartId());
+                    loadedPartIdList.add(noLoadSymPart.getPartId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

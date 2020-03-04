@@ -70,7 +70,7 @@ public class DiseaseIdInit implements ApplicationRunner {
             noLoadDisPartList.forEach(noLoadDisPart -> {
                 try {
                     diseaseLibFacade.loadDis(noLoadDisPart);
-                    loadedDeptIdList.add(noLoadDisPart.getPartId());
+                    loadedPartIdList.add(noLoadDisPart.getPartId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
