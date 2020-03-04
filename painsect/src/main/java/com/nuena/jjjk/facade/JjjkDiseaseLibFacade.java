@@ -2,9 +2,11 @@ package com.nuena.jjjk.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.nuena.jjjk.entity.JjjkBodypart;
 import com.nuena.jjjk.entity.JjjkDeptDiseaseMapping;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
 import com.nuena.jjjk.entity.JjjkDiseaseLib;
+import com.nuena.jjjk.entity.JjjkPartDiseaseMapping;
 import com.nuena.jjjk.service.impl.JjjkDeptDiseaseMappingServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseComplicationServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseDiscernServiceImpl;
@@ -16,6 +18,7 @@ import com.nuena.jjjk.service.impl.JjjkDiseasePreventServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseSymptomServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseSynopsisServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseTreatServiceImpl;
+import com.nuena.jjjk.service.impl.JjjkPartDiseaseMappingServiceImpl;
 import com.nuena.util.DateUtil;
 import com.nuena.util.HttpTool;
 import com.nuena.util.ListUtil;
@@ -95,6 +98,9 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     @Autowired
     @Qualifier("jjjkDeptDiseaseMappingServiceImpl")
     private JjjkDeptDiseaseMappingServiceImpl jjjkDeptDiseaseMappingService;
+    @Autowired
+    @Qualifier("jjjkPartDiseaseMappingServiceImpl")
+    private JjjkPartDiseaseMappingServiceImpl jjjkPartDiseaseMappingService;
 
     @Transactional
     public void loadDis(JjjkDeptInfo deptInfo) {
@@ -123,6 +129,33 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
         }
     }
 
+    @Transactional
+    public void loadDis(JjjkBodypart bodypart) {
+        Map<String, JjjkDiseaseLib> loadedDisMap = getLoadedDisMap();
+        List<JjjkPartDiseaseMapping> savePartDiseaseMappingList = Lists.newArrayList();
+        List<JjjkDiseaseLib> saveDiseaseLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        getDiseases(bodypart).forEach(i -> {
+            JjjkDiseaseLib loadedDis = loadedDisMap.get(i.getDisId());
+            if (loadedDis != null) {
+                savePartDiseaseMappingList.add(getMapByPartDis(bodypart, loadedDis, now));
+            } else {
+                i.setCreateTime(now);
+                saveDiseaseLibList.add(i);
+            }
+        });
+
+        if (ListUtil.isNotEmpty(saveDiseaseLibList)) {
+            jjjkDiseaseLibService.saveBatch(saveDiseaseLibList);
+            saveDiseaseLibList.forEach(i -> {
+                savePartDiseaseMappingList.add(getMapByPartDis(bodypart, i, now));
+            });
+        }
+        if (ListUtil.isNotEmpty(savePartDiseaseMappingList)) {
+            jjjkPartDiseaseMappingService.saveBatch(savePartDiseaseMappingList);
+        }
+    }
+
     /**
      * 获取已下载的疾病 map
      *
@@ -142,6 +175,16 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
      */
     private List<JjjkDiseaseLib> getDiseases(JjjkDeptInfo deptInfo) {
         return pageConsult("https://jb.9939.com/jbzz/" + deptInfo.getDeptId() + "_t1/?page=");
+    }
+
+    /**
+     * 根据部位，获取网站疾病列表(仅仅包含id、名称、各个模块url)
+     *
+     * @param bodypart
+     * @return
+     */
+    private List<JjjkDiseaseLib> getDiseases(JjjkBodypart bodypart) {
+        return pageConsult("https://jb.9939.com/jbzz/" + bodypart.getPartId() + "_t1/?page=");
     }
 
     /**
@@ -229,6 +272,26 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
         jjjkDeptDiseaseMapping.setDeptName(deptInfo.getDeptName());
         jjjkDeptDiseaseMapping.setCreateTime(now);
         return jjjkDeptDiseaseMapping;
+    }
+
+    /**
+     * 由部位和疾病获取映射信息
+     *
+     * @param bodypart
+     * @param diseaseLib
+     * @param now
+     * @return
+     */
+    private JjjkPartDiseaseMapping getMapByPartDis(JjjkBodypart bodypart, JjjkDiseaseLib diseaseLib, Date now) {
+        JjjkPartDiseaseMapping jjjkPartDiseaseMapping = new JjjkPartDiseaseMapping();
+        jjjkPartDiseaseMapping.setDisId(diseaseLib.getDisId());
+        jjjkPartDiseaseMapping.setDisLibId(diseaseLib.getId());
+        jjjkPartDiseaseMapping.setDisName(diseaseLib.getDisName());
+        jjjkPartDiseaseMapping.setPartId(bodypart.getId());
+        jjjkPartDiseaseMapping.setPartWzId(bodypart.getPartId());
+        jjjkPartDiseaseMapping.setPartName(bodypart.getPartName());
+        jjjkPartDiseaseMapping.setCreateTime(now);
+        return jjjkPartDiseaseMapping;
     }
 
     /**

@@ -106,7 +106,7 @@ jjjk.dept.insect.finished: true
 ##久健---身体部位爬取是否完成
 jjjk.bodypart.insect.finished: true
 ##久健---疾病id爬取是否完成
-jjjk.disease.id.insect.finished: true
+jjjk.disease.id.insect.finished: false
 ##久健---疾病各模块html爬取是否完成
 jjjk.disease.html.insect.finished: false
 ##久健---疾病各模块html解析是否完成

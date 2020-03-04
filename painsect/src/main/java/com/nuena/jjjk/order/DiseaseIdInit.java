@@ -1,7 +1,9 @@
 package com.nuena.jjjk.order;
 
 import com.google.common.collect.Lists;
+import com.nuena.jjjk.entity.JjjkBodypart;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
+import com.nuena.jjjk.facade.JjjkBodypartFacade;
 import com.nuena.jjjk.facade.JjjkDeptInfoFacade;
 import com.nuena.jjjk.facade.JjjkDiseaseLibFacade;
 import com.nuena.util.ListUtil;
@@ -30,6 +32,8 @@ public class DiseaseIdInit implements ApplicationRunner {
     private JjjkDeptInfoFacade deptInfoFacade;
     @Autowired
     private JjjkDiseaseLibFacade diseaseLibFacade;
+    @Autowired
+    private JjjkBodypartFacade bodypartFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -54,6 +58,25 @@ public class DiseaseIdInit implements ApplicationRunner {
                 }
             });
         }
+
+        List<JjjkBodypart> bodypartList = bodypartFacade.getNoLoadDisPart();
+        List<String> loadedPartIdList = Lists.newArrayList();
+        List<JjjkBodypart> noLoadDisPartList = null;
+        while (ListUtil.isNotEmpty(
+                noLoadDisPartList = bodypartList.stream()
+                        .filter(i -> !loadedPartIdList.contains(i.getPartId()))
+                        .collect(Collectors.toList())
+        )) {
+            noLoadDisPartList.forEach(noLoadDisPart -> {
+                try {
+                    diseaseLibFacade.loadDis(noLoadDisPart);
+                    loadedDeptIdList.add(noLoadDisPart.getPartId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
         diseaseLibFacade.loadOtherDis();
     }
 

@@ -1,7 +1,9 @@
 package com.nuena.jjjk.order;
 
 import com.google.common.collect.Lists;
+import com.nuena.jjjk.entity.JjjkBodypart;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
+import com.nuena.jjjk.facade.JjjkBodypartFacade;
 import com.nuena.jjjk.facade.JjjkDeptInfoFacade;
 import com.nuena.jjjk.facade.JjjkSymptomLibFacade;
 import com.nuena.util.ListUtil;
@@ -29,6 +31,8 @@ public class SymptomIdInit implements ApplicationRunner {
     @Autowired
     private JjjkDeptInfoFacade deptInfoFacade;
     @Autowired
+    private JjjkBodypartFacade bodypartFacade;
+    @Autowired
     private JjjkSymptomLibFacade symptomLibFacade;
 
     @Override
@@ -54,6 +58,25 @@ public class SymptomIdInit implements ApplicationRunner {
                 }
             });
         }
+
+        List<JjjkBodypart> bodypartList = bodypartFacade.getNoLoadSymPart();
+        List<String> loadedPartIdList = Lists.newArrayList();
+        List<JjjkBodypart> noLoadSymPartList = null;
+        while (ListUtil.isNotEmpty(
+                noLoadSymPartList = bodypartList.stream()
+                        .filter(i -> !loadedPartIdList.contains(i.getPartId()))
+                        .collect(Collectors.toList())
+        )) {
+            noLoadSymPartList.forEach(noLoadSymPart -> {
+                try {
+                    symptomLibFacade.loadSym(noLoadSymPart);
+                    loadedDeptIdList.add(noLoadSymPart.getPartId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
         symptomLibFacade.loadOtherSym();
     }
 

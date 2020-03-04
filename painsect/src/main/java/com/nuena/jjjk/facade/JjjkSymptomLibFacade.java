@@ -3,10 +3,13 @@ package com.nuena.jjjk.facade;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.nuena.jjjk.entity.JjjkBodypart;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
 import com.nuena.jjjk.entity.JjjkDeptSymptomMapping;
+import com.nuena.jjjk.entity.JjjkPartSymptomMapping;
 import com.nuena.jjjk.entity.JjjkSymptomLib;
 import com.nuena.jjjk.service.impl.JjjkDeptSymptomMappingServiceImpl;
+import com.nuena.jjjk.service.impl.JjjkPartSymptomMappingServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomEtiologyServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomExamineServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomLibServiceImpl;
@@ -68,6 +71,9 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
     @Autowired
     @Qualifier("jjjkDeptSymptomMappingServiceImpl")
     private JjjkDeptSymptomMappingServiceImpl jjjkDeptSymptomMappingService;
+    @Autowired
+    @Qualifier("jjjkPartSymptomMappingServiceImpl")
+    private JjjkPartSymptomMappingServiceImpl jjjkPartSymptomMappingService;
 
     @Transactional
     public void loadSym(JjjkDeptInfo deptInfo) {
@@ -96,6 +102,33 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
         }
     }
 
+    @Transactional
+    public void loadSym(JjjkBodypart bodypart) {
+        Map<String, JjjkSymptomLib> loadedSymMap = getLoadedSymMap();
+        List<JjjkPartSymptomMapping> savePartSymptomMappingList = Lists.newArrayList();
+        List<JjjkSymptomLib> saveSymptomLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        getSymptoms(bodypart).forEach(i -> {
+            JjjkSymptomLib loadedSym = loadedSymMap.get(i.getSymId());
+            if (loadedSym != null) {
+                savePartSymptomMappingList.add(getMapByPartSym(bodypart, loadedSym, now));
+            } else {
+                i.setCreateTime(now);
+                saveSymptomLibList.add(i);
+            }
+        });
+
+        if (ListUtil.isNotEmpty(saveSymptomLibList)) {
+            jjjkSymptomLibService.saveBatch(saveSymptomLibList);
+            saveSymptomLibList.forEach(i -> {
+                savePartSymptomMappingList.add(getMapByPartSym(bodypart, i, now));
+            });
+        }
+        if (ListUtil.isNotEmpty(savePartSymptomMappingList)) {
+            jjjkPartSymptomMappingService.saveBatch(savePartSymptomMappingList);
+        }
+    }
+
     /**
      * 获取已下载的症状 map
      *
@@ -115,6 +148,16 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
      */
     private List<JjjkSymptomLib> getSymptoms(JjjkDeptInfo deptInfo) {
         return pageConsult("https://jb.9939.com/jbzz/" + deptInfo.getDeptId() + "_t2/?page=");
+    }
+
+    /**
+     * 根据部位，获取网站症状列表(仅仅包含id、名称、各个模块url)
+     *
+     * @param bodypart
+     * @return
+     */
+    private List<JjjkSymptomLib> getSymptoms(JjjkBodypart bodypart) {
+        return pageConsult("https://jb.9939.com/jbzz/" + bodypart.getPartId() + "_t2/?page=");
     }
 
     /**
@@ -201,6 +244,26 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
     }
 
     /**
+     * 由部位和症状获取映射信息
+     *
+     * @param bodypart
+     * @param symptomLib
+     * @param now
+     * @return
+     */
+    private JjjkPartSymptomMapping getMapByPartSym(JjjkBodypart bodypart, JjjkSymptomLib symptomLib, Date now) {
+        JjjkPartSymptomMapping jjjkPartSymptomMapping = new JjjkPartSymptomMapping();
+        jjjkPartSymptomMapping.setSymId(symptomLib.getSymId());
+        jjjkPartSymptomMapping.setSymLibId(symptomLib.getId());
+        jjjkPartSymptomMapping.setSymName(symptomLib.getSymName());
+        jjjkPartSymptomMapping.setPartId(bodypart.getId());
+        jjjkPartSymptomMapping.setPartWzId(bodypart.getPartId());
+        jjjkPartSymptomMapping.setPartName(bodypart.getPartName());
+        jjjkPartSymptomMapping.setCreateTime(now);
+        return jjjkPartSymptomMapping;
+    }
+
+    /**
      * 下载其他无归属科室的症状
      */
     @Transactional
@@ -234,6 +297,7 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
 
     /**
      * 下载各模块HTML到本地
+     *
      * @param path
      * @param symptomLibList
      */
@@ -338,10 +402,11 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
 
     /**
      * 将下载的各模块html插入到数据库
+     *
      * @param path
      * @param symptomLibList
      */
-    public void loadedHtmlIntoDB(String path,List<JjjkSymptomLib> symptomLibList){
+    public void loadedHtmlIntoDB(String path, List<JjjkSymptomLib> symptomLibList) {
 
     }
 
