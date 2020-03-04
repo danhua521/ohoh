@@ -103,6 +103,8 @@ myzx.disease.html.analysis.finished: true
 myzx.disease.file.gener.finished: true
 ##久健---科室爬取是否完成
 jjjk.dept.insect.finished: true
+##久健---身体部位爬取是否完成
+jjjk.bodypart.insect.finished: true
 ##久健---疾病id爬取是否完成
 jjjk.disease.id.insect.finished: true
 ##久健---疾病各模块html爬取是否完成
@@ -112,7 +114,7 @@ jjjk.disease.html.analysis.finished: false
 ##久健---疾病各模块文件生成是否完成
 jjjk.disease.file.gener.finished: false
 ##久健---症状id爬取是否完成
-jjjk.symptom.id.insect.finished: true
+jjjk.symptom.id.insect.finished: false
 ##久健---症状各模块html爬取是否完成
 jjjk.symptom.html.insect.finished: false
 ##久健---症状各模块html解析是否完成
