@@ -25,11 +25,17 @@ public class MavenJarClear {
 
         }
         if (file.getName().equals("_remote.repositories")) {
+            System.out.println("_remote.repositories文件："+file.getName());
             file.delete();
         }
         if (file.getName().indexOf("lastUpdated") != -1) {
+            System.out.println("lastUpdated文件："+file.getName());
             file.delete();
         }
+    }
+
+    public static void main(String[] args) {
+        MavenJarClear.startClear(new File("F:\\work\\maven_repo\\repository"));
     }
 
 }
