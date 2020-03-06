@@ -2,10 +2,20 @@ package com.nuena.jjjk.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nuena.jjjk.entity.JjjkBodypart;
 import com.nuena.jjjk.entity.JjjkDeptDiseaseMapping;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
+import com.nuena.jjjk.entity.JjjkDiseaseComplication;
+import com.nuena.jjjk.entity.JjjkDiseaseDiscern;
+import com.nuena.jjjk.entity.JjjkDiseaseEtiology;
+import com.nuena.jjjk.entity.JjjkDiseaseExamine;
 import com.nuena.jjjk.entity.JjjkDiseaseLib;
+import com.nuena.jjjk.entity.JjjkDiseaseNurse;
+import com.nuena.jjjk.entity.JjjkDiseasePrevent;
+import com.nuena.jjjk.entity.JjjkDiseaseSymptom;
+import com.nuena.jjjk.entity.JjjkDiseaseSynopsis;
+import com.nuena.jjjk.entity.JjjkDiseaseTreat;
 import com.nuena.jjjk.entity.JjjkPartDiseaseMapping;
 import com.nuena.jjjk.service.impl.JjjkDeptDiseaseMappingServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseComplicationServiceImpl;
@@ -20,6 +30,8 @@ import com.nuena.jjjk.service.impl.JjjkDiseaseSynopsisServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkDiseaseTreatServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkPartDiseaseMappingServiceImpl;
 import com.nuena.util.DateUtil;
+import com.nuena.util.EnDecodeUtil;
+import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
@@ -32,6 +44,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -313,6 +326,299 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
         if (ListUtil.isNotEmpty(saveDiseaseLibList)) {
             jjjkDiseaseLibService.saveBatch(saveDiseaseLibList);
         }
+    }
+
+    /**
+     * 获取未下载html的疾病列表
+     *
+     * @return
+     */
+    public List<JjjkDiseaseLib> getNoLoadHtmlDiseases() {
+        QueryWrapper<JjjkDiseaseLib> diseaseLibQe = new QueryWrapper<>();
+        diseaseLibQe.eq("is_htmls_load", 0);
+        return list(diseaseLibQe);
+    }
+
+    /**
+     * 下载各模块HTML到本地
+     *
+     * @param path
+     * @param diseaseLibList
+     */
+    public void loadHtmlToLocal(String path, List<JjjkDiseaseLib> diseaseLibList) {
+        File file = new File(path);
+        List<String> loadedDisIdList = Lists.newArrayList(file.listFiles()).stream().map(i -> i.getName()).collect(Collectors.toList());
+        List<JjjkDiseaseLib> willLoadDisList = null;
+        Map<String, String> htmlMap = null;
+        while (ListUtil.isNotEmpty(willLoadDisList =
+                diseaseLibList.stream().filter(i -> !loadedDisIdList.contains(i.getDisId())).collect(Collectors.toList()))) {
+            for (JjjkDiseaseLib willLoadDis : willLoadDisList) {
+                System.out.println("疾病：" + willLoadDis.getDisName());
+                try {
+                    htmlMap = getHtmls(willLoadDis);
+                    if (htmlMap != null && htmlMap.size() == 9) {
+                        System.out.println("下载各模块html成功---");
+                        createLocalFiles(path, willLoadDis.getDisId(), htmlMap);
+                        System.out.println("生成文件over---");
+                        loadedDisIdList.add(willLoadDis.getDisId());
+                    } else {
+                        System.out.println("下载各模块html失败---");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成本地html文件
+     *
+     * @param path
+     * @param disId
+     * @param content
+     */
+    private void createLocalFiles(String path, String disId, Map<String, String> content) {
+        String path_ = path + disId;
+        content.keySet().forEach(key -> {
+            FileUtil.fileWrite(path_, key, content.get(key));
+        });
+    }
+
+    /**
+     * 组装包含html 的 map
+     *
+     * @param diseaseLib
+     * @return
+     */
+    private Map<String, String> getHtmls(JjjkDiseaseLib diseaseLib) {
+        Map<String, String> content = Maps.newHashMap();
+        String html = loadHtml(diseaseLib.getSynopsisUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("jianjie", html);
+        }
+
+        html = loadHtml(diseaseLib.getEtiologyUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("by", html);
+        }
+
+        html = loadHtml(diseaseLib.getPreventUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("yf", html);
+        }
+
+        html = loadHtml(diseaseLib.getExamineUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("lcjc", html);
+        }
+
+        html = loadHtml(diseaseLib.getComplicationUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("bfz", html);
+        }
+
+        html = loadHtml(diseaseLib.getSymptomUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("zz", html);
+        }
+
+        html = loadHtml(diseaseLib.getDiscernUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("jb", html);
+        }
+
+        html = loadHtml(diseaseLib.getTreatUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("zl", html);
+        }
+
+        html = loadHtml(diseaseLib.getNurseUrl());
+        if (StringUtil.isBlank(html)) {
+            return null;
+        } else {
+            content.put("yshl", html);
+        }
+        return content;
+    }
+
+    /**
+     * 拉取html
+     *
+     * @param url
+     * @return
+     */
+    private String loadHtml(String url) {
+        try {
+            Thread.sleep(200);
+        } catch (Exception e) {
+        }
+        return HttpTool.get(url);
+    }
+
+    /**
+     * 将下载的各模块html插入到数据库
+     *
+     * @param path
+     * @param diseaseLibList
+     */
+    @Transactional
+    public void loadedHtmlIntoDB(String path, List<JjjkDiseaseLib> diseaseLibList) {
+        Date now = DateUtil.now();
+        List<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisList = Lists.newArrayList();
+        List<JjjkDiseaseEtiology> jjjkDiseaseEtiologyList = Lists.newArrayList();
+        List<JjjkDiseasePrevent> jjjkDiseasePreventList = Lists.newArrayList();
+        List<JjjkDiseaseExamine> jjjkDiseaseExamineList = Lists.newArrayList();
+        List<JjjkDiseaseComplication> jjjkDiseaseComplicationList = Lists.newArrayList();
+        List<JjjkDiseaseSymptom> jjjkDiseaseSymptomList = Lists.newArrayList();
+        List<JjjkDiseaseDiscern> jjjkDiseaseDiscernList = Lists.newArrayList();
+        List<JjjkDiseaseTreat> jjjkDiseaseTreatList = Lists.newArrayList();
+        List<JjjkDiseaseNurse> jjjkDiseaseNurseList = Lists.newArrayList();
+        diseaseLibList.forEach(diseaseLib -> {
+            System.out.println("在进行：" + diseaseLib.getDisName());
+            JjjkDiseaseSynopsis jjjkDiseaseSynopsis = new JjjkDiseaseSynopsis();
+            jjjkDiseaseSynopsis.setCreateTime(now);
+            jjjkDiseaseSynopsis.setModifyTime(now);
+            jjjkDiseaseSynopsis.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseSynopsis.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseSynopsis.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseSynopsis.setSynopsisUrl(diseaseLib.getSynopsisUrl());
+            jjjkDiseaseSynopsis.setSynopsisHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\jianjie")));
+            jjjkDiseaseSynopsisList.add(jjjkDiseaseSynopsis);
+
+            JjjkDiseaseEtiology jjjkDiseaseEtiology = new JjjkDiseaseEtiology();
+            jjjkDiseaseEtiology.setCreateTime(now);
+            jjjkDiseaseEtiology.setModifyTime(now);
+            jjjkDiseaseEtiology.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseEtiology.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseEtiology.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseEtiology.setEtiologyUrl(diseaseLib.getEtiologyUrl());
+            jjjkDiseaseEtiology.setEtiologyHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\by")));
+            jjjkDiseaseEtiologyList.add(jjjkDiseaseEtiology);
+
+            JjjkDiseasePrevent jjjkDiseasePrevent = new JjjkDiseasePrevent();
+            jjjkDiseasePrevent.setCreateTime(now);
+            jjjkDiseasePrevent.setModifyTime(now);
+            jjjkDiseasePrevent.setDisId(diseaseLib.getDisId());
+            jjjkDiseasePrevent.setDisLibId(diseaseLib.getId());
+            jjjkDiseasePrevent.setDisName(diseaseLib.getDisName());
+            jjjkDiseasePrevent.setPreventUrl(diseaseLib.getPreventUrl());
+            jjjkDiseasePrevent.setPreventHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\yf")));
+            jjjkDiseasePreventList.add(jjjkDiseasePrevent);
+
+            JjjkDiseaseExamine jjjkDiseaseExamine = new JjjkDiseaseExamine();
+            jjjkDiseaseExamine.setCreateTime(now);
+            jjjkDiseaseExamine.setModifyTime(now);
+            jjjkDiseaseExamine.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseExamine.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseExamine.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseExamine.setExamineUrl(diseaseLib.getExamineUrl());
+            jjjkDiseaseExamine.setExamineHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\lcjc")));
+            jjjkDiseaseExamineList.add(jjjkDiseaseExamine);
+
+            JjjkDiseaseComplication jjjkDiseaseComplication = new JjjkDiseaseComplication();
+            jjjkDiseaseComplication.setCreateTime(now);
+            jjjkDiseaseComplication.setModifyTime(now);
+            jjjkDiseaseComplication.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseComplication.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseComplication.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseComplication.setComplicationUrl(diseaseLib.getComplicationUrl());
+            jjjkDiseaseComplication.setComplicationHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\bfz")));
+            jjjkDiseaseComplicationList.add(jjjkDiseaseComplication);
+
+            JjjkDiseaseSymptom jjjkDiseaseSymptom = new JjjkDiseaseSymptom();
+            jjjkDiseaseSymptom.setCreateTime(now);
+            jjjkDiseaseSymptom.setModifyTime(now);
+            jjjkDiseaseSymptom.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseSymptom.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseSymptom.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseSymptom.setSymptomUrl(diseaseLib.getSymptomUrl());
+            jjjkDiseaseSymptom.setSymptomHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\zz")));
+            jjjkDiseaseSymptomList.add(jjjkDiseaseSymptom);
+
+            JjjkDiseaseDiscern jjjkDiseaseDiscern = new JjjkDiseaseDiscern();
+            jjjkDiseaseDiscern.setCreateTime(now);
+            jjjkDiseaseDiscern.setModifyTime(now);
+            jjjkDiseaseDiscern.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseDiscern.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseDiscern.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseDiscern.setDiscernUrl(diseaseLib.getDiscernUrl());
+            jjjkDiseaseDiscern.setDiscernHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\jb")));
+            jjjkDiseaseDiscernList.add(jjjkDiseaseDiscern);
+
+            JjjkDiseaseTreat jjjkDiseaseTreat = new JjjkDiseaseTreat();
+            jjjkDiseaseTreat.setCreateTime(now);
+            jjjkDiseaseTreat.setModifyTime(now);
+            jjjkDiseaseTreat.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseTreat.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseTreat.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseTreat.setTreatUrl(diseaseLib.getTreatUrl());
+            jjjkDiseaseTreat.setTreatHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\zl")));
+            jjjkDiseaseTreatList.add(jjjkDiseaseTreat);
+
+            JjjkDiseaseNurse jjjkDiseaseNurse = new JjjkDiseaseNurse();
+            jjjkDiseaseNurse.setCreateTime(now);
+            jjjkDiseaseNurse.setModifyTime(now);
+            jjjkDiseaseNurse.setDisId(diseaseLib.getDisId());
+            jjjkDiseaseNurse.setDisLibId(diseaseLib.getId());
+            jjjkDiseaseNurse.setDisName(diseaseLib.getDisName());
+            jjjkDiseaseNurse.setNurseUrl(diseaseLib.getNurseUrl());
+            jjjkDiseaseNurse.setNurseHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + diseaseLib.getDisId() + "\\yshl")));
+            jjjkDiseaseNurseList.add(jjjkDiseaseNurse);
+
+            diseaseLib.setIsHtmlsLoad(1);
+            diseaseLib.setModifyTime(now);
+
+            if (jjjkDiseaseSynopsisList.size() == 1000) {
+                jjjkDiseaseSynopsisService.saveBatch(jjjkDiseaseSynopsisList);
+                jjjkDiseaseEtiologyService.saveBatch(jjjkDiseaseEtiologyList);
+                jjjkDiseasePreventService.saveBatch(jjjkDiseasePreventList);
+                jjjkDiseaseExamineService.saveBatch(jjjkDiseaseExamineList);
+                jjjkDiseaseComplicationService.saveBatch(jjjkDiseaseComplicationList);
+                jjjkDiseaseSymptomService.saveBatch(jjjkDiseaseSymptomList);
+                jjjkDiseaseDiscernService.saveBatch(jjjkDiseaseDiscernList);
+                jjjkDiseaseTreatService.saveBatch(jjjkDiseaseTreatList);
+                jjjkDiseaseNurseService.saveBatch(jjjkDiseaseNurseList);
+
+                jjjkDiseaseSynopsisList.clear();
+                jjjkDiseaseEtiologyList.clear();
+                jjjkDiseasePreventList.clear();
+                jjjkDiseaseExamineList.clear();
+                jjjkDiseaseComplicationList.clear();
+                jjjkDiseaseSymptomList.clear();
+                jjjkDiseaseDiscernList.clear();
+                jjjkDiseaseComplicationList.clear();
+                jjjkDiseaseNurseList.clear();
+            }
+        });
+
+        jjjkDiseaseSynopsisService.saveBatch(jjjkDiseaseSynopsisList);
+        jjjkDiseaseEtiologyService.saveBatch(jjjkDiseaseEtiologyList);
+        jjjkDiseasePreventService.saveBatch(jjjkDiseasePreventList);
+        jjjkDiseaseExamineService.saveBatch(jjjkDiseaseExamineList);
+        jjjkDiseaseComplicationService.saveBatch(jjjkDiseaseComplicationList);
+        jjjkDiseaseSymptomService.saveBatch(jjjkDiseaseSymptomList);
+        jjjkDiseaseDiscernService.saveBatch(jjjkDiseaseDiscernList);
+        jjjkDiseaseTreatService.saveBatch(jjjkDiseaseTreatList);
+        jjjkDiseaseNurseService.saveBatch(jjjkDiseaseNurseList);
+
+        jjjkDiseaseLibService.updateBatchById(diseaseLibList);
     }
 
 }

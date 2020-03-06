@@ -7,15 +7,22 @@ import com.nuena.jjjk.entity.JjjkBodypart;
 import com.nuena.jjjk.entity.JjjkDeptInfo;
 import com.nuena.jjjk.entity.JjjkDeptSymptomMapping;
 import com.nuena.jjjk.entity.JjjkPartSymptomMapping;
+import com.nuena.jjjk.entity.JjjkSymptomEtiology;
+import com.nuena.jjjk.entity.JjjkSymptomExamine;
+import com.nuena.jjjk.entity.JjjkSymptomHealth;
 import com.nuena.jjjk.entity.JjjkSymptomLib;
+import com.nuena.jjjk.entity.JjjkSymptomPrevent;
+import com.nuena.jjjk.entity.JjjkSymptomSynopsis;
 import com.nuena.jjjk.service.impl.JjjkDeptSymptomMappingServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkPartSymptomMappingServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomEtiologyServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomExamineServiceImpl;
+import com.nuena.jjjk.service.impl.JjjkSymptomHealthServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomLibServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomPreventServiceImpl;
 import com.nuena.jjjk.service.impl.JjjkSymptomSynopsisServiceImpl;
 import com.nuena.util.DateUtil;
+import com.nuena.util.EnDecodeUtil;
 import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
 import com.nuena.util.ListUtil;
@@ -74,6 +81,9 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
     @Autowired
     @Qualifier("jjjkPartSymptomMappingServiceImpl")
     private JjjkPartSymptomMappingServiceImpl jjjkPartSymptomMappingService;
+    @Autowired
+    @Qualifier("jjjkSymptomHealthServiceImpl")
+    private JjjkSymptomHealthServiceImpl jjjkSymptomHealthService;
 
     @Transactional
     public void loadSym(JjjkDeptInfo deptInfo) {
@@ -406,8 +416,91 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
      * @param path
      * @param symptomLibList
      */
+    @Transactional
     public void loadedHtmlIntoDB(String path, List<JjjkSymptomLib> symptomLibList) {
+        Date now = DateUtil.now();
+        List<JjjkSymptomSynopsis> jjjkSymptomSynopsisList = Lists.newArrayList();
+        List<JjjkSymptomEtiology> jjjkSymptomEtiologyList = Lists.newArrayList();
+        List<JjjkSymptomPrevent> jjjkSymptomPreventList = Lists.newArrayList();
+        List<JjjkSymptomExamine> jjjkSymptomExamineList = Lists.newArrayList();
+        List<JjjkSymptomHealth> jjjkSymptomHealthList = Lists.newArrayList();
+        symptomLibList.forEach(symptomLib -> {
+            System.out.println("在进行："+symptomLib.getSymName());
+            JjjkSymptomSynopsis jjjkSymptomSynopsis = new JjjkSymptomSynopsis();
+            jjjkSymptomSynopsis.setCreateTime(now);
+            jjjkSymptomSynopsis.setModifyTime(now);
+            jjjkSymptomSynopsis.setSymId(symptomLib.getSymId());
+            jjjkSymptomSynopsis.setSymLibId(symptomLib.getId());
+            jjjkSymptomSynopsis.setSymName(symptomLib.getSymName());
+            jjjkSymptomSynopsis.setSynopsisUrl(symptomLib.getSynopsisUrl());
+            jjjkSymptomSynopsis.setSynopsisHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + symptomLib.getSymId() + "\\synopsis")));
+            jjjkSymptomSynopsisList.add(jjjkSymptomSynopsis);
 
+            JjjkSymptomEtiology jjjkSymptomEtiology = new JjjkSymptomEtiology();
+            jjjkSymptomEtiology.setCreateTime(now);
+            jjjkSymptomEtiology.setModifyTime(now);
+            jjjkSymptomEtiology.setSymId(symptomLib.getSymId());
+            jjjkSymptomEtiology.setSymLibId(symptomLib.getId());
+            jjjkSymptomEtiology.setSymName(symptomLib.getSymName());
+            jjjkSymptomEtiology.setEtiologyUrl(symptomLib.getEtiologyUrl());
+            jjjkSymptomEtiology.setEtiologyHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + symptomLib.getSymId() + "\\etiology")));
+            jjjkSymptomEtiologyList.add(jjjkSymptomEtiology);
+
+            JjjkSymptomPrevent jjjkSymptomPrevent = new JjjkSymptomPrevent();
+            jjjkSymptomPrevent.setCreateTime(now);
+            jjjkSymptomPrevent.setModifyTime(now);
+            jjjkSymptomPrevent.setSymId(symptomLib.getSymId());
+            jjjkSymptomPrevent.setSymLibId(symptomLib.getId());
+            jjjkSymptomPrevent.setSymName(symptomLib.getSymName());
+            jjjkSymptomPrevent.setPreventUrl(symptomLib.getPreventUrl());
+            jjjkSymptomPrevent.setPreventHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + symptomLib.getSymId() + "\\prevent")));
+            jjjkSymptomPreventList.add(jjjkSymptomPrevent);
+
+            JjjkSymptomExamine jjjkSymptomExamine = new JjjkSymptomExamine();
+            jjjkSymptomExamine.setCreateTime(now);
+            jjjkSymptomExamine.setModifyTime(now);
+            jjjkSymptomExamine.setSymId(symptomLib.getSymId());
+            jjjkSymptomExamine.setSymLibId(symptomLib.getId());
+            jjjkSymptomExamine.setSymName(symptomLib.getSymName());
+            jjjkSymptomExamine.setExamineUrl(symptomLib.getExamineUrl());
+            jjjkSymptomExamine.setExamineHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + symptomLib.getSymId() + "\\examine")));
+            jjjkSymptomExamineList.add(jjjkSymptomExamine);
+
+            JjjkSymptomHealth jjjkSymptomHealth = new JjjkSymptomHealth();
+            jjjkSymptomHealth.setCreateTime(now);
+            jjjkSymptomHealth.setModifyTime(now);
+            jjjkSymptomHealth.setSymId(symptomLib.getSymId());
+            jjjkSymptomHealth.setSymLibId(symptomLib.getId());
+            jjjkSymptomHealth.setSymName(symptomLib.getSymName());
+            jjjkSymptomHealth.setHealthUrl(symptomLib.getHealthUrl());
+            jjjkSymptomHealth.setHealthHtml(EnDecodeUtil.encode(FileUtil.fileRead(path + symptomLib.getSymId() + "\\health")));
+            jjjkSymptomHealthList.add(jjjkSymptomHealth);
+
+            symptomLib.setIsHtmlsLoad(1);
+            symptomLib.setModifyTime(now);
+
+            if (jjjkSymptomSynopsisList.size()==1000) {
+                jjjkSymptomSynopsisService.saveBatch(jjjkSymptomSynopsisList);
+                jjjkSymptomEtiologyService.saveBatch(jjjkSymptomEtiologyList);
+                jjjkSymptomPreventService.saveBatch(jjjkSymptomPreventList);
+                jjjkSymptomExamineService.saveBatch(jjjkSymptomExamineList);
+                jjjkSymptomHealthService.saveBatch(jjjkSymptomHealthList);
+                jjjkSymptomSynopsisList.clear();
+                jjjkSymptomEtiologyList.clear();
+                jjjkSymptomPreventList.clear();
+                jjjkSymptomExamineList.clear();
+                jjjkSymptomHealthList.clear();
+            }
+        });
+
+        jjjkSymptomSynopsisService.saveBatch(jjjkSymptomSynopsisList);
+        jjjkSymptomEtiologyService.saveBatch(jjjkSymptomEtiologyList);
+        jjjkSymptomPreventService.saveBatch(jjjkSymptomPreventList);
+        jjjkSymptomExamineService.saveBatch(jjjkSymptomExamineList);
+        jjjkSymptomHealthService.saveBatch(jjjkSymptomHealthList);
+
+        jjjkSymptomLibService.updateBatchById(symptomLibList);
     }
+
 
 }
