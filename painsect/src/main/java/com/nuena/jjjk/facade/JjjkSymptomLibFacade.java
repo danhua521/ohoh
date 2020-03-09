@@ -80,6 +80,8 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
     @Qualifier("jjjkPartSymptomMappingServiceImpl")
     private JjjkPartSymptomMappingServiceImpl jjjkPartSymptomMappingService;
     @Autowired
+    private JjjkPartSymptomMappingFacade jjjkPartSymptomMappingFacade;
+    @Autowired
     @Qualifier("jjjkSymptomHealthServiceImpl")
     private JjjkSymptomHealthServiceImpl jjjkSymptomHealthService;
     @Autowired
@@ -655,6 +657,71 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
         jjjkSymptomHealthList.clear();
         jjjkSymptomHealthService.updateBatchById(jjjkSymptomHealthUpts);
         jjjkSymptomHealthUpts.clear();
+    }
+
+    /**
+     * 文件生成
+     */
+    public void fileGener() {
+        QueryWrapper<JjjkSymptomLib> jjjkSymptomLibQe = new QueryWrapper<>();
+        jjjkSymptomLibQe.eq("is_htmls_anay", 1);
+        jjjkSymptomLibQe.select("id", "sym_name");
+        List<JjjkSymptomLib> jjjkSymptomLibList = list(jjjkSymptomLibQe);
+
+        QueryWrapper<JjjkPartSymptomMapping> jjjkPartSymptomMappingQe = new QueryWrapper<>();
+        jjjkPartSymptomMappingQe.select("part_name", "sym_lib_id");
+        Map<Long, List<String>> symIdPartNamesMap = jjjkPartSymptomMappingFacade.list(jjjkPartSymptomMappingQe)
+                .stream().collect(
+                        Collectors.groupingBy(
+                                JjjkPartSymptomMapping::getSymLibId,
+                                Collectors.mapping(JjjkPartSymptomMapping::getPartName, Collectors.toList())
+                        )
+                );
+
+        QueryWrapper<JjjkSymptomSynopsis> jjjkSymptomSynopsisQe = new QueryWrapper<>();
+        jjjkSymptomSynopsisQe.select("sym_lib_id", "synopsis_anaytxt");
+        Map<Long, String> jjjkSymptomSynopsisMap = jjjkSymptomSynopsisFacade.list(jjjkSymptomSynopsisQe)
+                .stream().collect(Collectors.toMap(JjjkSymptomSynopsis::getSymLibId, JjjkSymptomSynopsis::getSynopsisAnaytxt));
+
+        QueryWrapper<JjjkSymptomEtiology> jjjkSymptomEtiologyQe = new QueryWrapper<>();
+        jjjkSymptomEtiologyQe.select("sym_lib_id", "etiology_anaytxt");
+        Map<Long, String> jjjkSymptomEtiologyMap = jjjkSymptomEtiologyFacade.list(jjjkSymptomEtiologyQe)
+                .stream().collect(Collectors.toMap(JjjkSymptomEtiology::getSymLibId, JjjkSymptomEtiology::getEtiologyAnaytxt));
+
+        QueryWrapper<JjjkSymptomPrevent> jjjkSymptomPreventQe = new QueryWrapper<>();
+        jjjkSymptomPreventQe.select("sym_lib_id", "prevent_anaytxt");
+        Map<Long, String> jjjkSymptomPreventMap = jjjkSymptomPreventFacade.list(jjjkSymptomPreventQe)
+                .stream().collect(Collectors.toMap(JjjkSymptomPrevent::getSymLibId, JjjkSymptomPrevent::getPreventAnaytxt));
+
+        QueryWrapper<JjjkSymptomExamine> jjjkSymptomExamineQe = new QueryWrapper<>();
+        jjjkSymptomExamineQe.select("sym_lib_id", "examine_anaytxt");
+        Map<Long, String> jjjkSymptomExamineMap = jjjkSymptomExamineFacade.list(jjjkSymptomExamineQe)
+                .stream().collect(Collectors.toMap(JjjkSymptomExamine::getSymLibId, JjjkSymptomExamine::getExamineAnaytxt));
+
+        QueryWrapper<JjjkSymptomHealth> jjjkSymptomHealthQe = new QueryWrapper<>();
+        jjjkSymptomHealthQe.select("sym_lib_id", "health_anaytxt");
+        Map<Long, String> jjjkSymptomHealthMap = jjjkSymptomHealthFacade.list(jjjkSymptomHealthQe)
+                .stream().collect(Collectors.toMap(JjjkSymptomHealth::getSymLibId, JjjkSymptomHealth::getHealthAnaytxt));
+
+        jjjkSymptomLibList.forEach(jjjkSymptomLib -> {
+            List<String> partNames = symIdPartNamesMap.get(jjjkSymptomLib.getId());
+            if (ListUtil.isEmpty(partNames)) {
+                partNames = Lists.newArrayList();
+                partNames.add("无归属");
+            }
+            partNames.forEach(partName -> {
+                String path = "F:\\久久健康网\\症状\\" + partName + "\\" + jjjkSymptomLib.getSymName();
+                File file = new File(path);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                FileUtil.fileWrite(path, "简介", jjjkSymptomSynopsisMap.get(jjjkSymptomLib.getId()));
+                FileUtil.fileWrite(path, "病因", jjjkSymptomEtiologyMap.get(jjjkSymptomLib.getId()));
+                FileUtil.fileWrite(path, "预防", jjjkSymptomPreventMap.get(jjjkSymptomLib.getId()));
+                FileUtil.fileWrite(path, "检查", jjjkSymptomExamineMap.get(jjjkSymptomLib.getId()));
+                FileUtil.fileWrite(path, "食疗", jjjkSymptomHealthMap.get(jjjkSymptomLib.getId()));
+            });
+        });
     }
 
 }

@@ -110,6 +110,8 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     @Qualifier("jjjkDeptDiseaseMappingServiceImpl")
     private JjjkDeptDiseaseMappingServiceImpl jjjkDeptDiseaseMappingService;
     @Autowired
+    private JjjkDeptDiseaseMappingFacade jjjkDeptDiseaseMappingFacade;
+    @Autowired
     @Qualifier("jjjkPartDiseaseMappingServiceImpl")
     private JjjkPartDiseaseMappingServiceImpl jjjkPartDiseaseMappingService;
 
@@ -647,7 +649,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisSynopsis() {
         List<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisQe = new QueryWrapper<>();
-        jjjkDiseaseSynopsisQe.select("id", "synopsis_html");
+        jjjkDiseaseSynopsisQe.select("id", "synopsis_html", "dis_lib_id");
         List<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisList = jjjkDiseaseSynopsisFacade.list(jjjkDiseaseSynopsisQe);
         List<JjjkDiseaseLib> jjjkDiseaseLibList = Lists.newArrayList();
         Date now = DateUtil.now();
@@ -685,7 +687,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisEtiology() {
         List<JjjkDiseaseEtiology> jjjkDiseaseEtiologyUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseEtiology> jjjkDiseaseEtiologyQe = new QueryWrapper<>();
-        jjjkDiseaseEtiologyQe.select("id", "etiology_html");
+        jjjkDiseaseEtiologyQe.select("id", "etiology_html", "dis_lib_id");
         List<JjjkDiseaseEtiology> jjjkDiseaseEtiologyList = jjjkDiseaseEtiologyFacade.list(jjjkDiseaseEtiologyQe);
         Date now = DateUtil.now();
         jjjkDiseaseEtiologyList.forEach(jjjkDiseaseEtiology -> {
@@ -710,7 +712,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisPrevent() {
         List<JjjkDiseasePrevent> jjjkDiseasePreventUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseasePrevent> jjjkDiseasePreventQe = new QueryWrapper<>();
-        jjjkDiseasePreventQe.select("id", "prevent_html");
+        jjjkDiseasePreventQe.select("id", "prevent_html", "dis_lib_id");
         List<JjjkDiseasePrevent> jjjkDiseasePreventList = jjjkDiseasePreventFacade.list(jjjkDiseasePreventQe);
         Date now = DateUtil.now();
         jjjkDiseasePreventList.forEach(jjjkDiseasePrevent -> {
@@ -735,7 +737,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisComplication() {
         List<JjjkDiseaseComplication> jjjkDiseaseComplicationUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseComplication> jjjkDiseaseComplicationQe = new QueryWrapper<>();
-        jjjkDiseaseComplicationQe.select("id", "complication_html");
+        jjjkDiseaseComplicationQe.select("id", "complication_html", "dis_lib_id");
         List<JjjkDiseaseComplication> jjjkDiseaseComplicationList = jjjkDiseaseComplicationFacade.list(jjjkDiseaseComplicationQe);
         Date now = DateUtil.now();
         jjjkDiseaseComplicationList.forEach(jjjkDiseaseComplication -> {
@@ -763,7 +765,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisSymptom() {
         List<JjjkDiseaseSymptom> jjjkDiseaseSymptomUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseSymptom> jjjkDiseaseSymptomQe = new QueryWrapper<>();
-        jjjkDiseaseSymptomQe.select("id", "symptom_html");
+        jjjkDiseaseSymptomQe.select("id", "symptom_html", "dis_lib_id");
         List<JjjkDiseaseSymptom> jjjkDiseaseSymptomList = jjjkDiseaseSymptomFacade.list(jjjkDiseaseSymptomQe);
         Date now = DateUtil.now();
         jjjkDiseaseSymptomList.forEach(jjjkDiseaseSymptom -> {
@@ -788,7 +790,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisExamine() {
         List<JjjkDiseaseExamine> jjjkDiseaseExamineUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseExamine> jjjkDiseaseExamineQe = new QueryWrapper<>();
-        jjjkDiseaseExamineQe.select("id", "examine_html");
+        jjjkDiseaseExamineQe.select("id", "examine_html", "dis_lib_id");
         List<JjjkDiseaseExamine> jjjkDiseaseExamineList = jjjkDiseaseExamineFacade.list(jjjkDiseaseExamineQe);
         Date now = DateUtil.now();
         jjjkDiseaseExamineList.forEach(jjjkDiseaseExamine -> {
@@ -816,7 +818,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisDiscern() {
         List<JjjkDiseaseDiscern> jjjkDiseaseDiscernUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseDiscern> jjjkDiseaseDiscernQe = new QueryWrapper<>();
-        jjjkDiseaseDiscernQe.select("id", "discern_html");
+        jjjkDiseaseDiscernQe.select("id", "discern_html", "dis_lib_id");
         List<JjjkDiseaseDiscern> jjjkDiseaseDiscernList = jjjkDiseaseDiscernFacade.list(jjjkDiseaseDiscernQe);
         Date now = DateUtil.now();
         jjjkDiseaseDiscernList.forEach(jjjkDiseaseDiscern -> {
@@ -844,7 +846,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisTreat() {
         List<JjjkDiseaseTreat> jjjkDiseaseTreatUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseTreat> jjjkDiseaseTreatQe = new QueryWrapper<>();
-        jjjkDiseaseTreatQe.select("id", "treat_html");
+        jjjkDiseaseTreatQe.select("id", "treat_html", "dis_lib_id");
         List<JjjkDiseaseTreat> jjjkDiseaseTreatList = jjjkDiseaseTreatFacade.list(jjjkDiseaseTreatQe);
         Date now = DateUtil.now();
         jjjkDiseaseTreatList.forEach(jjjkDiseaseTreat -> {
@@ -872,7 +874,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
     private void analysisNurse() {
         List<JjjkDiseaseNurse> jjjkDiseaseNurseUpts = Lists.newArrayList();
         QueryWrapper<JjjkDiseaseNurse> jjjkDiseaseNurseQe = new QueryWrapper<>();
-        jjjkDiseaseNurseQe.select("id", "nurse_html");
+        jjjkDiseaseNurseQe.select("id", "nurse_html", "dis_lib_id");
         List<JjjkDiseaseNurse> jjjkDiseaseNurseList = jjjkDiseaseNurseFacade.list(jjjkDiseaseNurseQe);
         Date now = DateUtil.now();
         jjjkDiseaseNurseList.forEach(jjjkDiseaseNurse -> {
@@ -892,6 +894,95 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
         jjjkDiseaseNurseList.clear();
         jjjkDiseaseNurseService.updateBatchById(jjjkDiseaseNurseUpts);
         jjjkDiseaseNurseUpts.clear();
+    }
+
+    /**
+     * 文件生成
+     */
+    public void fileGener() {
+        QueryWrapper<JjjkDiseaseLib> jjjkDiseaseLibQe = new QueryWrapper<>();
+        jjjkDiseaseLibQe.eq("is_htmls_anay", 1);
+        jjjkDiseaseLibQe.select("id", "dis_name");
+        List<JjjkDiseaseLib> jjjkDiseaseLibList = list(jjjkDiseaseLibQe);
+
+        QueryWrapper<JjjkDeptDiseaseMapping> jjjkDeptDiseaseMappingQe = new QueryWrapper<>();
+        jjjkDeptDiseaseMappingQe.select("dis_lib_id", "dept_name");
+        Map<Long, List<String>> disIdDeptNamesMap = jjjkDeptDiseaseMappingFacade.list(jjjkDeptDiseaseMappingQe)
+                .stream().collect(
+                        Collectors.groupingBy(
+                                JjjkDeptDiseaseMapping::getDisLibId,
+                                Collectors.mapping(JjjkDeptDiseaseMapping::getDeptName, Collectors.toList())
+                        )
+                );
+
+        QueryWrapper<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisQe = new QueryWrapper<>();
+        jjjkDiseaseSynopsisQe.select("dis_lib_id", "synopsis_anaytxt");
+        Map<Long, String> jjjkDiseaseSynopsisMap = jjjkDiseaseSynopsisFacade.list(jjjkDiseaseSynopsisQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseSynopsis::getDisLibId, JjjkDiseaseSynopsis::getSynopsisAnaytxt));
+
+        QueryWrapper<JjjkDiseaseEtiology> jjjkDiseaseEtiologyQe = new QueryWrapper<>();
+        jjjkDiseaseEtiologyQe.select("dis_lib_id", "etiology_anaytxt");
+        Map<Long, String> jjjkDiseaseEtiologyMap = jjjkDiseaseEtiologyFacade.list(jjjkDiseaseEtiologyQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseEtiology::getDisLibId, JjjkDiseaseEtiology::getEtiologyAnaytxt));
+
+        QueryWrapper<JjjkDiseasePrevent> jjjkDiseasePreventQe = new QueryWrapper<>();
+        jjjkDiseasePreventQe.select("dis_lib_id", "prevent_anaytxt");
+        Map<Long, String> jjjkDiseasePreventMap = jjjkDiseasePreventFacade.list(jjjkDiseasePreventQe)
+                .stream().collect(Collectors.toMap(JjjkDiseasePrevent::getDisLibId, JjjkDiseasePrevent::getPreventAnaytxt));
+
+        QueryWrapper<JjjkDiseaseComplication> jjjkDiseaseComplicationQe = new QueryWrapper<>();
+        jjjkDiseaseComplicationQe.select("dis_lib_id", "complication_anaytxt");
+        Map<Long, String> jjjkDiseaseComplicationMap = jjjkDiseaseComplicationFacade.list(jjjkDiseaseComplicationQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseComplication::getDisLibId, JjjkDiseaseComplication::getComplicationAnaytxt));
+
+        QueryWrapper<JjjkDiseaseSymptom> jjjkDiseaseSymptomQe = new QueryWrapper<>();
+        jjjkDiseaseSymptomQe.select("dis_lib_id", "symptom_anaytxt");
+        Map<Long, String> jjjkDiseaseSymptomMap = jjjkDiseaseSymptomFacade.list(jjjkDiseaseSymptomQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseSymptom::getDisLibId, JjjkDiseaseSymptom::getSymptomAnaytxt));
+
+        QueryWrapper<JjjkDiseaseExamine> jjjkDiseaseExamineQe = new QueryWrapper<>();
+        jjjkDiseaseExamineQe.select("dis_lib_id", "examine_anaytxt");
+        Map<Long, String> jjjkDiseaseExamineMap = jjjkDiseaseExamineFacade.list(jjjkDiseaseExamineQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseExamine::getDisLibId, JjjkDiseaseExamine::getExamineAnaytxt));
+
+        QueryWrapper<JjjkDiseaseDiscern> jjjkDiseaseDiscernQe = new QueryWrapper<>();
+        jjjkDiseaseDiscernQe.select("dis_lib_id", "discern_anaytxt");
+        Map<Long, String> jjjkDiseaseDiscernMap = jjjkDiseaseDiscernFacade.list(jjjkDiseaseDiscernQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseDiscern::getDisLibId, JjjkDiseaseDiscern::getDiscernAnaytxt));
+
+        QueryWrapper<JjjkDiseaseTreat> jjjkDiseaseTreatQe = new QueryWrapper<>();
+        jjjkDiseaseTreatQe.select("dis_lib_id", "treat_anaytxt");
+        Map<Long, String> jjjkDiseaseTreatMap = jjjkDiseaseTreatFacade.list(jjjkDiseaseTreatQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseTreat::getDisLibId, JjjkDiseaseTreat::getTreatAnaytxt));
+
+        QueryWrapper<JjjkDiseaseNurse> jjjkDiseaseNurseQe = new QueryWrapper<>();
+        jjjkDiseaseNurseQe.select("dis_lib_id", "nurse_anaytxt");
+        Map<Long, String> jjjkDiseaseNurseMap = jjjkDiseaseNurseFacade.list(jjjkDiseaseNurseQe)
+                .stream().collect(Collectors.toMap(JjjkDiseaseNurse::getDisLibId, JjjkDiseaseNurse::getNurseAnaytxt));
+
+        jjjkDiseaseLibList.forEach(jjjkDiseaseLib -> {
+            List<String> deptNames = disIdDeptNamesMap.get(jjjkDiseaseLib.getId());
+            if (ListUtil.isEmpty(deptNames)) {
+                deptNames = Lists.newArrayList();
+                deptNames.add("无归属");
+            }
+            deptNames.forEach(deptName -> {
+                String path = "F:\\久久健康网\\疾病\\" + deptName + "\\" + jjjkDiseaseLib.getDisName();
+                File file = new File(path);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                FileUtil.fileWrite(path, "简介", jjjkDiseaseSynopsisMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "病因", jjjkDiseaseEtiologyMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "预防", jjjkDiseasePreventMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "并发症", jjjkDiseaseComplicationMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "症状", jjjkDiseaseSymptomMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "检查", jjjkDiseaseExamineMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "诊断鉴别", jjjkDiseaseDiscernMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "治疗", jjjkDiseaseTreatMap.get(jjjkDiseaseLib.getId()));
+                FileUtil.fileWrite(path, "护理", jjjkDiseaseNurseMap.get(jjjkDiseaseLib.getId()));
+            });
+        });
     }
 
 }
