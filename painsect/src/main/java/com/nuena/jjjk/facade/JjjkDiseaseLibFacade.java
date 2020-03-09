@@ -33,6 +33,7 @@ import com.nuena.util.DateUtil;
 import com.nuena.util.EnDecodeUtil;
 import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
+import com.nuena.util.JsoupUtil;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
 import org.jsoup.Jsoup;
@@ -57,9 +58,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
-
-    @Autowired
-    private JjjkDeptInfoFacade jjjkDeptInfoFacade;
     @Autowired
     @Qualifier("jjjkDiseaseLibServiceImpl")
     private JjjkDiseaseLibServiceImpl jjjkDiseaseLibService;
@@ -619,6 +617,281 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
         jjjkDiseaseNurseService.saveBatch(jjjkDiseaseNurseList);
 
         jjjkDiseaseLibService.updateBatchById(diseaseLibList);
+    }
+
+    @Transactional
+    public void analysis() {
+        analysisSynopsis();
+        System.gc();
+        analysisEtiology();
+        System.gc();
+        analysisPrevent();
+        System.gc();
+        analysisComplication();
+        System.gc();
+        analysisSymptom();
+        System.gc();
+        analysisExamine();
+        System.gc();
+        analysisDiscern();
+        System.gc();
+        analysisTreat();
+        System.gc();
+        analysisNurse();
+        System.gc();
+    }
+
+    /**
+     * 解析--简介
+     */
+    private void analysisSynopsis() {
+        List<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisQe = new QueryWrapper<>();
+        jjjkDiseaseSynopsisQe.select("id", "synopsis_html");
+        List<JjjkDiseaseSynopsis> jjjkDiseaseSynopsisList = jjjkDiseaseSynopsisFacade.list(jjjkDiseaseSynopsisQe);
+        List<JjjkDiseaseLib> jjjkDiseaseLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        jjjkDiseaseSynopsisList.forEach(jjjkDiseaseSynopsis -> {
+            Element diseaElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseSynopsis.getSynopsisHtml())).getElementsByClass("disea").first();
+            String anaTxt = JsoupUtil.clean(diseaElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkDiseaseSynopsis jjjkDiseaseSynopsisUpt = new JjjkDiseaseSynopsis();
+            jjjkDiseaseSynopsisUpt.setId(jjjkDiseaseSynopsis.getId());
+            jjjkDiseaseSynopsisUpt.setSynopsisAnaytxt(anaTxt);
+            jjjkDiseaseSynopsisUpt.setModifyTime(now);
+            jjjkDiseaseSynopsisUpts.add(jjjkDiseaseSynopsisUpt);
+
+            String title = diseaElement.getElementsByClass("bshare").first().select("h2").first().text();
+            title = title.substring(0, title.length() - 2);
+            JjjkDiseaseLib jjjkDiseaseLib = new JjjkDiseaseLib();
+            jjjkDiseaseLib.setId(jjjkDiseaseSynopsis.getDisLibId());
+            jjjkDiseaseLib.setDisName(title);
+            jjjkDiseaseLib.setIsHtmlsAnay(1);
+            jjjkDiseaseLib.setModifyTime(now);
+            jjjkDiseaseLibList.add(jjjkDiseaseLib);
+        });
+        jjjkDiseaseSynopsisList.clear();
+        jjjkDiseaseSynopsisService.updateBatchById(jjjkDiseaseSynopsisUpts);
+        jjjkDiseaseSynopsisUpts.clear();
+        jjjkDiseaseLibService.updateBatchById(jjjkDiseaseLibList);
+        jjjkDiseaseLibList.clear();
+    }
+
+    /**
+     * 解析--病因
+     */
+    private void analysisEtiology() {
+        List<JjjkDiseaseEtiology> jjjkDiseaseEtiologyUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseEtiology> jjjkDiseaseEtiologyQe = new QueryWrapper<>();
+        jjjkDiseaseEtiologyQe.select("id", "etiology_html");
+        List<JjjkDiseaseEtiology> jjjkDiseaseEtiologyList = jjjkDiseaseEtiologyFacade.list(jjjkDiseaseEtiologyQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseEtiologyList.forEach(jjjkDiseaseEtiology -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseEtiology.getEtiologyHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            JjjkDiseaseEtiology jjjkDiseaseEtiologyUpt = new JjjkDiseaseEtiology();
+            jjjkDiseaseEtiologyUpt.setId(jjjkDiseaseEtiology.getId());
+            jjjkDiseaseEtiologyUpt.setEtiologyAnaytxt(anaTxt);
+            jjjkDiseaseEtiologyUpt.setModifyTime(now);
+            jjjkDiseaseEtiologyUpts.add(jjjkDiseaseEtiologyUpt);
+        });
+        jjjkDiseaseEtiologyList.clear();
+        jjjkDiseaseEtiologyService.updateBatchById(jjjkDiseaseEtiologyUpts);
+        jjjkDiseaseEtiologyUpts.clear();
+    }
+
+    /**
+     * 解析--预防
+     */
+    private void analysisPrevent() {
+        List<JjjkDiseasePrevent> jjjkDiseasePreventUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseasePrevent> jjjkDiseasePreventQe = new QueryWrapper<>();
+        jjjkDiseasePreventQe.select("id", "prevent_html");
+        List<JjjkDiseasePrevent> jjjkDiseasePreventList = jjjkDiseasePreventFacade.list(jjjkDiseasePreventQe);
+        Date now = DateUtil.now();
+        jjjkDiseasePreventList.forEach(jjjkDiseasePrevent -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseasePrevent.getPreventHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            JjjkDiseasePrevent jjjkDiseasePreventUpt = new JjjkDiseasePrevent();
+            jjjkDiseasePreventUpt.setId(jjjkDiseasePrevent.getId());
+            jjjkDiseasePreventUpt.setPreventAnaytxt(anaTxt);
+            jjjkDiseasePreventUpt.setModifyTime(now);
+            jjjkDiseasePreventUpts.add(jjjkDiseasePreventUpt);
+        });
+        jjjkDiseasePreventList.clear();
+        jjjkDiseasePreventService.updateBatchById(jjjkDiseasePreventUpts);
+        jjjkDiseasePreventUpts.clear();
+    }
+
+    /**
+     * 解析--并发症
+     */
+    private void analysisComplication() {
+        List<JjjkDiseaseComplication> jjjkDiseaseComplicationUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseComplication> jjjkDiseaseComplicationQe = new QueryWrapper<>();
+        jjjkDiseaseComplicationQe.select("id", "complication_html");
+        List<JjjkDiseaseComplication> jjjkDiseaseComplicationList = jjjkDiseaseComplicationFacade.list(jjjkDiseaseComplicationQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseComplicationList.forEach(jjjkDiseaseComplication -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseComplication.getComplicationHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkDiseaseComplication jjjkDiseaseComplicationUpt = new JjjkDiseaseComplication();
+            jjjkDiseaseComplicationUpt.setId(jjjkDiseaseComplication.getId());
+            jjjkDiseaseComplicationUpt.setComplicationAnaytxt(anaTxt);
+            jjjkDiseaseComplicationUpt.setModifyTime(now);
+            jjjkDiseaseComplicationUpts.add(jjjkDiseaseComplicationUpt);
+        });
+        jjjkDiseaseComplicationList.clear();
+        jjjkDiseaseComplicationService.updateBatchById(jjjkDiseaseComplicationUpts);
+        jjjkDiseaseComplicationUpts.clear();
+    }
+
+    /**
+     * 解析--症状
+     */
+    private void analysisSymptom() {
+        List<JjjkDiseaseSymptom> jjjkDiseaseSymptomUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseSymptom> jjjkDiseaseSymptomQe = new QueryWrapper<>();
+        jjjkDiseaseSymptomQe.select("id", "symptom_html");
+        List<JjjkDiseaseSymptom> jjjkDiseaseSymptomList = jjjkDiseaseSymptomFacade.list(jjjkDiseaseSymptomQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseSymptomList.forEach(jjjkDiseaseSymptom -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseSymptom.getSymptomHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            JjjkDiseaseSymptom jjjkDiseaseSymptomUpt = new JjjkDiseaseSymptom();
+            jjjkDiseaseSymptomUpt.setId(jjjkDiseaseSymptom.getId());
+            jjjkDiseaseSymptomUpt.setSymptomAnaytxt(anaTxt);
+            jjjkDiseaseSymptomUpt.setModifyTime(now);
+            jjjkDiseaseSymptomUpts.add(jjjkDiseaseSymptomUpt);
+        });
+        jjjkDiseaseSymptomList.clear();
+        jjjkDiseaseSymptomService.updateBatchById(jjjkDiseaseSymptomUpts);
+        jjjkDiseaseSymptomUpts.clear();
+    }
+
+    /**
+     * 解析--检查
+     */
+    private void analysisExamine() {
+        List<JjjkDiseaseExamine> jjjkDiseaseExamineUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseExamine> jjjkDiseaseExamineQe = new QueryWrapper<>();
+        jjjkDiseaseExamineQe.select("id", "examine_html");
+        List<JjjkDiseaseExamine> jjjkDiseaseExamineList = jjjkDiseaseExamineFacade.list(jjjkDiseaseExamineQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseExamineList.forEach(jjjkDiseaseExamine -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseExamine.getExamineHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkDiseaseExamine jjjkDiseaseExamineUpt = new JjjkDiseaseExamine();
+            jjjkDiseaseExamineUpt.setId(jjjkDiseaseExamine.getId());
+            jjjkDiseaseExamineUpt.setExamineAnaytxt(anaTxt);
+            jjjkDiseaseExamineUpt.setModifyTime(now);
+            jjjkDiseaseExamineUpts.add(jjjkDiseaseExamineUpt);
+        });
+        jjjkDiseaseExamineList.clear();
+        jjjkDiseaseExamineService.updateBatchById(jjjkDiseaseExamineUpts);
+        jjjkDiseaseExamineUpts.clear();
+    }
+
+    /**
+     * 解析--诊断鉴别
+     */
+    private void analysisDiscern() {
+        List<JjjkDiseaseDiscern> jjjkDiseaseDiscernUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseDiscern> jjjkDiseaseDiscernQe = new QueryWrapper<>();
+        jjjkDiseaseDiscernQe.select("id", "discern_html");
+        List<JjjkDiseaseDiscern> jjjkDiseaseDiscernList = jjjkDiseaseDiscernFacade.list(jjjkDiseaseDiscernQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseDiscernList.forEach(jjjkDiseaseDiscern -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseDiscern.getDiscernHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkDiseaseDiscern jjjkDiseaseDiscernUpt = new JjjkDiseaseDiscern();
+            jjjkDiseaseDiscernUpt.setId(jjjkDiseaseDiscern.getId());
+            jjjkDiseaseDiscernUpt.setDiscernAnaytxt(anaTxt);
+            jjjkDiseaseDiscernUpt.setModifyTime(now);
+            jjjkDiseaseDiscernUpts.add(jjjkDiseaseDiscernUpt);
+        });
+        jjjkDiseaseDiscernList.clear();
+        jjjkDiseaseDiscernService.updateBatchById(jjjkDiseaseDiscernUpts);
+        jjjkDiseaseDiscernUpts.clear();
+    }
+
+    /**
+     * 解析--治疗
+     */
+    private void analysisTreat() {
+        List<JjjkDiseaseTreat> jjjkDiseaseTreatUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseTreat> jjjkDiseaseTreatQe = new QueryWrapper<>();
+        jjjkDiseaseTreatQe.select("id", "treat_html");
+        List<JjjkDiseaseTreat> jjjkDiseaseTreatList = jjjkDiseaseTreatFacade.list(jjjkDiseaseTreatQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseTreatList.forEach(jjjkDiseaseTreat -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseTreat.getTreatHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkDiseaseTreat jjjkDiseaseTreatUpt = new JjjkDiseaseTreat();
+            jjjkDiseaseTreatUpt.setId(jjjkDiseaseTreat.getId());
+            jjjkDiseaseTreatUpt.setTreatAnaytxt(anaTxt);
+            jjjkDiseaseTreatUpt.setModifyTime(now);
+            jjjkDiseaseTreatUpts.add(jjjkDiseaseTreatUpt);
+        });
+        jjjkDiseaseTreatList.clear();
+        jjjkDiseaseTreatService.updateBatchById(jjjkDiseaseTreatUpts);
+        jjjkDiseaseTreatUpts.clear();
+    }
+
+    /**
+     * 解析--护理
+     */
+    private void analysisNurse() {
+        List<JjjkDiseaseNurse> jjjkDiseaseNurseUpts = Lists.newArrayList();
+        QueryWrapper<JjjkDiseaseNurse> jjjkDiseaseNurseQe = new QueryWrapper<>();
+        jjjkDiseaseNurseQe.select("id", "nurse_html");
+        List<JjjkDiseaseNurse> jjjkDiseaseNurseList = jjjkDiseaseNurseFacade.list(jjjkDiseaseNurseQe);
+        Date now = DateUtil.now();
+        jjjkDiseaseNurseList.forEach(jjjkDiseaseNurse -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkDiseaseNurse.getNurseHtml()))
+                    .getElementsByClass("disea").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkDiseaseNurse jjjkDiseaseNurseUpt = new JjjkDiseaseNurse();
+            jjjkDiseaseNurseUpt.setId(jjjkDiseaseNurse.getId());
+            jjjkDiseaseNurseUpt.setNurseAnaytxt(anaTxt);
+            jjjkDiseaseNurseUpt.setModifyTime(now);
+            jjjkDiseaseNurseUpts.add(jjjkDiseaseNurseUpt);
+        });
+        jjjkDiseaseNurseList.clear();
+        jjjkDiseaseNurseService.updateBatchById(jjjkDiseaseNurseUpts);
+        jjjkDiseaseNurseUpts.clear();
     }
 
 }

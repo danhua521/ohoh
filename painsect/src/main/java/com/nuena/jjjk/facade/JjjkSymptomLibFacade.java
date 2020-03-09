@@ -25,6 +25,7 @@ import com.nuena.util.DateUtil;
 import com.nuena.util.EnDecodeUtil;
 import com.nuena.util.FileUtil;
 import com.nuena.util.HttpTool;
+import com.nuena.util.JsoupUtil;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
 import org.jsoup.Jsoup;
@@ -49,9 +50,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
-
-    @Autowired
-    private JjjkDeptInfoFacade jjjkDeptInfoFacade;
     @Autowired
     @Qualifier("jjjkSymptomLibServiceImpl")
     private JjjkSymptomLibServiceImpl jjjkSymptomLibService;
@@ -84,6 +82,8 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
     @Autowired
     @Qualifier("jjjkSymptomHealthServiceImpl")
     private JjjkSymptomHealthServiceImpl jjjkSymptomHealthService;
+    @Autowired
+    private JjjkSymptomHealthFacade jjjkSymptomHealthFacade;
 
     @Transactional
     public void loadSym(JjjkDeptInfo deptInfo) {
@@ -425,7 +425,7 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
         List<JjjkSymptomExamine> jjjkSymptomExamineList = Lists.newArrayList();
         List<JjjkSymptomHealth> jjjkSymptomHealthList = Lists.newArrayList();
         symptomLibList.forEach(symptomLib -> {
-            System.out.println("在进行："+symptomLib.getSymName());
+            System.out.println("在进行：" + symptomLib.getSymName());
             JjjkSymptomSynopsis jjjkSymptomSynopsis = new JjjkSymptomSynopsis();
             jjjkSymptomSynopsis.setCreateTime(now);
             jjjkSymptomSynopsis.setModifyTime(now);
@@ -479,7 +479,7 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
             symptomLib.setIsHtmlsLoad(1);
             symptomLib.setModifyTime(now);
 
-            if (jjjkSymptomSynopsisList.size()==1000) {
+            if (jjjkSymptomSynopsisList.size() == 1000) {
                 jjjkSymptomSynopsisService.saveBatch(jjjkSymptomSynopsisList);
                 jjjkSymptomEtiologyService.saveBatch(jjjkSymptomEtiologyList);
                 jjjkSymptomPreventService.saveBatch(jjjkSymptomPreventList);
@@ -502,5 +502,159 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
         jjjkSymptomLibService.updateBatchById(symptomLibList);
     }
 
+    @Transactional
+    public void analysis() {
+        analysisSynopsis();
+        System.gc();
+        analysisEtiology();
+        System.gc();
+        analysisPrevent();
+        System.gc();
+        analysisExamine();
+        System.gc();
+        analysisHealth();
+        System.gc();
+    }
+
+    /**
+     * 解析--简介
+     */
+    private void analysisSynopsis() {
+        List<JjjkSymptomSynopsis> jjjkSymptomSynopsisUpts = Lists.newArrayList();
+        QueryWrapper<JjjkSymptomSynopsis> jjjkSymptomSynopsisQe = new QueryWrapper<>();
+        jjjkSymptomSynopsisQe.select("id", "synopsis_html");
+        List<JjjkSymptomSynopsis> jjjkSymptomSynopsisList = jjjkSymptomSynopsisFacade.list(jjjkSymptomSynopsisQe);
+        List<JjjkSymptomLib> jjjkSymptomLibList = Lists.newArrayList();
+        Date now = DateUtil.now();
+        jjjkSymptomSynopsisList.forEach(jjjkSymptomSynopsis -> {
+            Element art1Element = Jsoup.parse(EnDecodeUtil.decode(jjjkSymptomSynopsis.getSynopsisHtml())).getElementsByClass("art_l").first();
+            String anaTxt = JsoupUtil.clean(art1Element.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkSymptomSynopsis jjjkSymptomSynopsisUpt = new JjjkSymptomSynopsis();
+            jjjkSymptomSynopsisUpt.setId(jjjkSymptomSynopsis.getId());
+            jjjkSymptomSynopsisUpt.setSynopsisAnaytxt(anaTxt);
+            jjjkSymptomSynopsisUpt.setModifyTime(now);
+            jjjkSymptomSynopsisUpts.add(jjjkSymptomSynopsisUpt);
+
+            String title = art1Element.getElementsByClass("bshare").first().select("h2").first().text();
+            title = title.substring(0, title.length() - 2);
+            JjjkSymptomLib jjjkSymptomLib = new JjjkSymptomLib();
+            jjjkSymptomLib.setId(jjjkSymptomSynopsis.getSymLibId());
+            jjjkSymptomLib.setSymName(title);
+            jjjkSymptomLib.setIsHtmlsAnay(1);
+            jjjkSymptomLib.setModifyTime(now);
+            jjjkSymptomLibList.add(jjjkSymptomLib);
+        });
+        jjjkSymptomSynopsisList.clear();
+        jjjkSymptomSynopsisService.updateBatchById(jjjkSymptomSynopsisUpts);
+        jjjkSymptomSynopsisUpts.clear();
+        jjjkSymptomLibService.updateBatchById(jjjkSymptomLibList);
+        jjjkSymptomLibList.clear();
+    }
+
+    /**
+     * 解析--病因
+     */
+    private void analysisEtiology() {
+        List<JjjkSymptomEtiology> jjjkSymptomEtiologyUpts = Lists.newArrayList();
+        QueryWrapper<JjjkSymptomEtiology> jjjkSymptomEtiologyQe = new QueryWrapper<>();
+        jjjkSymptomEtiologyQe.select("id", "etiology_html");
+        List<JjjkSymptomEtiology> jjjkSymptomEtiologyList = jjjkSymptomEtiologyFacade.list(jjjkSymptomEtiologyQe);
+        Date now = DateUtil.now();
+        jjjkSymptomEtiologyList.forEach(jjjkSymptomEtiology -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkSymptomEtiology.getEtiologyHtml()))
+                    .getElementsByClass("art_l").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            JjjkSymptomEtiology jjjkSymptomEtiologyUpt = new JjjkSymptomEtiology();
+            jjjkSymptomEtiologyUpt.setId(jjjkSymptomEtiology.getId());
+            jjjkSymptomEtiologyUpt.setEtiologyAnaytxt(anaTxt);
+            jjjkSymptomEtiologyUpt.setModifyTime(now);
+            jjjkSymptomEtiologyUpts.add(jjjkSymptomEtiologyUpt);
+        });
+        jjjkSymptomEtiologyList.clear();
+        jjjkSymptomEtiologyService.updateBatchById(jjjkSymptomEtiologyUpts);
+        jjjkSymptomEtiologyUpts.clear();
+    }
+
+    /**
+     * 解析--预防
+     */
+    private void analysisPrevent() {
+        List<JjjkSymptomPrevent> jjjkSymptomPreventUpts = Lists.newArrayList();
+        QueryWrapper<JjjkSymptomPrevent> jjjkSymptomPreventQe = new QueryWrapper<>();
+        jjjkSymptomPreventQe.select("id", "prevent_html");
+        List<JjjkSymptomPrevent> jjjkSymptomPreventList = jjjkSymptomPreventFacade.list(jjjkSymptomPreventQe);
+        Date now = DateUtil.now();
+        jjjkSymptomPreventList.forEach(jjjkSymptomPrevent -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkSymptomPrevent.getPreventHtml()))
+                    .getElementsByClass("art_l").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            JjjkSymptomPrevent jjjkSymptomPreventUpt = new JjjkSymptomPrevent();
+            jjjkSymptomPreventUpt.setId(jjjkSymptomPrevent.getId());
+            jjjkSymptomPreventUpt.setPreventAnaytxt(anaTxt);
+            jjjkSymptomPreventUpt.setModifyTime(now);
+            jjjkSymptomPreventUpts.add(jjjkSymptomPreventUpt);
+        });
+        jjjkSymptomPreventList.clear();
+        jjjkSymptomPreventService.updateBatchById(jjjkSymptomPreventUpts);
+        jjjkSymptomPreventUpts.clear();
+    }
+
+    /**
+     * 解析--检查
+     */
+    private void analysisExamine() {
+        List<JjjkSymptomExamine> jjjkSymptomExamineUpts = Lists.newArrayList();
+        QueryWrapper<JjjkSymptomExamine> jjjkSymptomExamineQe = new QueryWrapper<>();
+        jjjkSymptomExamineQe.select("id", "examine_html");
+        List<JjjkSymptomExamine> jjjkSymptomExamineList = jjjkSymptomExamineFacade.list(jjjkSymptomExamineQe);
+        Date now = DateUtil.now();
+        jjjkSymptomExamineList.forEach(jjjkSymptomExamine -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkSymptomExamine.getExamineHtml()))
+                    .getElementsByClass("art_l").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            if (anaTxt.indexOf("（温馨提示") != -1) {
+                anaTxt = anaTxt.substring(0, anaTxt.indexOf("（温馨提示"));
+            }
+            JjjkSymptomExamine jjjkSymptomExamineUpt = new JjjkSymptomExamine();
+            jjjkSymptomExamineUpt.setId(jjjkSymptomExamine.getId());
+            jjjkSymptomExamineUpt.setExamineAnaytxt(anaTxt);
+            jjjkSymptomExamineUpt.setModifyTime(now);
+            jjjkSymptomExamineUpts.add(jjjkSymptomExamineUpt);
+        });
+        jjjkSymptomExamineList.clear();
+        jjjkSymptomExamineService.updateBatchById(jjjkSymptomExamineUpts);
+        jjjkSymptomExamineUpts.clear();
+    }
+
+    /**
+     * 解析--食疗
+     */
+    private void analysisHealth() {
+        List<JjjkSymptomHealth> jjjkSymptomHealthUpts = Lists.newArrayList();
+        QueryWrapper<JjjkSymptomHealth> jjjkSymptomHealthQe = new QueryWrapper<>();
+        jjjkSymptomHealthQe.select("id", "health_html");
+        List<JjjkSymptomHealth> jjjkSymptomHealthList = jjjkSymptomHealthFacade.list(jjjkSymptomHealthQe);
+        Date now = DateUtil.now();
+        jjjkSymptomHealthList.forEach(jjjkSymptomHealth -> {
+            Element bshareElement = Jsoup.parse(EnDecodeUtil.decode(jjjkSymptomHealth.getHealthHtml()))
+                    .getElementsByClass("art_l").first()
+                    .getElementsByClass("bshare").first();
+            String anaTxt = JsoupUtil.clean(bshareElement.outerHtml());
+            JjjkSymptomHealth jjjkSymptomHealthUpt = new JjjkSymptomHealth();
+            jjjkSymptomHealthUpt.setId(jjjkSymptomHealth.getId());
+            jjjkSymptomHealthUpt.setHealthAnaytxt(anaTxt);
+            jjjkSymptomHealthUpt.setModifyTime(now);
+            jjjkSymptomHealthUpts.add(jjjkSymptomHealthUpt);
+        });
+        jjjkSymptomHealthList.clear();
+        jjjkSymptomHealthService.updateBatchById(jjjkSymptomHealthUpts);
+        jjjkSymptomHealthUpts.clear();
+    }
 
 }
