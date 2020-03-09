@@ -601,7 +601,7 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
                 jjjkDiseaseComplicationList.clear();
                 jjjkDiseaseSymptomList.clear();
                 jjjkDiseaseDiscernList.clear();
-                jjjkDiseaseComplicationList.clear();
+                jjjkDiseaseTreatList.clear();
                 jjjkDiseaseNurseList.clear();
             }
         });
