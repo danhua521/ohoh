@@ -710,7 +710,8 @@ public class JjjkSymptomLibFacade extends JjjkSymptomLibServiceImpl {
                 partNames.add("无归属");
             }
             partNames.forEach(partName -> {
-                String path = "F:\\久久健康网\\症状\\" + partName + "\\" + jjjkSymptomLib.getSymName();
+                String path = "F:\\久久健康网\\症状\\" + partName + "\\"
+                        + jjjkSymptomLib.getSymName().replaceAll("\\\\", "zxg").replaceAll("/", "fxg");
                 File file = new File(path);
                 if (!file.exists()) {
                     file.mkdirs();

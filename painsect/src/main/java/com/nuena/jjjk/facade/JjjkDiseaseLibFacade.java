@@ -967,7 +967,8 @@ public class JjjkDiseaseLibFacade extends JjjkDiseaseLibServiceImpl {
                 deptNames.add("无归属");
             }
             deptNames.forEach(deptName -> {
-                String path = "F:\\久久健康网\\疾病\\" + deptName + "\\" + jjjkDiseaseLib.getDisName();
+                String path = "F:\\久久健康网\\疾病\\" + deptName + "\\"
+                        + jjjkDiseaseLib.getDisName().replaceAll("\\\\", "zxg").replaceAll("/", "fxg");
                 File file = new File(path);
                 if (!file.exists()) {
                     file.mkdirs();
