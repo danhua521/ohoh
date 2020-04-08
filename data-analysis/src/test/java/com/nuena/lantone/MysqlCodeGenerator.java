@@ -1,4 +1,4 @@
-package com.nuena.changx;
+package com.nuena.lantone;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author: rengb
  * @time: 2019/11/5 17:39
  */
-public class OracleCodeGenerator {
+public class MysqlCodeGenerator {
 
     public static void main(String[] args) {
         // 代码生成器
@@ -30,7 +30,7 @@ public class OracleCodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String classPath = OracleCodeGenerator.class.getResource("").getPath();
+        String classPath = MysqlCodeGenerator.class.getResource("").getPath();
         final String projectPath = classPath.substring(0, classPath.indexOf("target") - 1);
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("rgb");
@@ -42,15 +42,15 @@ public class OracleCodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:oracle:thin:@192.168.0.97:1521:orcl");
-        dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
-        dsc.setUsername("ETRACKMRQC");
-        dsc.setPassword("ETRACKMRQC");
+        dsc.setUrl("jdbc:mysql://223.93.170.82:23606/sys-qctest?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setUsername("root");
+        dsc.setPassword("lantone");
         mpg.setDataSource(dsc);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.nuena.changx");
+        pc.setParent("com.nuena.lantone");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");
@@ -69,7 +69,7 @@ public class OracleCodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
-                return projectPath + "/src/main/resources/mapper/changx/"
+                return projectPath + "/src/main/resources/mapper/lantone/"
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
@@ -85,9 +85,10 @@ public class OracleCodeGenerator {
         strategy.setEntityTableFieldAnnotationEnable(true);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix("");
+        strategy.setTablePrefix("qc_");
         strategy.setInclude(
-                "BR_RECHOME"
+                "qc_cases_number",
+                "qc_model_mapping"
         );
         mpg.setStrategy(strategy);
 
