@@ -47,7 +47,6 @@ spring:
         use-global-data-source-stat: true
 
 mybatis-plus:
-  mapper-locations: classpath*:mapper/huazo/*.xml,classpath*:mapper/lantone/*.xml
   type-aliases-package: com.nuena.huazo.entity,com.nuena.lantone.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

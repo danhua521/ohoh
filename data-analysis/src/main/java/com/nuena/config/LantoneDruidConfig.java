@@ -18,7 +18,7 @@ import javax.sql.DataSource;
  * @time: 2020/4/8 21:41
  */
 @Configuration
-@MapperScan(basePackages = "com.nuena.orglib.mapper", sqlSessionFactoryRef = "sqlSessionFactory1")
+@MapperScan(basePackages = "com.nuena.lantone.mapper", sqlSessionFactoryRef = "sqlSessionFactory1")
 public class LantoneDruidConfig {
 
     @Bean("db1")
@@ -33,7 +33,7 @@ public class LantoneDruidConfig {
         MybatisSqlSessionFactoryBean sqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(db1);
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources("classpath*:mapper/orglib/*.xml"));
+                .getResources("classpath*:mapper/lantone/*.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 
