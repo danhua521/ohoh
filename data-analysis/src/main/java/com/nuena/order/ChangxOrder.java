@@ -34,8 +34,8 @@ public class ChangxOrder implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         QueryWrapper<MrMrcontent> mrMrcontentQe = new QueryWrapper<>();
         mrMrcontentQe.last("where rownum<50");
-        MrMrcontent mrMrcontent = mrMrcontentServiceImpl.list(mrMrcontentQe).get(20);
-        String msg = GZIPUtils.uncompressToString(mrMrcontent.getBljlnr(),"GBK");
+        MrMrcontent mrMrcontent = mrMrcontentServiceImpl.list(mrMrcontentQe).get(35);
+        String msg = GZIPUtils.uncompressToString(mrMrcontent.getBljlnr());
         System.out.println(msg);
     }
 
