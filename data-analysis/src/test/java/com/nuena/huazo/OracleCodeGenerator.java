@@ -87,7 +87,8 @@ public class OracleCodeGenerator {
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("");
         strategy.setInclude(
-                "BR_RECHOME"
+                "BR_RECHOME",
+                "MR_MRCONTENT"
         );
         mpg.setStrategy(strategy);
 
