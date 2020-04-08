@@ -25,17 +25,25 @@ public class YxbkLoad {
 
     public static void main(String[] args) {
         YxbkLoad yxbkLoad = new YxbkLoad();
+//       ykLoad.loadSym();
+        System.out.println(yxbkLoad.getExcus("F:\\医学网站html文本库\\医学百科网\\疾病").stream().distinct().count());
+        System.out.println(yxbkLoad.getExcus("F:\\医学网站html文本库\\医学百科网\\症状").stream().distinct().count());
+    }
+
+    private void loadDis() {
         String url = "http://www.medbaike.com/category-view-1.html";
-        String path = "F:\\医学百科网\\症状";
+        String path = "F:\\医学网站html文本库\\医学百科网\\疾病";
         String otherId = "category-view-1";
         String otherName = "无归属";
-//        yxbkLoad.loadAll(url, path, otherId, otherName);
+        loadAll(url, path, otherId, otherName);
+    }
 
-        url = "http://www.medbaike.com/category-view-2.html";
-        path = "F:\\医学百科网\\症状";
-        otherId = "category-view-2";
-//        yxbkLoad.loadAll(url, path, otherId, otherName);
-        System.out.println(yxbkLoad.getExcus(path).stream().distinct().count());
+    private void loadSym() {
+        String url = "http://www.medbaike.com/category-view-2.html";
+        String path = "F:\\医学网站html文本库\\医学百科网\\症状";
+        String otherId = "category-view-2";
+        String otherName = "无归属";
+        loadAll(url, path, otherId, otherName);
     }
 
     private void loadAll(String url, String path, String otherId, String otherName) {

@@ -1,32 +1,21 @@
 package com.nuena.util;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.nuena.bkmy.entity.DeptInfo;
-import com.nuena.bkmy.entity.DiseaseInfo;
-import org.apache.tika.Tika;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.pdf.PDFParser;
-import org.apache.tika.sax.BodyContentHandler;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
-import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.Date;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -36,316 +25,91 @@ import java.util.stream.Collectors;
 public class MyTest {
 
     public static void main(String[] args) throws Exception {
+//fun5();
+//        File level1FileDec = new File("F:\\医学网站文本库\\医学百科网\\疾病");
+//        for (File level2FileDec : level1FileDec.listFiles()) {
+//            for (File level3FileDec : level2FileDec.listFiles()) {
+//                String level4FilePath = level3FileDec.listFiles()[0].getPath();
+//                level4FilePath = level4FilePath.substring(16, level4FilePath.lastIndexOf("\\"));
+//                System.out.println(level4FilePath);
+//            }
+//        }
+//        List<String> list = Lists.newArrayList();
+//        int page_=0;
+//        int cou = 672;
+//        for (int page=1;page<=cou;page++){
+//            if (page==1){
+//                page_=cou;
+//            }
+//            if (page==cou){
+//                page_=1;
+//            }
+//            list.addAll(fun5(page,page_));
+//        }
+//
+//        System.out.println(list.stream().distinct().count());
 
-        //        String contentHtml = FileUtil.fileRead("C:\\Users\\Administrator\\Desktop\\百科名医网\\test.txt");
-        //        Document contentDoc = Jsoup.parse(contentHtml);
-        //
-        //        contentDoc.getElementsByClass("s_directory_flag").forEach(i->{
-        //            i.appendText("@ab98cdef");
-        //        });
-        //
-        //        String specialityVersionHtml = contentDoc.getElementById("specialityVersion").html().replaceAll("<br>","@ab98cdef");
-        //        Document specialityVersionDoc = Jsoup.parse(specialityVersionHtml);
-        //        String specialityVersionText = specialityVersionDoc.text().replaceAll("@ab98cdef","\r\n");
-        //
-        //        System.out.println(specialityVersionText);
+//        th("C:\\Users\\RGB\\Desktop\\调试\\001.txt");
 
-        //        List<String> items =
-        //                Arrays.asList("apple", "apple", "banana",
-        //                        "apple", "orange", "banana", "papaya");
-        //
-        //        Map<String, Long> result =
-        //                items.stream().collect(
-        //                        Collectors.groupingBy(
-        //                                Function.identity(), Collectors.counting()
-        //                        )
-        //                );
+    }
 
-        //        System.out.println(result);
-
-        //        String msg = FileUtil.fileRead("C:\\Users\\Administrator\\Desktop\\百科名医网\\test.txt");
-        //        String[] arry = null;
-        //        for(String a : msg.split(",")){
-        //            arry = a.split("=");
-        //            System.out.println("insert into test values('" + arry[0].trim()+"',"+arry[1]+");");
-        //        }
-
-        //
-        //        html2 = html2.replaceAll("<br>","@ab98cdef");
-        //
-        //        Document doc2 = Jsoup.parse(html2);
-        //
-        //        System.out.println(doc2.text().replaceAll("@ab98cdef","\r\n"));
-
-        //        String path="C:/Users/Administrator/Desktop/百科名医网/"; String fileName="尺骨干下1\\/3骨折合并下尺关节脱位切开复位内固定术.txt";
-        //        FileWriter fw = new FileWriter(path + "\\" + fileName);
-        //        fw.write("123");
-        //        fw.close();
-
-        //        String msg = "鼻型结外NK\\T细胞/淋巴瘤_51393838158593.txt";
-
-//        System.out.println(parsePdf("C:\\Users\\Administrator\\Desktop\\tt9\\西氏内科学(中文第22版上册).pdf"));
-        //        File file = new File("");
+    public static void th(String filePath){
+        String content = FileUtil.fileRead(filePath);
+        System.out.println(content);
+        FileUtil.fileWrite("C:\\Users\\RGB\\Desktop\\调试","ttb.java",content);
+    }
 
 
 
-
-//        System.out.println(contentHtml);
-//        System.out.println(contentHtml);
-//        String msg = EnDecodeUtil.encode(contentHtml);
-//        System.out.println(msg);
-//        System.out.println(EnDecodeUtil.decode(msg));
-//        Document contentDoc = Jsoup.parse(contentHtml);
-//        Element jblistConEarElement = contentDoc.getElementsByClass("jblist-con-ear").first();
-//        Elements aElements = jblistConEarElement.getElementsByClass("ks-zm-list").select("a");
-//        System.out.println(aElements.size());
-//        aElements.forEach(i->{
-//            String href = i.attr("href");
-//            System.out.println(href.substring(8,href.indexOf(".htm")));
+//
+//    public static List<String> fun5(int page,int page_) throws ClientProtocolException, IOException {
+//        List<String> list = Lists.newArrayList();
+//        String url = "http://cmkd.hnadl.cn/Search.html?t=Disease";
+//        CloseableHttpClient httpclient = HttpClients.createDefault();
+//        HttpPost httppost =new HttpPost(url);
+//
+//        //httppost.addHeader("Cookie","JSESSIONID=fnwebidwn==");
+//        httppost.addHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36");
+//        httppost.addHeader("Cookie","ASP.NET_SessionId=c3lhg0m2sfkywb553mo1vez0");
+//        httppost.addHeader("Content-Type","application/x-www-form-urlencoded");
+////        httppost.addHeader("","");
+////        httppost.addHeader("","");
+////        httppost.addHeader("","");
+//
+//
+//        //在集合中放入我们表单中的name --- value 键值对
+//        List<BasicNameValuePair> pair =new ArrayList<BasicNameValuePair>();
+//        pair.add(new BasicNameValuePair("__EVENTTARGET", "ctl00$cphCenter$ctlPager2"));
+//        pair.add(new BasicNameValuePair("__EVENTARGUMENT", page+""));
+//        pair.add(new BasicNameValuePair("__LASTFOCUS", ""));
+//        pair.add(new BasicNameValuePair("__VIEWSTATE", "/wEPDwUJMTgwNTc5MDA0DxYEHgJTRWUeB1Nob3dFeHBlFgJmD2QWAgIDD2QWBAIBDxYCHgRUZXh0BQZndXNldCBkAgUPZBYUAgEPEGQQFQQM5oyJ55a+55eF5ZCNDOaMieiLseaWh+WQjQnmjInliKvlkI0J5oyJSUNE5Y+3FQQHc3RyTmFtZQlzdHJOYW1lX0UJc3RyTmFtZV9BBnN0cklDRBQrAwRnZ2dnZGQCBg9kFgJmDxAPFgYeDURhdGFUZXh0RmllbGQFD3N0ckNhdGVnb3J5TmFtZR4ORGF0YVZhbHVlRmllbGQFDWludENhdGVnb3J5SUQeC18hRGF0YUJvdW5kZ2QQFRsJ55qu6IKk56eRDOiAgeW5tOeXheenkQblhL/np5EJ57K+56We56eRBumqqOenkQzogp3og4blpJbnp5EG5aaH56eRCeihgOa2suenkQzmma7pgJrlpJbnp5EJ5raI5YyW56eRDOWGheWIhuazjOenkQznpZ7nu4/lpJbnp5EP5b+D6KGA566h5YaF56eRDOaEn+afk+WGheenkQzms4zlsL/lpJbnp5EG55y856eRCeiDuOWkluenkQnlkbzlkLjnp5EJ6aOO5rm/56eRCeiCv+eYpOenkQnogr7lhoXnp5EG5Lqn56eRDOelnue7j+WGheenkQnku6PosKLnp5EJ6ICz6by75ZaJCeWPo+iFlOenkQbng6fkvKQVGwExATIBMwE0ATUBNgE3ATgBOQIxMAIxMQIxMgIxMwIxNAIxNQIxNgIxNwIxOAIxOQIyMAIyMQIyMgIyMwIyNAIyNQIyNgIyNxQrAxtnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dkZAIHDw8WAh8CZWRkAggPFgIfAgUENjcxNWQCCQ8WAh8CBQE1ZAIKDxYCHwIFAzY3MmQCCw8QZGQWAWZkAgwPDxYGHgtSZWNvcmRjb3VudAK7NB4IUGFnZVNpemUCCh4QQ3VycmVudFBhZ2VJbmRleAIFZGQCEw8WAh8CBQEwZAIUDxBkZBYBZmQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFh0FHWN0bDAwJGNwaENlbnRlciRjYlR3aWNlU2VhcmNoBShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQwBShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQxBShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQyBShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQzBShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQ0BShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQ1BShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQ2BShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQ3BShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQ4BShjdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQ5BSljdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQxMAUpY3RsMDAkY3BoQ2VudGVyJHVjQ2F0ZWdvcnkkY2JsQ2F0ZWdvcnkkMTEFKWN0bDAwJGNwaENlbnRlciR1Y0NhdGVnb3J5JGNibENhdGVnb3J5JDEyBSljdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQxMwUpY3RsMDAkY3BoQ2VudGVyJHVjQ2F0ZWdvcnkkY2JsQ2F0ZWdvcnkkMTQFKWN0bDAwJGNwaENlbnRlciR1Y0NhdGVnb3J5JGNibENhdGVnb3J5JDE1BSljdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQxNgUpY3RsMDAkY3BoQ2VudGVyJHVjQ2F0ZWdvcnkkY2JsQ2F0ZWdvcnkkMTcFKWN0bDAwJGNwaENlbnRlciR1Y0NhdGVnb3J5JGNibENhdGVnb3J5JDE4BSljdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQxOQUpY3RsMDAkY3BoQ2VudGVyJHVjQ2F0ZWdvcnkkY2JsQ2F0ZWdvcnkkMjAFKWN0bDAwJGNwaENlbnRlciR1Y0NhdGVnb3J5JGNibENhdGVnb3J5JDIxBSljdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQyMgUpY3RsMDAkY3BoQ2VudGVyJHVjQ2F0ZWdvcnkkY2JsQ2F0ZWdvcnkkMjMFKWN0bDAwJGNwaENlbnRlciR1Y0NhdGVnb3J5JGNibENhdGVnb3J5JDI0BSljdGwwMCRjcGhDZW50ZXIkdWNDYXRlZ29yeSRjYmxDYXRlZ29yeSQyNQUpY3RsMDAkY3BoQ2VudGVyJHVjQ2F0ZWdvcnkkY2JsQ2F0ZWdvcnkkMjYFKWN0bDAwJGNwaENlbnRlciR1Y0NhdGVnb3J5JGNibENhdGVnb3J5JDI2ws4Uf6jh48YGupz86LnyzBf+1jw="));
+//        pair.add(new BasicNameValuePair("__EVENTVALIDATION", "/wEWLQKd+6cYAuvK55oFAri/mp4JAoS/mp4JAsidsLcPAs+Z3q0OAs6Z3q0OAoOu3swHAs3f7N0PAteVkoUNApKIr6MLApKIw/4DApKI19kMApKI67QFApKI37YIApKI85EBApKIh+0JApKIm8gCApKIz3wCkojj1wkCm8aTswQCmsaTswQCmcaTswQCmMaTswQCn8aTswQCnsaTswQCncaTswQCnMaTswQCo8aTswQCosaTswQCm8anjg0Cmsanjg0Cmcanjg0CmManjg0Cn8anjg0Cnsanjg0Cncanjg0Cq67A2gQCpMGqtwgCpcGqtwgCpsGqtwgCq66s/wsCpMHGkgcCpcHGkgcCpsHGkge0AMjv1D34onpK2s1nGtkCdb7aIw=="));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$ddlField", "strName"));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$ddlFuzzy", "2"));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$txtSearchKey", ""));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$ddlPageSize1", "10"));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$ctlPager_input", page_+""));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$ddlPageSize2", "10"));
+//        pair.add(new BasicNameValuePair("ctl00$cphCenter$ctlPager2_input", page_+""));
+//
+//
+//        //httppost 中放入我们的经过url编码的表单参数
+//        httppost.setEntity(new UrlEncodedFormEntity(pair));
+//
+//        HttpResponse response=httpclient.execute(httppost);
+//
+//        Utf8ResponseHandler utf8ResponseHandler = new Utf8ResponseHandler();
+//        String retMsg = utf8ResponseHandler.handleResponse(response);
+//        FileUtil.fileWrite("D:\\html",page+"",retMsg);
+//        httpclient.close();
+//
+//        Document doc = Jsoup.parse(retMsg);
+//        doc.getElementsByClass("text5").forEach(i->{
+//            System.out.println(i.text());
+//            list.add(i.text());
 //        });
-//        String zimus = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z";
-//        System.out.println(zimus.split(",").length);
-//        String nritong = contentDoc.getElementsByClass("jib-articl").first().text();
-//        System.out.println(nritong);
-//        FileUtil.fileWrite("F:\\迅雷下载","dte",nritong);
-
-//        System.out.println("任"+"\r\n"+"国宾");
-//
-//        String contentHtml = HttpTool.post("http://www.myzx.cn/jibing/xbt.html");
-//        Document contentDoc = Jsoup.parse(contentHtml);
-//
-//        String mediaListHtml = contentDoc.getElementsByClass("media_list").first().outerHtml();
-//        mediaListHtml = mediaListHtml.replaceAll("<br>","@ab98cdef");
-//
-//        Element mediaListElement = Jsoup.parse(mediaListHtml);
-//        Element cardListElement = mediaListElement.getElementsByClass("card_list").first();
-//        String cardListTxt = JsoupUtil.clean(cardListElement.outerHtml());
-//        cardListTxt = cardListTxt
-//                .replace("展开全部疾病","")
-//                .replace("展开全部症状","")
-//                .replace("全部收起","")
-//                .replaceAll("@ab98cdef","\r\n");
-//
-//        StringBuffer sbf = new StringBuffer();
-//        String title,content,bigContent;
-//        Elements desListElements = mediaListElement.getElementsByClass("des_list");
-//        for (Element desListElement:desListElements){
-//            title = desListElement.selectFirst("dt").text();
-//            content = JsoupUtil.clean(desListElement.selectFirst("dd").outerHtml())
-//                    .replaceAll("@ab98cdef","\r\n")
-//                    .replaceAll("&nbsp;","");
-//            bigContent = JsoupUtil.clean(desListElement.outerHtml())
-//                    .replaceAll("@ab98cdef","\r\n")
-//                    .replaceAll("&nbsp;","");
-//            if (title.equals("疾病介绍")){
-//                content = content + "\r\n" + cardListTxt;
-//                bigContent = bigContent + "\r\n" + cardListTxt;
-//            }else if (title.equals("病因")){
-//
-//            }else if (title.equals("症状")){
-//
-//            }else if (title.equals("检查")){
-//
-//            }else if (title.equals("鉴别")){
-//
-//            }else if (title.equals("并发症")){
-//
-//            }else if (title.equals("预防")){
-//
-//            }else if (title.equals("治疗")){
-//
-//            }
-//            sbf.append(bigContent+"\r\n");
-//        }
-//        System.out.println(sbf.toString());
-//
-
-
-
-//        String anaTxt = JsoupUtil.clean(fl730Element.outerHtml());
-//        System.out.println(anaTxt);
-//        String title = fl730Element.text();
-//        title = title.substring(0, title.length() - 5);
-//        System.out.println(title);
-//        System.out.println(title);
-//        Elements drugListElement = fl730Element.getElementsByClass("drug-list").select("h4");
-//        String anaTxt = JsoupUtil.clean(drugListElement.outerHtml());
-//        System.out.println(anaTxt);
-
-//        String title = listLeftElement.getElementsByClass("disease_box").first().getElementsByClass("disease_title").first().text();
-//        title = title.substring(0,title.length()-2);
-//        System.out.println(title);
-//        String anaTxt = JsoupUtil.clean(listLeftElement.outerHtml());
-//        if (anaTxt.indexOf("相关阅读")!=-1){
-//            anaTxt = anaTxt.substring(0,anaTxt.indexOf("相关阅读"));
-//        }
-//
-//
-//        System.out.println(anaTxt);
-//        parse();
-//        Element diseaseBoxElement = listLeftElement.getElementsByClass("disease_box").first();
-//        String disName = diseaseBoxElement.getElementsByClass("disease_title").first().text();
-//        String jii = diseaseBoxElement.getElementsByClass("introduction").first().text();
-//
-//        System.out.println(disName);
-//        System.out.println(jii);
-
-//        File file = new File("F:\\迅雷下载\\ter\\rgb\\002");
-//        if (!file.exists()){
-//            file.mkdirs();
-//        }
-//        FileUtil.fileWrite("F:\\迅雷下载\\ter\\rgb\\002","tt","fefefe");
-
-        File file = new File("F:\\work\\maven_repo\\repository");
-        MavenJarClear.startClear(file);
-
-    }
-
-    public static void parse(){
-        String htmlStr = "<table id=kbtable >"
-                + "<tr> "
-                + "<td width=123>"
-                + "<div id=12>这里是要获取的数据1</div>"
-                + "<div id=13>这里是要获取的数据2</div>"
-                + "</td>"
-                + "<td width=123>"
-                + "<div id=12>这里是要获取的数据3</div>"
-                + "<div id=13>这里是要获取的数据4</div>"
-                + "</td>	"
-                + "</tr>"
-                + "</table>";
-        Document doc = Jsoup.parse(htmlStr);
-        // 根据id获取table
-        Element table = doc.getElementById("kbtable");
-        // 使用选择器选择该table内所有的<tr> <tr/>
-        Elements trs = table.select("tr");
-        //遍历该表格内的所有的<tr> <tr/>
-        for (int i = 0; i < trs.size(); ++i) {
-            // 获取一个tr
-            Element tr = trs.get(i);
-            // 获取该行的所有td节点
-            Elements tds = tr.select("td");
-            // 选择某一个td节点
-            for (int j = 0; j < tds.size(); ++j) {
-                Element td = tds.get(j);
-                // 获取td节点的所有div
-                Elements divs = td.select("div");
-                // 选择一个div
-                for (int k = 0; k < divs.size(); k++) {
-                    Element div = divs.get(k);
-                    //获取文本信息
-                    String text = div.text();
-                    //输出到控制台
-                    System.out.println(text);
-                }
-            }
-        }
-    }
-
-
-    public static String getFileType(String path) {
-        try {
-            File file = new File(path);
-            Tika tika = new Tika();
-            String fileType = tika.detect(file);
-            if (fileType != null && fileType.contains("/")) {
-                fileType = fileType.substring(fileType.indexOf("/") + 1);
-            }
-            return fileType;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public static String getContext(String path) {
-
-        try {
-
-            File file = new File(path);
-
-            Tika tika = new Tika();
-
-            String filecontent = tika.parseToString(file);
-
-            System.out.println("Extracted Content: " + filecontent);
-
-            return filecontent;
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-        return "";
-    }
-
-    public static String parsePdf(String path) {
-        try {
-            BodyContentHandler handler = new BodyContentHandler();
-
-            Metadata metadata = new Metadata();
-
-            FileInputStream inputstream = new FileInputStream(new File(path));
-
-            ParseContext pcontext = new ParseContext();
-            PDFParser pdfparser = new PDFParser();
-            pdfparser.parse(inputstream, handler, metadata, pcontext);
-                        System.out.println("Contents of the PDF :" + handler.toString());
-            System.out.println("Metadata of the PDF:");
-            String[] metadataNames = metadata.names();
-            for (String name : metadataNames) {
-                System.out.println(name + " : " + metadata.get(name));
-            }
-        } catch (Exception e) {
-        }
-        return "";
-    }
-
-//    public static String parsePdf(String path) {
-//
-//        try {
-//
-//            BodyContentHandler handler = new BodyContentHandler();
-//
-//            Metadata metadata = new Metadata();
-//
-//            FileInputStream inputstream = new FileInputStream(new File(path));
-//
-//            ParseContext pcontext = new ParseContext();
-//
-//
-//            //parsing the document using PDF parser
-//
-//            PDFParser pdfparser = new PDFParser();
-//
-//            pdfparser.parse(inputstream, handler, metadata, pcontext);
-//
-//            //getting the content of the document
-//
-//            System.out.println("Contents of the PDF :" + handler.toString());
-//
-//            // 元数据提取
-//
-//            System.out.println("Metadata of the PDF:");
-//
-//            String[] metadataNames = metadata.names();
-//
-//            for (String name : metadataNames) {
-//
-//                System.out.println(name + " : " + metadata.get(name));
-//
-//            }
-//
-//        } catch (Exception e) {
-//
-//            e.printStackTrace();
-//
-//        }
-//
-//        return "";
-//
+//        return list;
 //    }
+
 
 }
