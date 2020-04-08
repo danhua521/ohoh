@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@MapperScan({ "com.nuena.changx.mapper" })
+@MapperScan({
+        "com.nuena.mapper.changx",
+        "com.nuena.mapper.orglib"
+})
 public class DataAnalysisApplication {
 
     public static void main(String[] args) {
