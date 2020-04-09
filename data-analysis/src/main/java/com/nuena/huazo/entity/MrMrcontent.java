@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-08
+ * @since 2020-04-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,7 +30,7 @@ public class MrMrcontent implements Serializable {
     private String bljlid;
 
     @TableField("BLJLNR")
-    private byte[] bljlnr;
+    private Blob bljlnr;
 
     @TableField("CJCXRQ")
     private Date cjcxrq;

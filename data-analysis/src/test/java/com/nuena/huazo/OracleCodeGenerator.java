@@ -36,6 +36,8 @@ public class OracleCodeGenerator {
         gc.setAuthor("rgb");
         gc.setOpen(false);
         gc.setFileOverride(true);
+        gc.setBaseResultMap(true);
+        gc.setBaseColumnList(true);
         gc.setDateType(DateType.ONLY_DATE);
         gc.setServiceName("%sService");
         mpg.setGlobalConfig(gc);
