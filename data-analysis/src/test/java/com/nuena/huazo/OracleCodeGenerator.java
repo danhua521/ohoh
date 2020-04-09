@@ -67,7 +67,7 @@ public class OracleCodeGenerator {
             }
         };
         List<FileOutConfig> focList = new ArrayList();
-        focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
+        focList.add(new FileOutConfig("/mapper/huazo/templates/mapxml.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称================================模块名（自己设置）
