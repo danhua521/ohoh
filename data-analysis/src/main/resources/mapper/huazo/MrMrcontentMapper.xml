@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nuena.huazo.mapper.MrMrcontentMapper">
-
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.MrMrcontent">
         <id column="BLJLID" property="bljlid" />
@@ -11,10 +10,8 @@
         <result column="PERSONID" property="personid" />
         <result column="XMLNR" property="xmlnr" />
     </resultMap>
-
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         BLJLID, BLJLNR, CJCXRQ, CJLSHM, PERSONID, XMLNR
     </sql>
-
 </mapper>

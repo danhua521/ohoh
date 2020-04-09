@@ -32,6 +32,7 @@ public class HuaZoDruidConfig {
     public SqlSessionFactory sqlSessionFactory1(@Qualifier("db2") DataSource db2) throws Exception {
         MybatisSqlSessionFactoryBean sqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(db2);
+        sqlSessionFactoryBean.setTypeHandlersPackage("com.nuena.config.typehandlers.oracle");
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources("classpath*:mapper/huazo/*.xml"));
         return sqlSessionFactoryBean.getObject();

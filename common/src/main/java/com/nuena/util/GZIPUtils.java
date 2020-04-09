@@ -3,7 +3,6 @@ package com.nuena.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -157,58 +156,6 @@ public class GZIPUtils {
      */
     public static String uncompressToString(byte[] bytes) {
         return uncompressToString(bytes, GZIP_ENCODE_UTF_8);
-    }
-
-    /**
-     * 将压缩的字符流根据某种编码解压成正常的字符串
-     *
-     * @param in
-     * @param encoding
-     * @return
-     */
-    public static String uncompressToString(InputStream in, String encoding) {
-        String ret = null;
-        ByteArrayOutputStream out = null;
-        GZIPInputStream ungzip = null;
-        try {
-            if (in == null || in.available() == 0) {
-                return null;
-            }
-            out = new ByteArrayOutputStream();
-            ungzip = new GZIPInputStream(in);
-            byte[] buffer = new byte[256];
-            int n;
-            while ((n = ungzip.read(buffer)) >= 0) {
-                out.write(buffer, 0, n);
-            }
-            ret = out.toString(encoding);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ungzip != null) {
-                    ungzip.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-            } catch (Exception e) {
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * 将压缩的字符流根据默认编码解压成正常的字符串
-     *
-     * @param in
-     * @return
-     */
-    public static String uncompressToString(InputStream in) {
-        return uncompressToString(in, GZIP_ENCODE_UTF_8);
     }
 
     public static void main(String[] args) throws IOException {
