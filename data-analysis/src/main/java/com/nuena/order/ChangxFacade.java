@@ -37,9 +37,8 @@ public class ChangxFacade {
     public void noJmDataToJm(List<MrMrcontent> mrMrcontents) throws Exception {
         List<MrMrcontent> uptMrMrcontents = Lists.newArrayList();
         Pattern pattern = Pattern.compile("[\\u4E00-\\u9FA5]+");
-        String xmlnr = null;
         for (MrMrcontent mrMrcontent : mrMrcontents) {
-            xmlnr = GZIPUtils.uncompressToString(mrMrcontent.getBljlnr().getBytes(1, (int) mrMrcontent.getBljlnr().length()));
+            String xmlnr = GZIPUtils.uncompressToString(mrMrcontent.getBljlnr().getBytes(1, (int) mrMrcontent.getBljlnr().length()));
             MrMrcontent uptMrMrcontent = new MrMrcontent();
             uptMrMrcontent.setBljlid(mrMrcontent.getBljlid());
             if (pattern.matcher(xmlnr).find()) {
