@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * @Description:
+ * @Description: 解决oracle的BLOB类型转java的BLOB字段，结果为null的问题
  * @author: rengb
  * @time: 2020/4/9 11:03
  */
