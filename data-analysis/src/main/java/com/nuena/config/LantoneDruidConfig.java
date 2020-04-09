@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -40,6 +41,7 @@ public class LantoneDruidConfig {
     }
 
     @Bean(name = "db1TransactionManager")
+    @Primary//不加这个注解会报错,必须告诉springboot优先使用哪一个，不然 2个的话 它无从选择
     public DataSourceTransactionManager testTransactionManager(@Qualifier("db1") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
