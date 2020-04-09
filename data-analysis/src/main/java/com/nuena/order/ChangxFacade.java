@@ -5,11 +5,12 @@ import com.google.common.collect.Lists;
 import com.nuena.huazo.entity.MrMrcontent;
 import com.nuena.huazo.service.impl.MrMrcontentServiceImpl;
 import com.nuena.util.GZIPUtils;
+import com.nuena.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -22,34 +23,36 @@ import java.util.regex.Pattern;
 public class ChangxFacade {
 
     @Autowired
-    private MrMrcontentServiceImpl mrMrcontentServiceImpl;
+    @Qualifier("mrMrcontentServiceImpl")
+    private MrMrcontentServiceImpl mrMrcontentService;
+
+    public List<MrMrcontent> getNoJmData() {
+        QueryWrapper<MrMrcontent> mrMrcontentQe = new QueryWrapper<>();
+        mrMrcontentQe.select("bljlid", "bljlnr");
+        mrMrcontentQe.last("where XMLNR is null and ROWNUM<31");
+        return mrMrcontentService.list(mrMrcontentQe);
+    }
 
     @Transactional(transactionManager = "db2TransactionManager")
-    public void dataAw() throws Exception {
-        QueryWrapper<MrMrcontent> mrMrcontentQe = new QueryWrapper<>();
-        List<MrMrcontent> mrMrcontents = mrMrcontentServiceImpl.list(mrMrcontentQe);
+    public void noJmDataToJm(List<MrMrcontent> mrMrcontents) throws Exception {
         List<MrMrcontent> uptMrMrcontents = Lists.newArrayList();
         Pattern pattern = Pattern.compile("[\\u4E00-\\u9FA5]+");
-        int count = 0;
+        String xmlnr = null;
         for (MrMrcontent mrMrcontent : mrMrcontents) {
-            try {
-                MrMrcontent uptMrMrcontent = new MrMrcontent();
-                uptMrMrcontent.setBljlid(mrMrcontent.getBljlid());
-                String msg = GZIPUtils.uncompressToString(mrMrcontent.getBljlnr().getBytes(1, (int) mrMrcontent.getBljlnr().length()));
-                if (!pattern.matcher(msg).find()) {
-                    mrMrcontent.setXmlnr("0");
-                    count++;
-                } else {
-                    mrMrcontent.setXmlnr("1");
-                }
-            } catch (SQLException E) {
+            xmlnr = GZIPUtils.uncompressToString(mrMrcontent.getBljlnr().getBytes(1, (int) mrMrcontent.getBljlnr().length()));
+            MrMrcontent uptMrMrcontent = new MrMrcontent();
+            uptMrMrcontent.setBljlid(mrMrcontent.getBljlid());
+            if (pattern.matcher(xmlnr).find()) {
+                uptMrMrcontent.setXmlnr(xmlnr);
+            } else {
+                uptMrMrcontent.setXmlnr("无法解密");
             }
-
+            uptMrMrcontents.add(uptMrMrcontent);
         }
-
-        mrMrcontentServiceImpl.updateBatchById(uptMrMrcontents);
-        System.out.println(count);
-        System.out.println(mrMrcontents.size());
+        if (ListUtil.isNotEmpty(uptMrMrcontents)) {
+            mrMrcontentService.updateBatchById(uptMrMrcontents);
+        }
+        uptMrMrcontents.clear();
     }
 
 }
