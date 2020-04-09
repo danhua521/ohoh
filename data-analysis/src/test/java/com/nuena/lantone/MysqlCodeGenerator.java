@@ -87,8 +87,7 @@ public class MysqlCodeGenerator {
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("qc_");
         strategy.setInclude(
-                "qc_cases_number",
-                "qc_model_mapping"
+                "qc_brecord"
         );
         mpg.setStrategy(strategy);
 
