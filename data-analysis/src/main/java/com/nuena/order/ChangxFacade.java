@@ -29,7 +29,7 @@ public class ChangxFacade {
     public List<MrMrcontent> getNoJmData() {
         QueryWrapper<MrMrcontent> mrMrcontentQe = new QueryWrapper<>();
         mrMrcontentQe.select("bljlid", "bljlnr");
-        mrMrcontentQe.last("where XMLNR is null and ROWNUM<31");
+        mrMrcontentQe.last("where XMLNR is null and ROWNUM<200");
         return mrMrcontentService.list(mrMrcontentQe);
     }
 
