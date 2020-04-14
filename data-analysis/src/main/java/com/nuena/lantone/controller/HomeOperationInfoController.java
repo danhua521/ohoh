@@ -1,4 +1,4 @@
-package com.nuena.huazo.controller;
+package com.nuena.lantone.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-04-14
  */
 @RestController
-@RequestMapping("/br-rechome")
-public class BrRechomeController {
+@RequestMapping("/home-operation-info")
+public class HomeOperationInfoController {
 
 }

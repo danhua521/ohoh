@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nuena.huazo.mapper.BrRecoperationMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrRecoperation">
+        <result column="BASYID" property="basyid" />
+        <result column="BRSSXH" property="brssxh" />
+        <result column="BRSSRQ" property="brssrq" />
+        <result column="SQZYTS" property="sqzyts" />
+        <result column="BRSSZH" property="brsszh" />
+        <result column="SSDMID" property="ssdmid" />
+        <result column="BRSSMC" property="brssmc" />
+        <result column="NSSMC" property="nssmc" />
+        <result column="SSJBID" property="ssjbid" />
+        <result column="SSYSID" property="ssysid" />
+        <result column="SSYSMC" property="ssysmc" />
+        <result column="YZHSID" property="yzhsid" />
+        <result column="YZHSMC" property="yzhsmc" />
+        <result column="EZHSID" property="ezhsid" />
+        <result column="EZHSMC" property="ezhsmc" />
+        <result column="SZHSID" property="szhsid" />
+        <result column="SZHSMC" property="szhsmc" />
+        <result column="MZFFDM" property="mzffdm" />
+        <result column="MZFFMC" property="mzffmc" />
+        <result column="MZYSID" property="mzysid" />
+        <result column="MZYSMC" property="mzysmc" />
+        <result column="MZYSID2" property="mzysid2" />
+        <result column="MZYSMC2" property="mzysmc2" />
+        <result column="QKDJDM" property="qkdjdm" />
+        <result column="YHDJDM" property="yhdjdm" />
+        <result column="SSFHPB" property="ssfhpb" />
+        <result column="SSKSSJ" property="sskssj" />
+        <result column="SSJSSJ" property="ssjssj" />
+        <result column="ASAFJ" property="asafj" />
+        <result column="SSFXDJ" property="ssfxdj" />
+        <result column="SSSHUXL" property="ssshuxl" />
+        <result column="SSSHIXL" property="ssshixl" />
+        <result column="CJCXRQ" property="cjcxrq" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        BASYID, BRSSXH, BRSSRQ, SQZYTS, BRSSZH, SSDMID, BRSSMC, NSSMC, SSJBID, SSYSID, SSYSMC, YZHSID, YZHSMC, EZHSID, EZHSMC, SZHSID, SZHSMC, MZFFDM, MZFFMC, MZYSID, MZYSMC, MZYSID2, MZYSMC2, QKDJDM, YHDJDM, SSFHPB, SSKSSJ, SSJSSJ, ASAFJ, SSFXDJ, SSSHUXL, SSSHIXL, CJCXRQ
+    </sql>
+</mapper>

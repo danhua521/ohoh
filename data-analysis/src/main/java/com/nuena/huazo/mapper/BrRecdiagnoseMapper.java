@@ -1,16 +1,16 @@
 package com.nuena.huazo.mapper;
 
-import com.nuena.huazo.entity.BrRechome;
+import com.nuena.huazo.entity.BrRecdiagnose;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 病案诊断信息 Mapper 接口
  * </p>
  *
  * @author rgb
  * @since 2020-04-14
  */
-public interface BrRechomeMapper extends BaseMapper<BrRechome> {
+public interface BrRecdiagnoseMapper extends BaseMapper<BrRecdiagnose> {
 
 }

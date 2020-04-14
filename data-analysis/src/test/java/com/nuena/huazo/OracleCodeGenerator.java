@@ -89,7 +89,10 @@ public class OracleCodeGenerator {
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("");
         strategy.setInclude(
-                "MR_MEDICALRECORDS"
+                "BR_RECHOME",
+                "BR_RECDIAGNOSE",
+                "BR_RECOPERATION",
+                "BR_DOCTADVICE"
         );
         mpg.setStrategy(strategy);
 

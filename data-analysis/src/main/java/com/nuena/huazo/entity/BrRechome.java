@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-09
+ * @since 2020-04-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

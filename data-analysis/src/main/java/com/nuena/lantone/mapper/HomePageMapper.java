@@ -1,6 +1,6 @@
-package com.nuena.huazo.mapper;
+package com.nuena.lantone.mapper;
 
-import com.nuena.huazo.entity.BrRechome;
+import com.nuena.lantone.entity.HomePage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author rgb
  * @since 2020-04-14
  */
-public interface BrRechomeMapper extends BaseMapper<BrRechome> {
+public interface HomePageMapper extends BaseMapper<HomePage> {
 
 }

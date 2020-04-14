@@ -87,7 +87,10 @@ public class MysqlCodeGenerator {
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("med_");
         strategy.setInclude(
-                "med_medical_record_content"
+                "med_home_page",
+                "med_home_operation_info",
+                "med_home_diagnose_info",
+                "med_doctor_advice"
         );
         mpg.setStrategy(strategy);
 

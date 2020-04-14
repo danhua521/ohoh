@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nuena.huazo.mapper.BrRecdiagnoseMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrRecdiagnose">
+        <result column="BASYID" property="basyid" />
+        <result column="BAZDXH" property="bazdxh" />
+        <result column="ZDLBDM" property="zdlbdm" />
+        <result column="ZCZDPB" property="zczdpb" />
+        <result column="JBDMID" property="jbdmid" />
+        <result column="ZDJBMC" property="zdjbmc" />
+        <result column="ICDM" property="icdm" />
+        <result column="ZGQKDM" property="zgqkdm" />
+        <result column="RYQKBM" property="ryqkbm" />
+        <result column="BLZDBH" property="blzdbh" />
+        <result column="ZDFHPB" property="zdfhpb" />
+        <result column="CJCXRQ" property="cjcxrq" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        BASYID, BAZDXH, ZDLBDM, ZCZDPB, JBDMID, ZDJBMC, ICDM, ZGQKDM, RYQKBM, BLZDBH, ZDFHPB, CJCXRQ
+    </sql>
+</mapper>

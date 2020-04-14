@@ -1,16 +1,16 @@
 package com.nuena.huazo.service;
 
-import com.nuena.huazo.entity.BrRechome;
+import com.nuena.huazo.entity.BrRecoperation;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 病案首页手术 服务类
  * </p>
  *
  * @author rgb
  * @since 2020-04-14
  */
-public interface BrRechomeService extends IService<BrRechome> {
+public interface BrRecoperationService extends IService<BrRecoperation> {
 
 }
