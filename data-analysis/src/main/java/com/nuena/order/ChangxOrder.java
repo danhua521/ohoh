@@ -26,6 +26,12 @@ public class ChangxOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+//        dataJm();
+        changxFacade.dataTrans();
+//        changxFacade.testtt();
+    }
+
+    private void dataJm(){
         List<MrMrcontent> noJmData = null;
         while (ListUtil.isNotEmpty(noJmData = changxFacade.getNoJmData())) {
             try {
@@ -40,5 +46,7 @@ public class ChangxOrder implements ApplicationRunner {
             }
         }
     }
+
+
 
 }

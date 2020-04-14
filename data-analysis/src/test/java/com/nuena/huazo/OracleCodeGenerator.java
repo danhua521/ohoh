@@ -44,10 +44,10 @@ public class OracleCodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:oracle:thin:@192.168.0.97:1521:orcl");
+        dsc.setUrl("jdbc:oracle:thin:@192.168.2.246:1521:orcl");
         dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
-        dsc.setUsername("ETRACKMRQC");
-        dsc.setPassword("ETRACKMRQC");
+        dsc.setUsername("ETRACKMRQCNEW");
+        dsc.setPassword("ETRACKMRQCNEW");
         mpg.setDataSource(dsc);
 
         // 包配置
@@ -89,8 +89,7 @@ public class OracleCodeGenerator {
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("");
         strategy.setInclude(
-                "BR_RECHOME",
-                "MR_MRCONTENT"
+                "MR_MEDICALRECORDS"
         );
         mpg.setStrategy(strategy);
 

@@ -35,6 +35,7 @@ public class LantoneDruidConfig {
     public SqlSessionFactory sqlSessionFactory1(@Qualifier("db1") DataSource db1) throws Exception {
         MybatisSqlSessionFactoryBean sqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(db1);
+        sqlSessionFactoryBean.setTypeHandlersPackage("com.nuena.config.typehandlers.mysql");
         sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources("classpath*:mapper/lantone/*.xml"));
         return sqlSessionFactoryBean.getObject();
