@@ -2,11 +2,25 @@ package com.nuena.order;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.nuena.huazo.entity.BrDoctadvice;
+import com.nuena.huazo.entity.BrRecdiagnose;
+import com.nuena.huazo.entity.BrRecoperation;
 import com.nuena.huazo.entity.MrMedicalrecords;
 import com.nuena.huazo.entity.MrMrcontent;
+import com.nuena.huazo.service.impl.BrDoctadviceServiceImpl;
+import com.nuena.huazo.service.impl.BrRecdiagnoseServiceImpl;
+import com.nuena.huazo.service.impl.BrRechomeServiceImpl;
+import com.nuena.huazo.service.impl.BrRecoperationServiceImpl;
 import com.nuena.huazo.service.impl.MrMedicalrecordsServiceImpl;
 import com.nuena.huazo.service.impl.MrMrcontentServiceImpl;
+import com.nuena.lantone.entity.DoctorAdvice;
+import com.nuena.lantone.entity.HomeDiagnoseInfo;
+import com.nuena.lantone.entity.HomeOperationInfo;
 import com.nuena.lantone.entity.MedicalRecordContent;
+import com.nuena.lantone.service.impl.DoctorAdviceServiceImpl;
+import com.nuena.lantone.service.impl.HomeDiagnoseInfoServiceImpl;
+import com.nuena.lantone.service.impl.HomeOperationInfoServiceImpl;
+import com.nuena.lantone.service.impl.HomePageServiceImpl;
 import com.nuena.lantone.service.impl.MedicalRecordContentServiceImpl;
 import com.nuena.util.GZIPUtils;
 import com.nuena.util.ListUtil;
@@ -37,6 +51,33 @@ public class ChangxFacade {
     @Autowired
     @Qualifier("medicalRecordContentServiceImpl")
     private MedicalRecordContentServiceImpl medicalRecordContentService;
+
+    @Autowired
+    @Qualifier("brDoctadviceServiceImpl")
+    private BrDoctadviceServiceImpl brDoctadviceService;
+    @Autowired
+    @Qualifier("brRechomeServiceImpl")
+    private BrRechomeServiceImpl brRechomeService;
+    @Autowired
+    @Qualifier("brRecdiagnoseServiceImpl")
+    private BrRecdiagnoseServiceImpl brRecdiagnoseService;
+    @Autowired
+    @Qualifier("brRecoperationServiceImpl")
+    private BrRecoperationServiceImpl brRecoperationService;
+
+    @Autowired
+    @Qualifier("doctorAdviceServiceImpl")
+    private DoctorAdviceServiceImpl doctorAdviceService;
+    @Autowired
+    @Qualifier("homePageServiceImpl")
+    private HomePageServiceImpl homePageService;
+    @Autowired
+    @Qualifier("homeOperationInfoServiceImpl")
+    private HomeOperationInfoServiceImpl homeOperationInfoService;
+    @Autowired
+    @Qualifier("homeDiagnoseInfoServiceImpl")
+    private HomeDiagnoseInfoServiceImpl homeDiagnoseInfoService;
+
 
     public List<MrMrcontent> getNoJmData() {
         QueryWrapper<MrMrcontent> mrMrcontentQe = new QueryWrapper<>();
@@ -93,10 +134,88 @@ public class ChangxFacade {
         medicalRecordContentService.saveBatch(medicalRecordContents);
     }
 
-    public void testtt(){
-        QueryWrapper<MedicalRecordContent> medicalRecordContentQe = new QueryWrapper<>();
-        List<MedicalRecordContent> medicalRecordContents = medicalRecordContentService.list(medicalRecordContentQe);
-        System.out.println(medicalRecordContents.get(0).getContentText());
+    @Transactional(transactionManager = "db1TransactionManager")
+    public void dataTransYiZhu() {
+        QueryWrapper<BrDoctadvice> brDoctadviceQe = new QueryWrapper<>();
+        brDoctadviceQe.in("BRYZID", Arrays.asList("ZY010000658833", "ZY010000656373"));
+        List<BrDoctadvice> brDoctadviceList = brDoctadviceService.list(brDoctadviceQe);
+        List<DoctorAdvice> doctorAdviceList = Lists.newArrayList();
+        for (BrDoctadvice brDoctadvice:brDoctadviceList){
+            DoctorAdvice doctorAdvice = new DoctorAdvice();
+            doctorAdvice.setDoctorAdviceId(brDoctadvice.getBryzid());
+            doctorAdvice.setHospitalId(1l);
+            doctorAdvice.setBehospitalCode(brDoctadvice.getBrzyid());
+            doctorAdvice.setOrderDoctorName(brDoctadvice.getYskdpb());
+            doctorAdvice.setFrequency(brDoctadvice.getYzplpb());
+            doctorAdvice.setParentTypeId(brDoctadvice.getFlyzid());
+            doctorAdvice.setDoctorAdviceType(brDoctadvice.getYzlxpb());
+            doctorAdvice.setUsageNum(brDoctadvice.getYcsysl());
+            doctorAdvice.setUsageUnit(brDoctadvice.getYcyldw());
+            doctorAdvice.setDose(brDoctadvice.getYzdcjl());
+            doctorAdvice.setDoseUnit(brDoctadvice.getDcjldw());
+            doctorAdvice.setMedModeType(brDoctadvice.getGyfsid());
+            doctorAdvice.setDaDealType(brDoctadvice.getYzcllx());
+            doctorAdvice.setDaStartDate(brDoctadvice.getYzkssj());
+            doctorAdvice.setDaItemName(brDoctadvice.getYzxmmc());
+            doctorAdvice.setDaStatus(brDoctadvice.getYzztpb());
+            doctorAdvice.setDaStopDate(brDoctadvice.getYzjssj());
+            doctorAdvice.setDaGroupNo(brDoctadvice.getYztzxh());
+            doctorAdvice.setDaPrescriptionType(brDoctadvice.getYzcflx());
+            doctorAdvice.setDaMedType(brDoctadvice.getYzlylx());
+            doctorAdvice.setDoctorNotice(brDoctadvice.getYsztsm());
+            doctorAdvice.setDoctorId(brDoctadvice.getKdysid());
+            doctorAdvice.setDoctorName(brDoctadvice.getKdysmc());
+
+            doctorAdviceList.add(doctorAdvice);
+        }
+        doctorAdviceService.saveBatch(doctorAdviceList);
+    }
+
+    @Transactional(transactionManager = "db1TransactionManager")
+    public void dataTransBasyshzd() {
+        QueryWrapper<BrRecdiagnose> brRecdiagnoseQe = new QueryWrapper<>();
+        brRecdiagnoseQe.in("BASYID",Arrays.asList("ZY010000658833", "ZY010000656373"));
+        List<BrRecdiagnose> brRecdiagnoseList = brRecdiagnoseService.list(brRecdiagnoseQe);
+        List<HomeDiagnoseInfo> homeDiagnoseInfoList = Lists.newArrayList();
+        brRecdiagnoseList.forEach(brRecdiagnose -> {
+            HomeDiagnoseInfo homeDiagnoseInfo = new HomeDiagnoseInfo();
+            homeDiagnoseInfo.setHomePageId(brRecdiagnose.getBasyid());
+            homeDiagnoseInfo.setHospitalId(1l);
+            homeDiagnoseInfo.setDiagnoseOrderNo(brRecdiagnose.getBazdxh());
+            homeDiagnoseInfo.setDiagnoseType(brRecdiagnose.getZdlbdm());
+            homeDiagnoseInfo.setDiagnoseTypeShort(brRecdiagnose.getZczdpb());
+            homeDiagnoseInfo.setDiagnoseName(brRecdiagnose.getZdjbmc());
+            homeDiagnoseInfo.setBehospitalType(brRecdiagnose.getRyqkbm());
+            homeDiagnoseInfo.setLeaveHospitalType(brRecdiagnose.getZgqkdm());
+            homeDiagnoseInfo.setPathologyDiagnose(brRecdiagnose.getBlzdbh());
+            homeDiagnoseInfo.setIcdCode(brRecdiagnose.getIcdm());
+            homeDiagnoseInfoList.add(homeDiagnoseInfo);
+        });
+        homeDiagnoseInfoService.saveBatch(homeDiagnoseInfoList);
+
+        QueryWrapper<BrRecoperation> brRecoperationQe = new QueryWrapper<>();
+        brRecoperationQe.in("BASYID",Arrays.asList("ZY010000658833", "ZY010000656373"));
+        List<BrRecoperation> brRecoperationList = brRecoperationService.list(brRecoperationQe);
+        List<HomeOperationInfo> homeOperationInfoList = Lists.newArrayList();
+        brRecoperationList.forEach(brRecoperation -> {
+            HomeOperationInfo homeOperationInfo = new HomeOperationInfo();
+            homeOperationInfo.setHomePageId(brRecoperation.getBasyid());
+            homeOperationInfo.setHospitalId(1l);
+            homeOperationInfo.setOperationOrderNo(brRecoperation.getBrssxh());
+            homeOperationInfo.setOperationDate(brRecoperation.getBrssrq());
+            homeOperationInfo.setOperationCode(brRecoperation.getSsdmid());
+            homeOperationInfo.setOperationDoctorId(brRecoperation.getSsysmc());
+            homeOperationInfo.setFirstAssistantId(brRecoperation.getYzhsmc());
+            homeOperationInfo.setSecondAssistantId(brRecoperation.getEzhsmc());
+            homeOperationInfo.setCutLevel(brRecoperation.getQkdjdm());
+            homeOperationInfo.setHealingLevel(brRecoperation.getYhdjdm());
+            homeOperationInfo.setOperationName(brRecoperation.getBrssmc());
+            homeOperationInfo.setOperationLevel(brRecoperation.getSsjbid());
+            homeOperationInfo.setAnaesthesiaName(brRecoperation.getMzffmc());
+            homeOperationInfo.setShamOperationName(brRecoperation.getNssmc());
+            homeOperationInfoList.add(homeOperationInfo);
+        });
+        homeOperationInfoService.saveBatch(homeOperationInfoList);
     }
 
 }

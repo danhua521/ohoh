@@ -27,8 +27,9 @@ public class ChangxOrder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 //        dataJm();
-        changxFacade.dataTrans();
-//        changxFacade.testtt();
+//        changxFacade.dataTrans();//拉文书内容
+//        changxFacade.dataTransYiZhu();//拉医嘱
+        changxFacade.dataTransBasyshzd();//拉病案首页的手术和诊断
     }
 
     private void dataJm(){
