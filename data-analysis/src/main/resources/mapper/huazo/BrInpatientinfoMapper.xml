@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nuena.huazo.mapper.BrInpatientinfoMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrInpatientinfo">
+        <result column="BRZYID" property="brzyid" />
+        <result column="ZZJGDM" property="zzjgdm" />
+        <result column="BRDAXM" property="brdaxm" />
+        <result column="BRJZHM" property="brjzhm" />
+        <result column="ZYBQID" property="zybqid" />
+        <result column="ZYBQMC" property="zybqmc" />
+        <result column="ZYKSID" property="zyksid" />
+        <result column="ZYKSMC" property="zyksmc" />
+        <result column="ZYCWID" property="zycwid" />
+        <result column="ZYCWHM" property="zycwhm" />
+        <result column="BRLBID" property="brlbid" />
+        <result column="BRXZID" property="brxzid" />
+        <result column="BRRYRQ" property="brryrq" />
+        <result column="BRCYRQ" property="brcyrq" />
+        <result column="BRDABH" property="brdabh" />
+        <result column="BRDAXB" property="brdaxb" />
+        <result column="BRCSRQ" property="brcsrq" />
+        <result column="JBDMID" property="jbdmid" />
+        <result column="JBMSXX" property="jbmsxx" />
+        <result column="ZZYSID" property="zzysid" />
+        <result column="ZZYSXM" property="zzysxm" />
+        <result column="CJCXRQ" property="cjcxrq" />
+        <result column="CJLSHM" property="cjlshm" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        BRZYID, ZZJGDM, BRDAXM, BRJZHM, ZYBQID, ZYBQMC, ZYKSID, ZYKSMC, ZYCWID, ZYCWHM, BRLBID, BRXZID, BRRYRQ, BRCYRQ, BRDABH, BRDAXB, BRCSRQ, JBDMID, JBMSXX, ZZYSID, ZZYSXM, CJCXRQ, CJLSHM
+    </sql>
+</mapper>

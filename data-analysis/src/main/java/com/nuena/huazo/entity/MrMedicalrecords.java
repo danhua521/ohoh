@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-14
+ * @since 2020-04-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -66,6 +66,15 @@ public class MrMedicalrecords implements Serializable {
 
     @TableField("XGCZSJ")
     private Date xgczsj;
+
+    @TableField("BLZCBZ")
+    private String blzcbz;
+
+    @TableField("BLLBMC")
+    private String bllbmc;
+
+    @TableField("XGYHMC")
+    private String xgyhmc;
 
     @TableField("CJCXRQ")
     private Date cjcxrq;

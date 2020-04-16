@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 病案诊断信息 服务类
+ *  服务类
  * </p>
  *
  * @author rgb
- * @since 2020-04-14
+ * @since 2020-04-16
  */
 public interface BrRecdiagnoseService extends IService<BrRecdiagnose> {
 

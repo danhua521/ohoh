@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author rgb
- * @since 2020-04-09
+ * @since 2020-04-16
  */
 public interface MrMrcontentService extends IService<MrMrcontent> {
 

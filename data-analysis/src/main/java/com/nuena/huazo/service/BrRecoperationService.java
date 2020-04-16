@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 病案首页手术 服务类
+ *  服务类
  * </p>
  *
  * @author rgb
- * @since 2020-04-14
+ * @since 2020-04-16
  */
 public interface BrRecoperationService extends IService<BrRecoperation> {
 

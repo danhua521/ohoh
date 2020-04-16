@@ -2,7 +2,6 @@ package com.nuena.lantone.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -15,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-14
+ * @since 2020-04-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -28,7 +27,7 @@ public class HomeOperationInfo implements Serializable {
     /**
      * 病案首页ID
      */
-    @TableId("home_page_id")
+    @TableField("home_page_id")
     private String homePageId;
 
     /**
@@ -56,19 +55,19 @@ public class HomeOperationInfo implements Serializable {
     private String operationCode;
 
     /**
-     * 手术医生ID
+     * 手术医生
      */
     @TableField("operation_doctor_id")
     private String operationDoctorId;
 
     /**
-     * 一助医生ID
+     * 一助医生
      */
     @TableField("first_assistant_id")
     private String firstAssistantId;
 
     /**
-     * 二助医生ID
+     * 二助医生
      */
     @TableField("second_assistant_id")
     private String secondAssistantId;
@@ -98,7 +97,7 @@ public class HomeOperationInfo implements Serializable {
     private String operationLevel;
 
     /**
-     * 麻醉方式（全麻、局麻、静脉麻醉）
+     * 麻醉方式
      */
     @TableField("anaesthesia_name")
     private String anaesthesiaName;

@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-14
+ * @since 2020-04-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -44,25 +44,25 @@ public class BrRechome implements Serializable {
     private String zzjgid;
 
     /**
-     * 组织机构名称
+     * 医疗机构名称
      */
     @TableField("ZZJGMC")
     private String zzjgmc;
 
     /**
-     * 组织机构编号
+     * 医疗机构代码
      */
     @TableField("ZZJGBH")
     private String zzjgbh;
 
     /**
-     * 医疗付款类别
+     * 医疗付费方式
      */
     @TableField("YLFKLB")
     private String ylfklb;
 
     /**
-     * 病人健康卡号
+     * 健康卡号
      */
     @TableField("BRJKKH")
     private String brjkkh;
@@ -74,31 +74,31 @@ public class BrRechome implements Serializable {
     private String brzycs;
 
     /**
-     * 病人病案编号
+     * 病案号
      */
     @TableField("BRBABH")
     private String brbabh;
 
     /**
-     * 病人病案姓名
+     * 姓名
      */
     @TableField("BRBAXM")
     private String brbaxm;
 
     /**
-     * 病人病案性别
+     * 性别
      */
     @TableField("BRBAXB")
     private String brbaxb;
 
     /**
-     * 病人出生日期
+     * 出生日期
      */
     @TableField("BRCSRQ")
     private Date brcsrq;
 
     /**
-     * 病人年龄
+     * 年龄
      */
     @TableField("BRDQNL")
     private String brdqnl;
@@ -110,31 +110,31 @@ public class BrRechome implements Serializable {
     private String brnldw;
 
     /**
-     * 病人国籍
+     * 国籍
      */
     @TableField("BRBAGJ")
     private String brbagj;
 
     /**
-     * 婴儿年龄月数
+     * 新生儿出生月数
      */
     @TableField("YENLYS")
     private String yenlys;
 
     /**
-     * 婴儿年龄天数
+     * 新生儿出生天数
      */
     @TableField("YENLTS")
     private String yenlts;
 
     /**
-     * 婴儿出生体重
+     * 新生儿出生体重
      */
     @TableField("YECSTZ")
     private String yecstz;
 
     /**
-     * 婴儿入院体重
+     * 新生儿入院体重
      */
     @TableField("YERYTZ")
     private String yerytz;
@@ -158,37 +158,37 @@ public class BrRechome implements Serializable {
     private String brbamz;
 
     /**
-     * 病人身份证号
+     * 身份证号
      */
     @TableField("BRSFZH")
     private String brsfzh;
 
     /**
-     * 病人病案身份
+     * 职业
      */
     @TableField("BRBASF")
     private String brbasf;
 
     /**
-     * 病人婚姻状况
+     * 婚姻
      */
     @TableField("BRHYZK")
     private String brhyzk;
 
     /**
-     * 病人联系地址
+     * 现住址
      */
     @TableField("BRLXDZ")
     private String brlxdz;
 
     /**
-     * 病人联系电话
+     * 现住址电话
      */
     @TableField("BRLXDH")
     private String brlxdh;
 
     /**
-     * 联系地址邮编
+     * 现住址邮编
      */
     @TableField("LXDZYB")
     private String lxdzyb;
@@ -206,7 +206,7 @@ public class BrRechome implements Serializable {
     private String hkdzyb;
 
     /**
-     * 工作单位名称
+     * 工作单位
      */
     @TableField("GZDWMC")
     private String gzdwmc;
@@ -248,37 +248,37 @@ public class BrRechome implements Serializable {
     private String lxrydh;
 
     /**
-     * 1.急诊 2.门诊 3.其他医疗机构转入 9.其他
+     * 入院途径
      */
     @TableField("RYLYDM")
     private String rylydm;
 
     /**
-     * 病人入院日期
+     * 入院时间
      */
     @TableField("BRRYRQ")
     private Date brryrq;
 
     /**
-     * 入院科室编码
+     * 入院科别编码
      */
     @TableField("RYKSID")
     private String ryksid;
 
     /**
-     * 入院科室名称
+     * 入院科别
      */
     @TableField("RYKSMC")
     private String ryksmc;
 
     /**
-     * 入院病区编码
+     * 入院病房编码
      */
     @TableField("RYBQID")
     private String rybqid;
 
     /**
-     * 入院病区名称
+     * 入院病房
      */
     @TableField("RYBQMC")
     private String rybqmc;
@@ -296,37 +296,37 @@ public class BrRechome implements Serializable {
     private String rycwhm;
 
     /**
-     * 病人转科科别
+     * 转科科别
      */
     @TableField("BRZKKB")
     private String brzkkb;
 
     /**
-     * 病人出院日期
+     * 出院时间
      */
     @TableField("BRCYRQ")
     private Date brcyrq;
 
     /**
-     * 出院科室编码
+     * 出院科别编码
      */
     @TableField("CYKSID")
     private String cyksid;
 
     /**
-     * 出院科室名称
+     * 出院科别
      */
     @TableField("CYKSMC")
     private String cyksmc;
 
     /**
-     * 出院病区编码
+     * 出院病房编码
      */
     @TableField("CYBQID")
     private String cybqid;
 
     /**
-     * 出院病区名称
+     * 出院病房
      */
     @TableField("CYBQMC")
     private String cybqmc;
@@ -350,13 +350,13 @@ public class BrRechome implements Serializable {
     private String sjzyts;
 
     /**
-     * 病人门诊诊断
+     * 门急诊诊断
      */
     @TableField("BRMZZD")
     private String brmzzd;
 
     /**
-     * 门诊诊断编码
+     * 门急诊诊断编码
      */
     @TableField("MZZDDM")
     private String mzzddm;
@@ -392,31 +392,31 @@ public class BrRechome implements Serializable {
     private String blzdbh;
 
     /**
-     * 有无药物过敏
+     * 药物过敏
      */
     @TableField("YWYWGM")
     private String ywywgm;
 
     /**
-     * 病人过敏药物
+     * 过敏药物
      */
     @TableField("BRGMYW")
     private String brgmyw;
 
     /**
-     * 病人是否尸检
+     * 死亡患者尸检
      */
     @TableField("BRSFSJ")
     private String brsfsj;
 
     /**
-     * 病人病案血型
+     * 血型
      */
     @TableField("BRBAXX")
     private String brbaxx;
 
     /**
-     * 病人病案RH型
+     * Rh
      */
     @TableField("BRBARH")
     private String brbarh;
@@ -518,7 +518,7 @@ public class BrRechome implements Serializable {
     private String bmy;
 
     /**
-     * 病人病案质量
+     * 病案质量
      */
     @TableField("BRBAZL")
     private String brbazl;
@@ -542,7 +542,7 @@ public class BrRechome implements Serializable {
     private Date bazkrq;
 
     /**
-     * 1.医嘱离院 2.医嘱转院 3.医嘱转社区卫生服务机构/乡镇卫生院 4.非医嘱离院 5.死亡 6.其他
+     * 离院方式
      */
     @TableField("BRLYFS")
     private String brlyfs;
@@ -554,7 +554,7 @@ public class BrRechome implements Serializable {
     private String zyjgmc;
 
     /**
-     * 是否有出院31天内再住院计划
+     * 31天内再住院计划
      */
     @TableField("SSYZZY")
     private String ssyzzy;
@@ -782,43 +782,43 @@ public class BrRechome implements Serializable {
     private String qtf;
 
     /**
-     * 单病种管理 1.是 2.否
+     * 单病种管理
      */
     @TableField("DBZGL")
     private String dbzgl;
 
     /**
-     * 临床路径管理 1.完成 2.变异 3.退出 4.未入
+     * 临床路径管理
      */
     @TableField("SSLCLJGL")
     private String sslcljgl;
 
     /**
-     * 门诊与出院符合 0.未做 1.符合 2.不符合 3.不确定
+     * 门诊与住院
      */
     @TableField("MZZYFH")
     private String mzzyfh;
 
     /**
-     * 入院与出院符合 0.未做 1.符合 2.不符合 3.不确定
+     * 入院与出院
      */
     @TableField("RYCYFH")
     private String rycyfh;
 
     /**
-     * 术前与术后符合 0.未做 1.符合 2.不符合 3.不确定
+     * 术前与术后
      */
     @TableField("SQSHFH")
     private String sqshfh;
 
     /**
-     * 临床与病理符合 0.未做 1.符合 2.不符合 3.不确定
+     * 临床与病理
      */
     @TableField("LCBLFH")
     private String lcblfh;
 
     /**
-     * 放射与病理符合0.未做 1.符合 2.不符合 3.不确定
+     * 放射与病理
      */
     @TableField("FSBLFH")
     private String fsblfh;
@@ -836,13 +836,13 @@ public class BrRechome implements Serializable {
     private String qjcgcs;
 
     /**
-     * 是否为自动出院 1.是 2.否
+     * 是否为自动出院
      */
     @TableField("ZDCYPB")
     private String zdcypb;
 
     /**
-     * 转归情况 1.治愈 2.好转 3.未愈 4.死亡 5.其他
+     * 转归情况
      */
     @TableField("CYQKDM")
     private String cyqkdm;
@@ -852,6 +852,9 @@ public class BrRechome implements Serializable {
      */
     @TableField("CJCXRQ")
     private Date cjcxrq;
+
+    @TableField("CJLSHM")
+    private String cjlshm;
 
 
 }

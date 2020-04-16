@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rgb
- * @since 2020-04-09
+ * @since 2020-04-16
  */
 public interface MrMrcontentMapper extends BaseMapper<MrMrcontent> {
 

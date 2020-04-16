@@ -2,7 +2,6 @@ package com.nuena.lantone.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -15,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-14
+ * @since 2020-04-16
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -28,7 +27,7 @@ public class HomeDiagnoseInfo implements Serializable {
     /**
      * 病案首页ID
      */
-    @TableId("home_page_id")
+    @TableField("home_page_id")
     private String homePageId;
 
     /**
@@ -44,29 +43,44 @@ public class HomeDiagnoseInfo implements Serializable {
     private String diagnoseOrderNo;
 
     /**
-     * 诊断类别（主要诊断、其他诊断）
+     * 诊断类别
      */
     @TableField("diagnose_type")
     private String diagnoseType;
 
     /**
-     * 诊断判别（主、次）
+     * 诊断判别
      */
     @TableField("diagnose_type_short")
     private String diagnoseTypeShort;
 
+    /**
+     * 诊断名称
+     */
     @TableField("diagnose_name")
     private String diagnoseName;
 
+    /**
+     * 入院情况
+     */
     @TableField("behospital_type")
     private String behospitalType;
 
+    /**
+     * 出院情况
+     */
     @TableField("leave_hospital_type")
     private String leaveHospitalType;
 
+    /**
+     * 病理号
+     */
     @TableField("pathology_diagnose")
     private String pathologyDiagnose;
 
+    /**
+     * 诊断编码
+     */
     @TableField("icd_code")
     private String icdCode;
 
