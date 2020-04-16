@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 病人医嘱 前端控制器
  * </p>
  *
  * @author rgb
  * @since 2020-04-14
  */
 @RestController
-@RequestMapping("/br-rechome")
-public class BrRechomeController {
+@RequestMapping("/br-doctadvice")
+public class BrDoctadviceController {
 
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-04-14
  */
 @RestController
-@RequestMapping("/br-rechome")
-public class BrRechomeController {
+@RequestMapping("/mr-medicalrecords")
+public class MrMedicalrecordsController {
 
 }

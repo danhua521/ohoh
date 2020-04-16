@@ -5,7 +5,7 @@ spring:
     druid:
       lantone:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://223.93.170.82:23606/sys-qctest
+        url: jdbc:mysql://192.168.2.236:3306/qc?useUnicode=true&characterEncoding=utf8
         username: root
         password: lantone
         initial-size: 8
@@ -26,9 +26,9 @@ spring:
         use-global-data-source-stat: true
       huazo:
         driver-class-name: oracle.jdbc.driver.OracleDriver
-        url: jdbc:oracle:thin:@192.168.0.97:1521:orcl
-        username: ETRACKMRQC
-        password: ETRACKMRQC
+        url: jdbc:oracle:thin:@192.168.2.246:1521:orcl
+        username: ETRACKMRQCNEW
+        password: ETRACKMRQCNEW
         initial-size: 8
         min-idle: 1
         max-active: 20

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nuena.huazo.mapper.MrMedicalrecordsMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.MrMedicalrecords">
+        <id column="BLJLID" property="bljlid" />
+        <result column="BLCJID" property="blcjid" />
+        <result column="ZZJGDM" property="zzjgdm" />
+        <result column="BRZYID" property="brzyid" />
+        <result column="MQZYID" property="mqzyid" />
+        <result column="BLLBID" property="bllbid" />
+        <result column="BLMBID" property="blmbid" />
+        <result column="BCJLSJ" property="bcjlsj" />
+        <result column="BLJLMC" property="bljlmc" />
+        <result column="SFZFPB" property="sfzfpb" />
+        <result column="CJYHDM" property="cjyhdm" />
+        <result column="CJCZSJ" property="cjczsj" />
+        <result column="XGYHDM" property="xgyhdm" />
+        <result column="XGCZSJ" property="xgczsj" />
+        <result column="CJCXRQ" property="cjcxrq" />
+        <result column="CJLSHM" property="cjlshm" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        BLJLID, BLCJID, ZZJGDM, BRZYID, MQZYID, BLLBID, BLMBID, BCJLSJ, BLJLMC, SFZFPB, CJYHDM, CJCZSJ, XGYHDM, XGCZSJ, CJCXRQ, CJLSHM
+    </sql>
+</mapper>

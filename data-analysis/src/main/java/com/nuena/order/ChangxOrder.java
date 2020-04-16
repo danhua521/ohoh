@@ -26,6 +26,13 @@ public class ChangxOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+//        dataJm();
+//        changxFacade.dataTrans();//拉文书内容
+//        changxFacade.dataTransYiZhu();//拉医嘱
+        changxFacade.dataTransBasyshzd();//拉病案首页的手术和诊断
+    }
+
+    private void dataJm(){
         List<MrMrcontent> noJmData = null;
         while (ListUtil.isNotEmpty(noJmData = changxFacade.getNoJmData())) {
             try {
@@ -40,5 +47,7 @@ public class ChangxOrder implements ApplicationRunner {
             }
         }
     }
+
+
 
 }

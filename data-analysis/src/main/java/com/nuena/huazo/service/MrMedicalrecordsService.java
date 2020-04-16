@@ -1,6 +1,6 @@
 package com.nuena.huazo.service;
 
-import com.nuena.huazo.entity.BrRechome;
+import com.nuena.huazo.entity.MrMedicalrecords;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author rgb
  * @since 2020-04-14
  */
-public interface BrRechomeService extends IService<BrRechome> {
+public interface MrMedicalrecordsService extends IService<MrMedicalrecords> {
 
 }
