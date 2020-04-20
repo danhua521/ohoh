@@ -30,6 +30,8 @@ import com.nuena.lantone.service.impl.HomeOperationInfoServiceImpl;
 import com.nuena.lantone.service.impl.HomePageServiceImpl;
 import com.nuena.lantone.service.impl.MedicalRecordContentServiceImpl;
 import com.nuena.lantone.service.impl.MedicalRecordServiceImpl;
+import com.nuena.util.ListUtil;
+import com.nuena.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -92,60 +94,103 @@ public class TaiZhouFacade {
     private HomeDiagnoseInfoServiceImpl homeDiagnoseInfoService;
 
     private List<String> brzyids = Lists.newArrayList(
-            "550310_1",
-            "320823_18",
-            "640023_1",
-            "630649_1",
-            "628114_1",
-            "612346_2",
-            "527912_4",
-            "362750_14",
-            "384221_4",
             "366861_3",
-            "223561_6",
-            "635455_1",
-            "456265_5",
             "257418_3",
             "619564_2",
-            "471959_9",
-            "289596_8",
-            "502462_2",
-            "639619_1",
-            "632898_1",
-            "633308_1",
-            "631190_1",
-            "636772_1",
-            "630810_1",
-            "236251_13",
-            "638289_1",
             "629952_1",
             "628055_1",
-            "407835_2",
-            "640746_1",
-            "617337_1",
-            "10007905_2",
-            "477311_2",
             "641816_1",
-            "589719_5",
             "641714_1",
-            "545913_2",
-            "271615_4",
-            "337883_3",
             "521289_3",
-            "616173_1",
-            "633877_1",
-            "625725_1",
-            "631110_1",
-            "631599_1",
-            "633191_2",
-            "618007_2",
+            "271615_4",
             "361753_4",
-            "525586_8",
-            "606635_2"
+            "236888_7",
+            "424727_2",
+            "640310_1",
+            "619025_2",
+            "635381_1",
+            "579798_2",
+            "373725_3",
+            "432388_7",
+            "468157_4",
+            "595748_2",
+            "639647_1",
+            "633901_1",
+            "637719_2",
+            "639020_1",
+            "632295_1",
+            "252751_4",
+            "639696_1",
+            "644053_1",
+            "641927_1",
+            "639776_1",
+            "215513_4",
+            "499720_4",
+            "519845_2",
+            "526363_5",
+            "538512_2",
+            "627345_1",
+            "615767_10",
+            "629984_1",
+            "634465_1",
+            "636824_2",
+            "642091_1",
+            "644056_1",
+            "627948_1",
+            "210476_2",
+            "639158_1",
+            "386164_5",
+            "431143_4",
+            "456832_2",
+            "563512_2",
+            "575051_2",
+            "587513_2",
+            "624641_1",
+            "627044_2",
+            "627555_1",
+            "627617_1",
+            "627711_1",
+            "634245_1",
+            "314722_2",
+            "377709_3",
+            "532855_4",
+            "539336_2",
+            "628052_1",
+            "628779_1",
+            "628818_1",
+            "640694_1",
+            "631318_1",
+            "631624_1",
+            "631657_2",
+            "636509_1",
+            "636745_1"
     );
 
     @Transactional(transactionManager = "db1TransactionManager")
-    public void dataTrans() throws Exception {
+    public void dataTrans() {
+        brzyidsQd();//brzyids确定，已经拉过的过滤掉
+        if (ListUtil.isEmpty(brzyids)) {
+            return;
+        }
+        dataTransZyWsNr();//拉住院信息、文书记录、文书内容
+        dataTransYiZhu();//拉医嘱
+        dataTransBasy();//拉病案首页
+        dataTransBasyshzd();//拉病案首页的手术、病案首页的诊断
+    }
+
+    private void brzyidsQd() {
+        QueryWrapper<BehospitalInfo> behospitalInfoQe = new QueryWrapper<>();
+        behospitalInfoQe.in("behospital_code", brzyids);
+        behospitalInfoQe.select("behospital_code");
+        List<String> behospitalCodeList =
+                behospitalInfoService.list(behospitalInfoQe)
+                        .stream()
+                        .map(i -> i.getBehospitalCode())
+                        .collect(Collectors.toList());
+        brzyids = brzyids.stream().filter(i -> !behospitalCodeList.contains(i)).collect(Collectors.toList());
+    }
+
+    private void dataTransZyWsNr() {
         QueryWrapper<BrInpatientinfo> brInpatientinfoQe = new QueryWrapper<>();
         brInpatientinfoQe.in("BRZYID", brzyids);
         List<BrInpatientinfo> brInpatientinfoList = brInpatientinfoService.list(brInpatientinfoQe);
@@ -155,7 +200,15 @@ public class TaiZhouFacade {
             behospitalInfo.setBehospitalCode(brInpatientinfo.getBrzyid());
             behospitalInfo.setHospitalId(3l);
             behospitalInfo.setName(brInpatientinfo.getBrdaxm());
-            behospitalInfo.setSex(brInpatientinfo.getBrdaxb());
+
+            if (brInpatientinfo.getBrdaxb().equals("M")) {
+                behospitalInfo.setSex("男");
+            } else if (brInpatientinfo.getBrdaxb().equals("F")) {
+                behospitalInfo.setSex("女");
+            } else {
+                behospitalInfo.setSex("未知");
+            }
+
             behospitalInfo.setBirthday(brInpatientinfo.getBrcsrq());
             behospitalInfo.setFileCode(brInpatientinfo.getBrdabh());
             behospitalInfo.setWardCode(brInpatientinfo.getZybqid());
@@ -224,8 +277,7 @@ public class TaiZhouFacade {
         medicalRecordContentService.saveBatch(medicalRecordContents);
     }
 
-    @Transactional(transactionManager = "db1TransactionManager")
-    public void dataTransYiZhu() {
+    private void dataTransYiZhu() {
         QueryWrapper<BrDoctadvice> brDoctadviceQe = new QueryWrapper<>();
         brDoctadviceQe.in("BRZYID", brzyids);
         List<BrDoctadvice> brDoctadviceList = brDoctadviceService.list(brDoctadviceQe);
@@ -258,11 +310,12 @@ public class TaiZhouFacade {
             doctorAdvice.setDoctorName(brDoctadvice.getKdysxm());
             doctorAdviceList.add(doctorAdvice);
         }
-        doctorAdviceService.saveBatch(doctorAdviceList);
+        if (ListUtil.isNotEmpty(doctorAdviceList)) {
+            doctorAdviceService.saveBatch(doctorAdviceList);
+        }
     }
 
-    @Transactional(transactionManager = "db1TransactionManager")
-    public void dataTransBasy() {
+    private void dataTransBasy() {
         QueryWrapper<BrRechome> brRechomeQe = new QueryWrapper<>();
         brRechomeQe.in("BRZYID", brzyids);
         List<BrRechome> brRechomeList = brRechomeService.list(brRechomeQe);
@@ -395,18 +448,22 @@ public class TaiZhouFacade {
             homePage.setRescueSuccessNum(brRechome.getQjcgcs());
             homePage.setIsAutoLeavehospital(brRechome.getZdcypb());
             homePage.setReturnToType(brRechome.getCyqkdm());
-            homePageList.add(homePage);
+            homePageList.add(ObjectUtil.attributeNullHandle(homePage));
         });
-        homePageService.saveBatch(homePageList);
+        if (ListUtil.isNotEmpty(homePageList)) {
+            homePageService.saveBatch(homePageList);
+        }
     }
 
-    @Transactional(transactionManager = "db1TransactionManager")
-    public void dataTransBasyshzd() {
+    private void dataTransBasyshzd() {
         QueryWrapper<BrRechome> brRechomeQe = new QueryWrapper<>();
         brRechomeQe.in("BRZYID", brzyids);
         List<BrRechome> brRechomeList = brRechomeService.list(brRechomeQe);
-
         List<String> basyids = brRechomeList.stream().map(i -> i.getBasyid()).distinct().collect(Collectors.toList());
+        if (ListUtil.isEmpty(basyids)) {
+            return;
+        }
+
         QueryWrapper<BrRecdiagnose> brRecdiagnoseQe = new QueryWrapper<>();
         brRecdiagnoseQe.in("BASYID", basyids);
         List<BrRecdiagnose> brRecdiagnoseList = brRecdiagnoseService.list(brRecdiagnoseQe);
@@ -425,7 +482,9 @@ public class TaiZhouFacade {
             homeDiagnoseInfo.setIcdCode(brRecdiagnose.getIcdm());
             homeDiagnoseInfoList.add(homeDiagnoseInfo);
         });
-        homeDiagnoseInfoService.saveBatch(homeDiagnoseInfoList);
+        if (ListUtil.isNotEmpty(homeDiagnoseInfoList)) {
+            homeDiagnoseInfoService.saveBatch(homeDiagnoseInfoList);
+        }
 
         QueryWrapper<BrRecoperation> brRecoperationQe = new QueryWrapper<>();
         brRecoperationQe.in("BASYID", basyids);
@@ -449,7 +508,9 @@ public class TaiZhouFacade {
             homeOperationInfo.setShamOperationName(brRecoperation.getNssmc());
             homeOperationInfoList.add(homeOperationInfo);
         });
-        homeOperationInfoService.saveBatch(homeOperationInfoList);
+        if (ListUtil.isNotEmpty(homeOperationInfoList)) {
+            homeOperationInfoService.saveBatch(homeOperationInfoList);
+        }
     }
 
 }

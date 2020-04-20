@@ -22,10 +22,7 @@ public class TaiZhouOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        taiZhouFacade.dataTrans();//拉住院信息、文书记录、文书内容
-        taiZhouFacade.dataTransYiZhu();//拉医嘱
-        taiZhouFacade.dataTransBasy();//拉病案首页
-        taiZhouFacade.dataTransBasyshzd();//拉病案首页的手术、病案首页的诊断
+        taiZhouFacade.dataTrans();
     }
 
 }
