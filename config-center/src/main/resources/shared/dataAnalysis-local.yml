@@ -28,11 +28,11 @@ spring:
         driver-class-name: oracle.jdbc.driver.OracleDriver
         url: jdbc:oracle:thin:@192.168.2.246:1521:orcl
         ######长兴####
-#        username: ETRACKMRQCNEW
-#        password: ETRACKMRQCNEW
+        username: ETRACKMRQCNEW
+        password: ETRACKMRQCNEW
         ######台州#####
-        username: ETRACKMRQCTZ
-        password: ETRACKMRQCTZ
+#        username: ETRACKMRQCTZ
+#        password: ETRACKMRQCTZ
         initial-size: 8
         min-idle: 1
         max-active: 20

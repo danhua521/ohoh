@@ -2,7 +2,6 @@ package com.nuena.huazo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -11,11 +10,11 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 病案诊断信息
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,37 +25,37 @@ public class BrRecdiagnose implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 病案首页编号
+     * 病案首页编号BASYID
      */
-    @TableId("BASYID")
+    @TableField("BASYID")
     private String basyid;
 
     /**
-     * 病案诊断序号
+     * 病案诊断序号BAZDXH
      */
     @TableField("BAZDXH")
     private String bazdxh;
 
     /**
-     * 诊断类别编码
+     * 诊断类别编码ZDLBDM
      */
     @TableField("ZDLBDM")
     private String zdlbdm;
 
     /**
-     * 主次诊断判别
+     * 主次诊断判别ZCZDPB
      */
     @TableField("ZCZDPB")
     private String zczdpb;
 
     /**
-     * 疾病代码序号
+     * 疾病代码序号JBDMID
      */
     @TableField("JBDMID")
     private String jbdmid;
 
     /**
-     * 诊断疾病名称
+     * 诊断疾病名称ZDJBMC
      */
     @TableField("ZDJBMC")
     private String zdjbmc;
@@ -68,13 +67,13 @@ public class BrRecdiagnose implements Serializable {
     private String icdm;
 
     /**
-     * 转归情况编码
+     * 转归情况
      */
     @TableField("ZGQKDM")
     private String zgqkdm;
 
     /**
-     * 入院情况编码
+     * 入院情况
      */
     @TableField("RYQKBM")
     private String ryqkbm;
@@ -86,14 +85,11 @@ public class BrRecdiagnose implements Serializable {
     private String blzdbh;
 
     /**
-     * 诊断符合判别
+     * 诊断符合情况
      */
     @TableField("ZDFHPB")
     private String zdfhpb;
 
-    /**
-     * 取数据的修改时间，根据这个时间进行数据同步
-     */
     @TableField("CJCXRQ")
     private Date cjcxrq;
 

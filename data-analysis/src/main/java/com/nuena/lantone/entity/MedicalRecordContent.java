@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -49,6 +49,18 @@ public class MedicalRecordContent implements Serializable {
      */
     @TableField("content_text")
     private String contentText;
+
+    /**
+     * html文本信息
+     */
+    @TableField("html_text")
+    private String htmlText;
+
+    /**
+     * xml文本信息
+     */
+    @TableField("xml_text")
+    private String xmlText;
 
     /**
      * 是否删除,N:未删除，Y:删除

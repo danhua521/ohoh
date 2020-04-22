@@ -3,6 +3,7 @@ package com.nuena.huazo.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.sql.Blob;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -15,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -29,7 +30,7 @@ public class MrMrcontent implements Serializable {
     private String bljlid;
 
     @TableField("BLJLNR")
-    private String bljlnr;
+    private Blob bljlnr;
 
     @TableField("CJCXRQ")
     private Date cjcxrq;
@@ -37,8 +38,11 @@ public class MrMrcontent implements Serializable {
     @TableField("CJLSHM")
     private String cjlshm;
 
-    @TableField("HTMLSJ")
-    private String htmlsj;
+    @TableField("PERSONID")
+    private String personid;
+
+    @TableField("XMLNR")
+    private String xmlnr;
 
 
 }

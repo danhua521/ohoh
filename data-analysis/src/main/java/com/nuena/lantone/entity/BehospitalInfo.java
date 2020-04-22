@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -44,7 +44,7 @@ public class BehospitalInfo implements Serializable {
     private String name;
 
     /**
-     * 性别
+     * 性别（男，女）
      */
     @TableField("sex")
     private String sex;
@@ -60,6 +60,12 @@ public class BehospitalInfo implements Serializable {
      */
     @TableField("file_code")
     private String fileCode;
+
+    /**
+     * 质控类型
+     */
+    @TableField("qc_type_id")
+    private Long qcTypeId;
 
     /**
      * 病区编码

@@ -47,11 +47,11 @@ public class OracleCodeGenerator {
         dsc.setUrl("jdbc:oracle:thin:@192.168.2.246:1521:orcl");
         dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
         /////长兴///////
-//        dsc.setUsername("ETRACKMRQCNEW");
-//        dsc.setPassword("ETRACKMRQCNEW");
+        dsc.setUsername("ETRACKMRQCNEW");
+        dsc.setPassword("ETRACKMRQCNEW");
         /////台州///////
-        dsc.setUsername("ETRACKMRQCTZ");
-        dsc.setPassword("ETRACKMRQCTZ");
+//        dsc.setUsername("ETRACKMRQCTZ");
+//        dsc.setPassword("ETRACKMRQCTZ");
         mpg.setDataSource(dsc);
 
         // 包配置

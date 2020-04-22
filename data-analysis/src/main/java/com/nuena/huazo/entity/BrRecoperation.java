@@ -11,11 +11,11 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 病人手术信息
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,94 +26,40 @@ public class BrRecoperation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 病案首页编号
+     * 病案首页编号BASYID
      */
     @TableId("BASYID")
     private String basyid;
 
     /**
-     * 病人手术序号
+     * 病人手术序号BRSSXH
      */
     @TableField("BRSSXH")
     private String brssxh;
 
     /**
-     * 病人手术日期
+     * 病人手术日期BRSSRQ
      */
     @TableField("BRSSRQ")
     private Date brssrq;
 
     /**
-     * 术前住院天数
+     * 术前住院天数SQZYTS
      */
     @TableField("SQZYTS")
     private String sqzyts;
 
     /**
-     * 病人手术组号
+     * 病人手术组号BRSSZH
      */
     @TableField("BRSSZH")
     private String brsszh;
 
     /**
-     * 手术代码编码
+     * 手术代码编码SSDMID
      */
     @TableField("SSDMID")
     private String ssdmid;
-
-    /**
-     * 手术医生编码
-     */
-    @TableField("SSYSID")
-    private String ssysid;
-
-    /**
-     * 一助护士编码
-     */
-    @TableField("YZHSID")
-    private String yzhsid;
-
-    /**
-     * 二助护士编码
-     */
-    @TableField("EZHSID")
-    private String ezhsid;
-
-    /**
-     * 麻醉方法代码
-     */
-    @TableField("MZFFDM")
-    private String mzffdm;
-
-    /**
-     * 麻醉医生编码
-     */
-    @TableField("MZYSID")
-    private String mzysid;
-
-    /**
-     * 切口等级编码
-     */
-    @TableField("QKDJDM")
-    private String qkdjdm;
-
-    /**
-     * 愈合等级编码
-     */
-    @TableField("YHDJDM")
-    private String yhdjdm;
-
-    /**
-     * 手术符合判别
-     */
-    @TableField("SSFHPB")
-    private String ssfhpb;
-
-    /**
-     * 麻醉医生编码2
-     */
-    @TableField("MZYSID2")
-    private String mzysid2;
 
     /**
      * 病人手术名称
@@ -122,10 +68,70 @@ public class BrRecoperation implements Serializable {
     private String brssmc;
 
     /**
-     * 手术级别
+     * 拟手术名称
+     */
+    @TableField("NSSMC")
+    private String nssmc;
+
+    /**
+     * 手术级别ID
      */
     @TableField("SSJBID")
     private String ssjbid;
+
+    /**
+     * 手术医生编码SSYSID
+     */
+    @TableField("SSYSID")
+    private String ssysid;
+
+    /**
+     * 手术医生名称
+     */
+    @TableField("SSYSMC")
+    private String ssysmc;
+
+    /**
+     * 一助护士编码YZHSID
+     */
+    @TableField("YZHSID")
+    private String yzhsid;
+
+    /**
+     * 一助护士名称
+     */
+    @TableField("YZHSMC")
+    private String yzhsmc;
+
+    /**
+     * 二助护士编码EZHSID
+     */
+    @TableField("EZHSID")
+    private String ezhsid;
+
+    /**
+     * 二助护士名称
+     */
+    @TableField("EZHSMC")
+    private String ezhsmc;
+
+    /**
+     * 三助护士编码
+     */
+    @TableField("SZHSID")
+    private String szhsid;
+
+    /**
+     * 三助护士名称
+     */
+    @TableField("SZHSMC")
+    private String szhsmc;
+
+    /**
+     * 麻醉方法代码MZFFDM
+     */
+    @TableField("MZFFDM")
+    private String mzffdm;
 
     /**
      * 麻醉方法名称
@@ -134,16 +140,46 @@ public class BrRecoperation implements Serializable {
     private String mzffmc;
 
     /**
-     * 拟手术名称
+     * 麻醉医生编码MZYSID
      */
-    @TableField("NSSMC")
-    private String nssmc;
+    @TableField("MZYSID")
+    private String mzysid;
 
     /**
-     * 三助护士编码
+     * 麻醉医生名称
      */
-    @TableField("SZHSID")
-    private String szhsid;
+    @TableField("MZYSMC")
+    private String mzysmc;
+
+    /**
+     * 麻醉医生编码2MZYSID2
+     */
+    @TableField("MZYSID2")
+    private String mzysid2;
+
+    /**
+     * 麻醉医生姓名
+     */
+    @TableField("MZYSMC2")
+    private String mzysmc2;
+
+    /**
+     * 切口等级编码QKDJDM
+     */
+    @TableField("QKDJDM")
+    private String qkdjdm;
+
+    /**
+     * 愈合等级编码YHDJDM
+     */
+    @TableField("YHDJDM")
+    private String yhdjdm;
+
+    /**
+     * 手术符合判别SSFHPB
+     */
+    @TableField("SSFHPB")
+    private String ssfhpb;
 
     /**
      * 开始时间
@@ -181,9 +217,6 @@ public class BrRecoperation implements Serializable {
     @TableField("SSSHIXL")
     private String ssshixl;
 
-    /**
-     * 取数据的修改时间，根据这个时间进行数据同步
-     */
     @TableField("CJCXRQ")
     private Date cjcxrq;
 

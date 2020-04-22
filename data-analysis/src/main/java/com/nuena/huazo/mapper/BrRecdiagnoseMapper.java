@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 病案诊断信息 Mapper 接口
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 public interface BrRecdiagnoseMapper extends BaseMapper<BrRecdiagnose> {
 

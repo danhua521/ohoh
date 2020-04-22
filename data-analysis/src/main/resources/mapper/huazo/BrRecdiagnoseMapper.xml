@@ -3,7 +3,7 @@
 <mapper namespace="com.nuena.huazo.mapper.BrRecdiagnoseMapper">
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrRecdiagnose">
-        <id column="BASYID" property="basyid" />
+        <result column="BASYID" property="basyid" />
         <result column="BAZDXH" property="bazdxh" />
         <result column="ZDLBDM" property="zdlbdm" />
         <result column="ZCZDPB" property="zczdpb" />

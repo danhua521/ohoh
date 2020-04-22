@@ -3,7 +3,7 @@
 <mapper namespace="com.nuena.huazo.mapper.BrInpatientinfoMapper">
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrInpatientinfo">
-        <result column="BRZYID" property="brzyid" />
+        <id column="BRZYID" property="brzyid" />
         <result column="ZZJGDM" property="zzjgdm" />
         <result column="BRDAXM" property="brdaxm" />
         <result column="BRJZHM" property="brjzhm" />

@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -51,6 +51,12 @@ public class MedicalRecord implements Serializable {
      */
     @TableField("rec_type_id")
     private String recTypeId;
+
+    /**
+     * 模块id
+     */
+    @TableField("mode_id")
+    private Long modeId;
 
     /**
      * 病历日期

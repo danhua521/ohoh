@@ -3,7 +3,7 @@
 <mapper namespace="com.nuena.huazo.mapper.BrDoctadviceMapper">
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrDoctadvice">
-        <id column="BRYZID" property="bryzid" />
+        <result column="BRYZID" property="bryzid" />
         <result column="BRZYID" property="brzyid" />
         <result column="YSKDPB" property="yskdpb" />
         <result column="YZPLPB" property="yzplpb" />
@@ -14,7 +14,6 @@
         <result column="YZDCJL" property="yzdcjl" />
         <result column="DCJLDW" property="dcjldw" />
         <result column="GYFSID" property="gyfsid" />
-        <result column="YZPLID" property="yzplid" />
         <result column="YZCLLX" property="yzcllx" />
         <result column="YZKSSJ" property="yzkssj" />
         <result column="YZXMMC" property="yzxmmc" />
@@ -26,17 +25,11 @@
         <result column="YSZTSM" property="ysztsm" />
         <result column="ZZJGDM" property="zzjgdm" />
         <result column="KDYSID" property="kdysid" />
+        <result column="KDYSMC" property="kdysmc" />
         <result column="CJCXRQ" property="cjcxrq" />
-        <result column="CJLSHM" property="cjlshm" />
-        <result column="LYLXMC" property="lylxmc" />
-        <result column="CFLXMC" property="cflxmc" />
-        <result column="CLLXMC" property="cllxmc" />
-        <result column="YZPLMC" property="yzplmc" />
-        <result column="GYFSMC" property="gyfsmc" />
-        <result column="KDYSXM" property="kdysxm" />
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        BRZYID, BRYZID, YSKDPB, YZPLPB, FLYZID, YZLXPB, YCSYSL, YCYLDW, YZDCJL, DCJLDW, GYFSID, YZPLID, YZCLLX, YZKSSJ, YZXMMC, YZZTPB, YZJSSJ, YZTZXH, YZCFLX, YZLYLX, YSZTSM, ZZJGDM, KDYSID, CJCXRQ, CJLSHM, LYLXMC, CFLXMC, CLLXMC, YZPLMC, GYFSMC, KDYSXM
+        BRYZID, BRZYID, YSKDPB, YZPLPB, FLYZID, YZLXPB, YCSYSL, YCYLDW, YZDCJL, DCJLDW, GYFSID, YZCLLX, YZKSSJ, YZXMMC, YZZTPB, YZJSSJ, YZTZXH, YZCFLX, YZLYLX, YSZTSM, ZZJGDM, KDYSID, KDYSMC, CJCXRQ
     </sql>
 </mapper>

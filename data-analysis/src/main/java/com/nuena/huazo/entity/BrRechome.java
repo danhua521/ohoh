@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -852,9 +852,6 @@ public class BrRechome implements Serializable {
      */
     @TableField("CJCXRQ")
     private Date cjcxrq;
-
-    @TableField("CJLSHM")
-    private String cjlshm;
 
 
 }

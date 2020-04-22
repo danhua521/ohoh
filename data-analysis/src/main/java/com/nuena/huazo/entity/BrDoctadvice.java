@@ -2,7 +2,6 @@ package com.nuena.huazo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -15,7 +14,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,16 +25,16 @@ public class BrDoctadvice implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 病人医嘱ID
+     */
+    @TableField("BRYZID")
+    private String bryzid;
+
+    /**
      * 病人ID
      */
     @TableField("BRZYID")
     private String brzyid;
-
-    /**
-     * 病人医嘱ID
-     */
-    @TableId("BRYZID")
-    private String bryzid;
 
     /**
      * 医生开单判别
@@ -90,12 +89,6 @@ public class BrDoctadvice implements Serializable {
      */
     @TableField("GYFSID")
     private String gyfsid;
-
-    /**
-     * 医嘱频率ID
-     */
-    @TableField("YZPLID")
-    private String yzplid;
 
     /**
      * 医嘱处理类型
@@ -164,49 +157,13 @@ public class BrDoctadvice implements Serializable {
     private String kdysid;
 
     /**
-     * 取数据的修改时间，根据这个时间进行数据同步
-     */
-    @TableField("CJCXRQ")
-    private Date cjcxrq;
-
-    @TableField("CJLSHM")
-    private String cjlshm;
-
-    /**
-     * 领药类型名称
-     */
-    @TableField("LYLXMC")
-    private String lylxmc;
-
-    /**
-     * 处方类型名称
-     */
-    @TableField("CFLXMC")
-    private String cflxmc;
-
-    /**
-     * 处理类型名称
-     */
-    @TableField("CLLXMC")
-    private String cllxmc;
-
-    /**
-     * 医嘱频率名称
-     */
-    @TableField("YZPLMC")
-    private String yzplmc;
-
-    /**
-     * 给药方式名称
-     */
-    @TableField("GYFSMC")
-    private String gyfsmc;
-
-    /**
      * 开单医生姓名
      */
-    @TableField("KDYSXM")
-    private String kdysxm;
+    @TableField("KDYSMC")
+    private String kdysmc;
+
+    @TableField("CJCXRQ")
+    private Date cjcxrq;
 
 
 }

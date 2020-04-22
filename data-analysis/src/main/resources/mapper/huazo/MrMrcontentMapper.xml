@@ -7,10 +7,11 @@
         <result column="BLJLNR" property="bljlnr" />
         <result column="CJCXRQ" property="cjcxrq" />
         <result column="CJLSHM" property="cjlshm" />
-        <result column="HTMLSJ" property="htmlsj" />
+        <result column="PERSONID" property="personid" />
+        <result column="XMLNR" property="xmlnr" />
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        BLJLID, BLJLNR, CJCXRQ, CJLSHM, HTMLSJ
+        BLJLID, BLJLNR, CJCXRQ, CJLSHM, PERSONID, XMLNR
     </sql>
 </mapper>

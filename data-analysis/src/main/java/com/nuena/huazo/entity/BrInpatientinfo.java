@@ -2,6 +2,7 @@ package com.nuena.huazo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-16
+ * @since 2020-04-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,7 +28,7 @@ public class BrInpatientinfo implements Serializable {
     /**
      * 病人唯一主键ID
      */
-    @TableField("BRZYID")
+    @TableId("BRZYID")
     private String brzyid;
 
     @TableField("ZZJGDM")
