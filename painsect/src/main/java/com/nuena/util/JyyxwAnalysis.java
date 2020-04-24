@@ -34,6 +34,7 @@ public class JyyxwAnalysis {
     }
 
     private static Map<String, String> createMap(String content) {
+        content = content.replaceAll("&nbsp;", "");
         int t1 = content.indexOf("项目名称：");
         int t2 = content.indexOf("英文缩写：");
         int t3 = content.indexOf("所属类别：");
