@@ -17,14 +17,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class DataPullOrder implements ApplicationRunner {
 
-    @Autowired
-    private ChangxDataPullFacade changxDataPullFacade;
+//    @Autowired
+//    private ChangxDataPullFacade changxDataPullFacade;
 //    @Autowired
 //    private TaiZhouDataPullFacade taiZhouDataPullFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        changxDataPullFacade.dataTrans();
+//        changxDataPullFacade.dataTrans();
 //        taiZhouDataPullFacade.dataTrans();
     }
 

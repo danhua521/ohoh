@@ -43,7 +43,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
             }
         });
 
-        log.info("----------执行失败---------------------");
+        log.info("----------分析结束---------------------");
         log.info("执行失败的recTitle：");
         failRecTitles.forEach(i -> {
             log.info("----------" + i);
