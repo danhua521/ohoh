@@ -1,6 +1,7 @@
 package com.nuena.order;
 
 import com.google.common.collect.Lists;
+import com.nuena.util.ListUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -29,25 +30,30 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
+        log.error("----------分析开始---------------------");
         taiZhouXmlDataAnalysisFacade.init();
-        long modelId = 1l;
+        long[] modeIds = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35 };
         String nodePath = "//emr_xml_root/TermList";
-        List<String> recTitles = taiZhouXmlDataAnalysisFacade.getRecTitles(modelId);
-        List<String> failRecTitles = Lists.newArrayList();//执行失败的recTitle
-        recTitles.forEach(recTitle -> {
-            try {
-                taiZhouXmlDataAnalysisFacade.analysisByRecTitle(modelId, recTitle, nodePath);
-            } catch (Exception e) {
-                log.info(e.getMessage(), e);
-                failRecTitles.add(recTitle);
-            }
-        });
+        for (long modelId : modeIds) {
+            List<String> recTitles = taiZhouXmlDataAnalysisFacade.getRecTitles(modelId);
+            List<String> failRecTitles = Lists.newArrayList();//执行失败的recTitle
+            recTitles.forEach(recTitle -> {
+                try {
+                    taiZhouXmlDataAnalysisFacade.analysisByRecTitle(modelId, recTitle, nodePath);
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                    failRecTitles.add(recTitle);
+                }
+            });
 
-        log.info("----------分析结束---------------------");
-        log.info("执行失败的recTitle：");
-        failRecTitles.forEach(i -> {
-            log.info("----------" + i);
-        });
+            if (ListUtil.isNotEmpty(failRecTitles)) {
+                log.error("执行失败的recTitle：");
+                failRecTitles.forEach(i -> {
+                    log.info("----------" + i);
+                });
+            }
+        }
+        log.error("----------分析结束---------------------");
     }
 
 }
