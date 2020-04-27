@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author rgb
- * @since 2020-04-25
+ * @since 2020-04-27
  */
 @Service
 public class RecordAnalyzeServiceImpl extends ServiceImpl<RecordAnalyzeMapper, RecordAnalyze> implements RecordAnalyzeService {
