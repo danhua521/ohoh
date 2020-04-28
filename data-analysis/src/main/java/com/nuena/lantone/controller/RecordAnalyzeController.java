@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author rgb
- * @since 2020-04-27
+ * @since 2020-04-28
  */
 @RestController
 @RequestMapping("/record-analyze")

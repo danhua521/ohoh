@@ -1,9 +1,8 @@
 package com.nuena.lantone.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.sql.Blob;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -12,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 病历
  * </p>
  *
  * @author rgb
@@ -21,46 +20,33 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("med_medical_record_content")
-public class MedicalRecordContent implements Serializable {
+public class QcMode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 病历ID
+     * 主键
      */
-    @TableId("rec_id")
-    private String recId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
-     * 医院ID
+     * 模块名称
      */
-    @TableField("hospital_id")
-    private Long hospitalId;
+    @TableField("name")
+    private String name;
 
     /**
-     * 文书内容（blob）
+     * 排序号
      */
-    @TableField("content_blob")
-    private Blob contentBlob;
+    @TableField("order_no")
+    private Integer orderNo;
 
     /**
-     * 病历文本（文本）
+     * 上级模块
      */
-    @TableField("content_text")
-    private String contentText;
-
-    /**
-     * html文本信息
-     */
-    @TableField("html_text")
-    private String htmlText;
-
-    /**
-     * xml文本信息
-     */
-    @TableField("xml_text")
-    private String xmlText;
+    @TableField("parent_id")
+    private Long parentId;
 
     /**
      * 是否删除,N:未删除，Y:删除
@@ -91,6 +77,12 @@ public class MedicalRecordContent implements Serializable {
      */
     @TableField("modifier")
     private String modifier;
+
+    /**
+     * 备注
+     */
+    @TableField("remark")
+    private String remark;
 
 
 }

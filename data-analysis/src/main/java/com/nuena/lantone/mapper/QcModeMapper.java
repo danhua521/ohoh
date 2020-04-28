@@ -1,16 +1,16 @@
 package com.nuena.lantone.mapper;
 
-import com.nuena.lantone.entity.MedicalRecord;
+import com.nuena.lantone.entity.QcMode;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 病历 Mapper 接口
  * </p>
  *
  * @author rgb
  * @since 2020-04-28
  */
-public interface MedicalRecordMapper extends BaseMapper<MedicalRecord> {
+public interface QcModeMapper extends BaseMapper<QcMode> {
 
 }

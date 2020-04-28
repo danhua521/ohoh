@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-27
+ * @since 2020-04-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -41,10 +41,22 @@ public class RecordAnalyze implements Serializable {
     private Long modeId;
 
     /**
+     * 标准模名称
+     */
+    @TableField("mode_name")
+    private String modeName;
+
+    /**
      * 医院模板名称
      */
     @TableField("rec_title")
     private String recTitle;
+
+    /**
+     * 病人住院id集合
+     */
+    @TableField("behospital_codes")
+    private String behospitalCodes;
 
     /**
      * 医院模板下属类型

@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-04-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -140,16 +140,40 @@ public class BehospitalInfo implements Serializable {
     private String diagnose;
 
     /**
-     * 医生ID
+     * 住院医生ID
+     */
+    @TableField("beh_doctor_id")
+    private String behDoctorId;
+
+    /**
+     * 住院医生姓名
+     */
+    @TableField("beh_doctor_name")
+    private String behDoctorName;
+
+    /**
+     * 主治医生ID
      */
     @TableField("doctor_id")
     private String doctorId;
 
     /**
-     * 医生姓名
+     * 主治医生姓名
      */
     @TableField("doctor_name")
     private String doctorName;
+
+    /**
+     * 主任医生ID
+     */
+    @TableField("director_doctor_id")
+    private String directorDoctorId;
+
+    /**
+     * 主任医生姓名
+     */
+    @TableField("director_doctor_name")
+    private String directorDoctorName;
 
     /**
      * 是否删除,N:未删除，Y:删除

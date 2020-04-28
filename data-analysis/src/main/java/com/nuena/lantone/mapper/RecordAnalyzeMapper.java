@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author rgb
- * @since 2020-04-27
+ * @since 2020-04-28
  */
 public interface RecordAnalyzeMapper extends BaseMapper<RecordAnalyze> {
 

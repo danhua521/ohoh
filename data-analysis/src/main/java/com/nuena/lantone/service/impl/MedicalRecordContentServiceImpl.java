@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-04-28
  */
 @Service
 public class MedicalRecordContentServiceImpl extends ServiceImpl<MedicalRecordContentMapper, MedicalRecordContent> implements MedicalRecordContentService {
