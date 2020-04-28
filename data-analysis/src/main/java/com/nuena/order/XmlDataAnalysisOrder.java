@@ -32,7 +32,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
     private void taiZhouXmlDataAnalysis() throws Exception {
         log.error("----------分析开始---------------------");
         taiZhouXmlDataAnalysisFacade.init();
-        long[] modeIds = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35 };
+        long[] modeIds = { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35 };
         String nodePath = "//emr_xml_root/TermList";
         for (long modelId : modeIds) {
             List<String> recTitles = taiZhouXmlDataAnalysisFacade.getRecTitles(modelId);
