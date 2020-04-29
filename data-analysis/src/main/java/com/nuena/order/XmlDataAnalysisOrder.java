@@ -26,6 +26,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         taiZhouXmlDataAnalysis();
+        taizhouCreateKeysDataExcel();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -50,6 +51,12 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         failRecTitles.forEach(i -> {
             log.error("执行失败的模块：" + i);
         });
+    }
+
+    private void taizhouCreateKeysDataExcel() {
+        log.error("----------生成keys的excel开始---------------------");
+        taiZhouXmlDataAnalysisFacade.createKeysDataExcel();
+        log.error("----------生成keys的excel结束---------------------");
     }
 
 }

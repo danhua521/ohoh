@@ -17,6 +17,7 @@ import com.nuena.lantone.service.impl.QcModelHospitalServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeDetailServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeServiceImpl;
 import com.nuena.util.EncrypDES;
+import com.nuena.util.ExcelUtil;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
 import org.dom4j.Document;
@@ -205,6 +206,43 @@ public class TaiZhouXmlDataAnalysisFacade {
             }
         }
         return keys;
+    }
+
+    public void createKeysDataExcel() {
+        QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
+        recordAnalyzeQe.eq("hospital_id", 3l);
+        recordAnalyzeQe.eq("is_deleted", "N");
+        List<RecordAnalyze> recordAnalyzeList = recordAnalyzeService.list(recordAnalyzeQe);
+
+        List<Long> recordAnalyzeIds = recordAnalyzeList.stream().map(i -> i.getId()).collect(Collectors.toList());
+        QueryWrapper<RecordAnalyzeDetail> recordAnalyzeDetailQe = new QueryWrapper<>();
+        recordAnalyzeDetailQe.in("record_analyze_id", recordAnalyzeIds);
+        List<RecordAnalyzeDetail> recordAnalyzeDetailList = recordAnalyzeDetailService.list(recordAnalyzeDetailQe);
+
+        Map<Long, List<String>> recordAnalyzeIdMapKeysMap = recordAnalyzeDetailList.stream().collect(Collectors.groupingBy(RecordAnalyzeDetail::getRecordAnalyzeId, Collectors.mapping(RecordAnalyzeDetail::getMapKey, Collectors.toList())));
+        Map<String, List<Long>> modeNameRecordAnalyzeIdsMap = recordAnalyzeList.stream().collect(Collectors.groupingBy(RecordAnalyze::getModeName, Collectors.mapping(RecordAnalyze::getId, Collectors.toList())));
+        Map<String, List<Map<String, String>>> modeNameMapKeyMapsMap = Maps.newHashMap();
+
+        modeNameRecordAnalyzeIdsMap.keySet().forEach(modeName -> {
+            List<String> mapKeys = Lists.newArrayList();
+            List<Long> raIds = modeNameRecordAnalyzeIdsMap.get(modeName);
+            raIds.forEach(raId -> {
+                mapKeys.addAll(recordAnalyzeIdMapKeysMap.get(raId));
+            });
+            List<Map<String, String>> mapKeyMaps = Lists.newArrayList();
+            mapKeys.stream().distinct().forEach(mapKey -> {
+                Map<String, String> mapKeyMap = Maps.newHashMap();
+                mapKeyMap.put("content", mapKey);
+                mapKeyMaps.add(mapKeyMap);
+            });
+            modeNameMapKeyMapsMap.put(modeName, mapKeyMaps);
+        });
+
+        String[] headerNames = { "字段名称" };
+        String[] dataMapKeys = { "content" };
+        for (String modeName : modeNameMapKeyMapsMap.keySet()) {
+            ExcelUtil.createExcel(false, false, "C:\\Users\\Administrator\\Desktop", "taizhou-keys", modeName, headerNames, dataMapKeys, modeNameMapKeyMapsMap.get(modeName));
+        }
     }
 
 }
