@@ -98,7 +98,7 @@ public class TaiZhouXmlDataAnalysisFacade {
         QueryWrapper<MedicalRecord> medicalRecordQe = new QueryWrapper<>();
         medicalRecordQe.eq("is_deleted", "N");
         medicalRecordQe.eq("hospital_id", 3l);
-        medicalRecordQe.eq("rec_type", recTitle);
+        medicalRecordQe.eq("rec_title", recTitle);
         medicalRecordQe.select("rec_id", "behospital_code");
         List<MedicalRecord> medicalRecordList = medicalRecordService.list(medicalRecordQe);
         if (ListUtil.isEmpty(medicalRecordList)) {
