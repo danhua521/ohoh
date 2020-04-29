@@ -163,7 +163,7 @@ public class TaiZhouXmlDataAnalysisFacade {
             recordAnalyze.setRecType(recTitle);
             recordAnalyze.setBehospitalCodes(behospitalCodes);
             recordAnalyze.setMapType(type + "");
-            recordAnalyze.setKeys(keys.stream().collect(Collectors.joining(",")));
+            recordAnalyze.setMapKeys(keys.stream().collect(Collectors.joining(",")));
             recordAnalyzeList.add(recordAnalyze);
             type++;
         }
@@ -173,7 +173,7 @@ public class TaiZhouXmlDataAnalysisFacade {
                 .stream()
                 .collect(
                         Collectors.toMap(
-                                i -> Sets.newHashSet(i.getKeys().split(",")),
+                                i -> Sets.newHashSet(i.getMapKeys().split(",")),
                                 i -> i.getId()
                         )
                 );

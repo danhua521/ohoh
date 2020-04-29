@@ -48,7 +48,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         }
         log.error("----------分析结束---------------------");
         failRecTitles.forEach(i -> {
-            log.info("执行失败的模块：" + i);
+            log.error("执行失败的模块：" + i);
         });
     }
 

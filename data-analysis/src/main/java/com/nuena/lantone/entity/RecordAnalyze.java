@@ -74,8 +74,8 @@ public class RecordAnalyze implements Serializable {
     /**
      * key集合，用英文逗号隔开
      */
-    @TableField("keys")
-    private String keys;
+    @TableField("map_keys")
+    private String mapKeys;
 
     /**
      * 是否删除,N:未删除，Y:删除
