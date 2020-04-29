@@ -41,7 +41,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
                 try {
                     taiZhouXmlDataAnalysisFacade.analysisByRecTitle(modelId, recTitle, nodePath);
                 } catch (Exception e) {
-                    log.error(e.getMessage(), e);
+                    log.error(recTitle + "执行失败--" + e.getMessage(), e);
                     failRecTitles.add(recTitle);
                 }
             });

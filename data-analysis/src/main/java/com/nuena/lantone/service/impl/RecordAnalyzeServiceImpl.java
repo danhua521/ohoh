@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 医院病历文书类型细分类主表 服务实现类
  * </p>
  *
  * @author rgb
- * @since 2020-04-28
+ * @since 2020-04-29
  */
 @Service
 public class RecordAnalyzeServiceImpl extends ServiceImpl<RecordAnalyzeMapper, RecordAnalyze> implements RecordAnalyzeService {

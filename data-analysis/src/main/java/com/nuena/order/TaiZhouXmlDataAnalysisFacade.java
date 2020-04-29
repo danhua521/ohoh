@@ -9,10 +9,12 @@ import com.nuena.lantone.entity.MedicalRecordContent;
 import com.nuena.lantone.entity.QcMode;
 import com.nuena.lantone.entity.QcModelHospital;
 import com.nuena.lantone.entity.RecordAnalyze;
+import com.nuena.lantone.entity.RecordAnalyzeDetail;
 import com.nuena.lantone.service.impl.MedicalRecordContentServiceImpl;
 import com.nuena.lantone.service.impl.MedicalRecordServiceImpl;
 import com.nuena.lantone.service.impl.QcModeServiceImpl;
 import com.nuena.lantone.service.impl.QcModelHospitalServiceImpl;
+import com.nuena.lantone.service.impl.RecordAnalyzeDetailServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeServiceImpl;
 import com.nuena.util.EncrypDES;
 import com.nuena.util.ListUtil;
@@ -47,6 +49,9 @@ public class TaiZhouXmlDataAnalysisFacade {
     @Autowired
     @Qualifier("recordAnalyzeServiceImpl")
     private RecordAnalyzeServiceImpl recordAnalyzeService;
+    @Autowired
+    @Qualifier("recordAnalyzeDetailServiceImpl")
+    private RecordAnalyzeDetailServiceImpl recordAnalyzeDetailService;
     @Autowired
     @Qualifier("qcModelHospitalServiceImpl")
     private QcModelHospitalServiceImpl qcModelHospitalService;
@@ -131,28 +136,50 @@ public class TaiZhouXmlDataAnalysisFacade {
                     )
             );
         }
+        if (ListUtil.isEmpty(keysBehospitalCodeEntryList)) {
+            return;
+        }
         Map<Set<String>, String> keysBehospitalCodesMap = keysBehospitalCodeEntryList.stream().collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.joining(","))));
 
         List<RecordAnalyze> recordAnalyzeList = Lists.newArrayList();
+        List<RecordAnalyzeDetail> recordAnalyzeDetailList = Lists.newArrayList();
         int type = 1;
         for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
             String behospitalCodes = keysBehospitalCodesMap.get(keys);
-            for (String key : keys) {
-                RecordAnalyze recordAnalyze = new RecordAnalyze();
-                recordAnalyze.setHospitalId(3l);
-                recordAnalyze.setModeId(modelId);
-                recordAnalyze.setModeName(modeMap.get(modelId));
-                recordAnalyze.setRecTitle(recTitle);
-                recordAnalyze.setBehospitalCodes(behospitalCodes);
-                recordAnalyze.setMapType(type + "");
-                recordAnalyze.setMapKey(key);
-                recordAnalyzeList.add(recordAnalyze);
-            }
+            RecordAnalyze recordAnalyze = new RecordAnalyze();
+            recordAnalyze.setName(modeMap.get(modelId) + "-" + recTitle + "-" + type);
+            recordAnalyze.setHospitalId(3l);
+            recordAnalyze.setModeId(modelId);
+            recordAnalyze.setModeName(modeMap.get(modelId));
+            recordAnalyze.setRecType(recTitle);
+            recordAnalyze.setBehospitalCodes(behospitalCodes);
+            recordAnalyze.setMapType(type + "");
+            recordAnalyze.setKeys(keys.stream().collect(Collectors.joining(",")));
+            recordAnalyzeList.add(recordAnalyze);
             type++;
         }
-        if (ListUtil.isNotEmpty(recordAnalyzeList)) {
-            recordAnalyzeService.saveBatch(recordAnalyzeList);
+        recordAnalyzeService.saveBatch(recordAnalyzeList);
+
+        Map<Set<String>, Long> keysRecordAnalyzeIdMap = recordAnalyzeList
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                i -> Sets.newHashSet(i.getKeys().split(",")),
+                                i -> i.getId()
+                        )
+                );
+
+        Long recordAnalyzeId = null;
+        for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
+            recordAnalyzeId = keysRecordAnalyzeIdMap.get(keys);
+            for (String key : keys) {
+                RecordAnalyzeDetail recordAnalyzeDetail = new RecordAnalyzeDetail();
+                recordAnalyzeDetail.setRecordAnalyzeId(recordAnalyzeId);
+                recordAnalyzeDetail.setMapKey(key);
+                recordAnalyzeDetailList.add(recordAnalyzeDetail);
+            }
         }
+        recordAnalyzeDetailService.saveBatch(recordAnalyzeDetailList);
     }
 
     private Set<String> getKeys(String xml, String nodePath) throws Exception {

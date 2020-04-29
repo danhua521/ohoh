@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- *  Mapper 接口
+ * 医院病历文书类型细分类主表 Mapper 接口
  * </p>
  *
  * @author rgb
- * @since 2020-04-28
+ * @since 2020-04-29
  */
 public interface RecordAnalyzeMapper extends BaseMapper<RecordAnalyze> {
 

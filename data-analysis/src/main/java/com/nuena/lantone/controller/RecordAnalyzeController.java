@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 医院病历文书类型细分类主表 前端控制器
  * </p>
  *
  * @author rgb
- * @since 2020-04-28
+ * @since 2020-04-29
  */
 @RestController
 @RequestMapping("/record-analyze")
