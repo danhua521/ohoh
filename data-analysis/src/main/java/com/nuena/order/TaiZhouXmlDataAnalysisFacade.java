@@ -241,7 +241,7 @@ public class TaiZhouXmlDataAnalysisFacade {
         String[] headerNames = { "字段名称" };
         String[] dataMapKeys = { "content" };
         for (String modeName : modeNameMapKeyMapsMap.keySet()) {
-            ExcelUtil.createExcel(false, false, "C:\\Users\\Administrator\\Desktop", "taizhou-keys", modeName, headerNames, dataMapKeys, modeNameMapKeyMapsMap.get(modeName));
+            ExcelUtil.createExcel(false, false, "C:\\Users\\Administrator\\Desktop", "taizhou-keys", modeName.replaceAll("/", ""), headerNames, dataMapKeys, modeNameMapKeyMapsMap.get(modeName));
         }
     }
 
