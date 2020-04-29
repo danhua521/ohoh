@@ -85,6 +85,15 @@ public class TaiZhouXmlDataAnalysisFacade {
 
     @Transactional(transactionManager = "db1TransactionManager")
     public void analysisByRecTitle(long modelId, String recTitle, String nodePath) throws Exception {
+        QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
+        recordAnalyzeQe.eq("is_deleted", "N");
+        recordAnalyzeQe.eq("hospital_id", 3l);
+        recordAnalyzeQe.eq("mode_id", modelId);
+        int alreadyExistsDataCount = recordAnalyzeService.count(recordAnalyzeQe);
+        if (alreadyExistsDataCount > 0) {
+            return;
+        }
+
         QueryWrapper<MedicalRecord> medicalRecordQe = new QueryWrapper<>();
         medicalRecordQe.eq("is_deleted", "N");
         medicalRecordQe.eq("hospital_id", 3l);
