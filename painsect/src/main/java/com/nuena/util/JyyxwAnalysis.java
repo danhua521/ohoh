@@ -30,7 +30,7 @@ public class JyyxwAnalysis {
         });
         String[] headerNames = { "项目名称", "英文缩写", "所属类别", "参考范围", "临床意义", "影响因素", "相关仪器试剂" };
         String[] dataMapKeys = { "项目名称", "英文缩写", "所属类别", "参考范围", "临床意义", "影响因素", "相关仪器试剂" };
-        ExcelUtil.createExcel("C:\\Users\\RGB\\Desktop\\调试", "检验项目临床意义数据", "检验项目临床意义数据", headerNames, dataMapKeys, list);
+        ExcelUtil.createExcel(true, true, "C:\\Users\\RGB\\Desktop\\调试", "检验项目临床意义数据", "检验项目临床意义数据", headerNames, dataMapKeys, list);
     }
 
     private static Map<String, String> createMap(String content) {

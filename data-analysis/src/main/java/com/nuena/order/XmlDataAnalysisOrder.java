@@ -25,8 +25,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        taiZhouXmlDataAnalysis();
-        taizhouCreateKeysDataExcel();
+        taizhouGetModeMappingInfo();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -57,6 +56,12 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         log.error("----------生成keys的excel开始---------------------");
         taiZhouXmlDataAnalysisFacade.createKeysDataExcel();
         log.error("----------生成keys的excel结束---------------------");
+    }
+
+    private void taizhouGetModeMappingInfo() {
+        log.error("----------生成模板映射json文件开始---------------------");
+        taiZhouXmlDataAnalysisFacade.getModeMappingInfo();
+        log.error("----------生成模板映射json文件结束---------------------");
     }
 
 }
