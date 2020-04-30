@@ -23,7 +23,6 @@ import com.nuena.lantone.service.impl.RecordModuleServiceImpl;
 import com.nuena.util.EncrypDES;
 import com.nuena.util.ExcelUtil;
 import com.nuena.util.FastJsonUtils;
-import com.nuena.util.FileUtil;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
 import org.dom4j.Document;
@@ -295,7 +294,7 @@ public class TaiZhouXmlDataAnalysisFacade {
             }
         }
         ret = FastJsonUtils.getBeanToJson(mapKeysModuleInfoIdMap);
-        FileUtil.fileWrite("C:\\Users\\Administrator\\Desktop", "module_mapping.json", ret);
+        //        FileUtil.fileWrite("C:\\Users\\Administrator\\Desktop", "module_mapping.json", ret);
         return ret;
     }
 
