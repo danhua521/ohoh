@@ -245,7 +245,7 @@ public class TaiZhouXmlDataAnalysisFacade {
             mapKeys.stream().distinct().forEach(mapKey -> {
                 Map<String, String> mapKeyMap = Maps.newHashMap();
                 mapKeyMap.put("content", mapKey);
-                mapKeyMap.put("content_", "\"" + mapKey + "=\"");
+                mapKeyMap.put("content_", "\"" + mapKey + "=\",");
                 mapKeyMaps.add(mapKeyMap);
             });
             modeNameMapKeyMapsMap.put(modeName, mapKeyMaps);
