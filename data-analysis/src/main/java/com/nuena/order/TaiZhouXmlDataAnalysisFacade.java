@@ -245,13 +245,14 @@ public class TaiZhouXmlDataAnalysisFacade {
             mapKeys.stream().distinct().forEach(mapKey -> {
                 Map<String, String> mapKeyMap = Maps.newHashMap();
                 mapKeyMap.put("content", mapKey);
+                mapKeyMap.put("content_", "\"" + mapKey + "=\"");
                 mapKeyMaps.add(mapKeyMap);
             });
             modeNameMapKeyMapsMap.put(modeName, mapKeyMaps);
         });
 
-        String[] headerNames = { "字段名称" };
-        String[] dataMapKeys = { "content" };
+        String[] headerNames = { "字段名称", "xml转化字段名称" };
+        String[] dataMapKeys = { "content", "content_" };
         for (String modeName : modeNameMapKeyMapsMap.keySet()) {
             ExcelUtil.createExcel(false, false, "C:\\Users\\Administrator\\Desktop", "taizhou-keys", modeName.replaceAll("/", ""), headerNames, dataMapKeys, modeNameMapKeyMapsMap.get(modeName));
         }
