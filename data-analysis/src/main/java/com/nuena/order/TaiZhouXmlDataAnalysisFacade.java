@@ -340,4 +340,21 @@ public class TaiZhouXmlDataAnalysisFacade {
         return ret;
     }
 
+    public List<MedicalRecordContent> getNoEncrypData() {
+        QueryWrapper<MedicalRecordContent> medicalRecordContentQe = new QueryWrapper<>();
+        medicalRecordContentQe.isNull("html_text");
+        medicalRecordContentQe.select("rec_id", "xml_text");
+        medicalRecordContentQe.last("limit 0,1000");
+        return medicalRecordContentService.list(medicalRecordContentQe);
+    }
+
+    @Transactional(transactionManager = "db1TransactionManager")
+    public void encrypData(List<MedicalRecordContent> medicalRecordContentList) throws Exception {
+        for (MedicalRecordContent i : medicalRecordContentList) {
+            i.setXmlText(encrypDES.encrytor(i.getXmlText()));
+            i.setHtmlText("1");
+        }
+        medicalRecordContentService.updateBatchById(medicalRecordContentList);
+    }
+
 }

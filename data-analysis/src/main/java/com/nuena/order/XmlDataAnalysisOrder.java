@@ -1,6 +1,8 @@
 package com.nuena.order;
 
 import com.google.common.collect.Lists;
+import com.nuena.lantone.entity.MedicalRecordContent;
+import com.nuena.util.ListUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -25,7 +27,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        taiZhouXmlDataAnalysis();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -62,6 +64,20 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         log.error("----------生成模板映射json文件开始---------------------");
         taiZhouXmlDataAnalysisFacade.getModeMappingInfo();
         log.error("----------生成模板映射json文件结束---------------------");
+    }
+
+    private void taizhouEncrypData() throws Exception {
+        log.error("----------数据加密开始---------------------");
+        taiZhouXmlDataAnalysisFacade.init();
+        List<MedicalRecordContent> medicalRecordContentList = null;
+        while (ListUtil.isNotEmpty(medicalRecordContentList = taiZhouXmlDataAnalysisFacade.getNoEncrypData())) {
+            try {
+                taiZhouXmlDataAnalysisFacade.encrypData(medicalRecordContentList);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        log.error("----------数据加密结束---------------------");
     }
 
 }
