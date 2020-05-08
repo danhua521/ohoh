@@ -25,7 +25,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        taizhouCreateKeysDataExcel();
+        taiZhouXmlDataAnalysis();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {

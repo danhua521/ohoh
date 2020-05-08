@@ -25,6 +25,7 @@ import com.nuena.util.ExcelUtil;
 import com.nuena.util.FastJsonUtils;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  * @author: rengb
  * @time: 2020/4/9 15:42
  */
+@Slf4j
 @Component
 public class TaiZhouXmlDataAnalysisFacade {
 
@@ -98,15 +100,15 @@ public class TaiZhouXmlDataAnalysisFacade {
 
     @Transactional(transactionManager = "db1TransactionManager")
     public void analysisByRecTitle(long modelId, String recTitle, String nodePath) throws Exception {
+        Map<Set<String>, RecordAnalyze> alreadyExistsDataMap = Maps.newHashMap();
         QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
         recordAnalyzeQe.eq("is_deleted", "N");
         recordAnalyzeQe.eq("hospital_id", 3l);
         recordAnalyzeQe.eq("mode_id", modelId);
         recordAnalyzeQe.eq("rec_type", recTitle);
-        int alreadyExistsDataCount = recordAnalyzeService.count(recordAnalyzeQe);
-        if (alreadyExistsDataCount > 0) {
-            return;
-        }
+        recordAnalyzeService.list(recordAnalyzeQe).forEach(i -> {
+            alreadyExistsDataMap.put(Sets.newHashSet(i.getMapKeys().split(",")), i);
+        });
 
         QueryWrapper<MedicalRecord> medicalRecordQe = new QueryWrapper<>();
         medicalRecordQe.eq("is_deleted", "N");
@@ -164,45 +166,84 @@ public class TaiZhouXmlDataAnalysisFacade {
         }
         Map<Set<String>, String> keysBehospitalCodesMap = keysBehospitalCodeEntryList.stream().collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.joining(","))));
 
-        List<RecordAnalyze> recordAnalyzeList = Lists.newArrayList();
+        List<RecordAnalyze> addRecordAnalyzeList = Lists.newArrayList();
+        List<RecordModule> addRecordModuleList = Lists.newArrayList();
+        List<RecordAnalyze> uptRecordAnalyzeList = Lists.newArrayList();
         List<RecordAnalyzeDetail> recordAnalyzeDetailList = Lists.newArrayList();
-        int type = 1;
+        Map<String, String> axRnMap = Maps.newHashMap();
+        int type = alreadyExistsDataMap.size() + 1;
+        RecordAnalyze alreadyExistsRecordAnalyze = null;
+        String recordAnalyzeName = null, behospitalCodes = null;
         for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
-            String behospitalCodes = keysBehospitalCodesMap.get(keys);
+            alreadyExistsRecordAnalyze = alreadyExistsDataMap.get(keys);
+            behospitalCodes = keysBehospitalCodesMap.get(keys);
             RecordAnalyze recordAnalyze = new RecordAnalyze();
-            recordAnalyze.setName(modeMap.get(modelId) + "-" + recTitle + "-" + type);
-            recordAnalyze.setHospitalId(3l);
-            recordAnalyze.setModeId(modelId);
-            recordAnalyze.setModeName(modeMap.get(modelId));
-            recordAnalyze.setRecType(recTitle);
-            recordAnalyze.setBehospitalCodes(behospitalCodes);
-            recordAnalyze.setMapType(type + "");
-            recordAnalyze.setMapKeys(keys.stream().collect(Collectors.joining(",")));
-            recordAnalyzeList.add(recordAnalyze);
-            type++;
-        }
-        recordAnalyzeService.saveBatch(recordAnalyzeList);
+            if (alreadyExistsRecordAnalyze == null) {
+                recordAnalyzeName = modeMap.get(modelId) + "-" + recTitle + "-" + type;
+                recordAnalyze.setName(recordAnalyzeName);
+                recordAnalyze.setHospitalId(3l);
+                recordAnalyze.setModeId(modelId);
+                recordAnalyze.setModeName(modeMap.get(modelId));
+                recordAnalyze.setRecType(recTitle);
+                recordAnalyze.setBehospitalCodes(behospitalCodes);
+                recordAnalyze.setMapType(type + "");
+                recordAnalyze.setMapKeys(keys.stream().collect(Collectors.joining(",")));
+                addRecordAnalyzeList.add(recordAnalyze);
+                type++;
 
-        Map<Set<String>, Long> keysRecordAnalyzeIdMap = recordAnalyzeList
-                .stream()
-                .collect(
-                        Collectors.toMap(
-                                i -> Sets.newHashSet(i.getMapKeys().split(",")),
-                                i -> i.getId()
-                        )
-                );
+                RecordModule recordModule = new RecordModule();
+                recordModule.setHospitalId(3l);
+                recordModule.setRecTypeDetail(recordAnalyzeName);
+                recordModule.setWithRecordAnalyzeNames(recordAnalyzeName);
+                recordModule.setModeId(modelId);
+                recordModule.setModeName(modeMap.get(modelId));
+                recordModule.setBehospitalCodes(behospitalCodes);
+                addRecordModuleList.add(recordModule);
+            } else {
+                recordAnalyze.setId(alreadyExistsRecordAnalyze.getId());
+                recordAnalyze.setBehospitalCodes(behospitalCodes);
+                uptRecordAnalyzeList.add(recordAnalyze);
 
-        Long recordAnalyzeId = null;
-        for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
-            recordAnalyzeId = keysRecordAnalyzeIdMap.get(keys);
-            for (String key : keys) {
-                RecordAnalyzeDetail recordAnalyzeDetail = new RecordAnalyzeDetail();
-                recordAnalyzeDetail.setRecordAnalyzeId(recordAnalyzeId);
-                recordAnalyzeDetail.setMapKey(key);
-                recordAnalyzeDetailList.add(recordAnalyzeDetail);
+                axRnMap.put(alreadyExistsRecordAnalyze.getName(), behospitalCodes);
             }
         }
-        recordAnalyzeDetailService.saveBatch(recordAnalyzeDetailList);
+        if (ListUtil.isNotEmpty(addRecordAnalyzeList)) {
+            recordAnalyzeService.saveBatch(addRecordAnalyzeList);
+            recordModuleService.saveBatch(addRecordModuleList);
+
+            Map<Set<String>, Long> keysRecordAnalyzeIdMap = addRecordAnalyzeList
+                    .stream()
+                    .collect(
+                            Collectors.toMap(
+                                    i -> Sets.newHashSet(i.getMapKeys().split(",")),
+                                    i -> i.getId()
+                            )
+                    );
+
+            Long recordAnalyzeId = null;
+            for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
+                recordAnalyzeId = keysRecordAnalyzeIdMap.get(keys);
+                for (String key : keys) {
+                    RecordAnalyzeDetail recordAnalyzeDetail = new RecordAnalyzeDetail();
+                    recordAnalyzeDetail.setRecordAnalyzeId(recordAnalyzeId);
+                    recordAnalyzeDetail.setMapKey(key);
+                    recordAnalyzeDetailList.add(recordAnalyzeDetail);
+                }
+            }
+            recordAnalyzeDetailService.saveBatch(recordAnalyzeDetailList);
+        }
+        if (ListUtil.isNotEmpty(uptRecordAnalyzeList)) {
+            recordAnalyzeService.updateBatchById(uptRecordAnalyzeList);
+
+            QueryWrapper<RecordModule> uptRecordModuleQe = new QueryWrapper<>();
+            uptRecordModuleQe.eq("hospital_id", 3l);
+            uptRecordModuleQe.in("rec_type_detail", axRnMap.keySet());
+            List<RecordModule> uptRecordModuleList = recordModuleService.list(uptRecordModuleQe);
+            uptRecordModuleList.forEach(i -> {
+                i.setBehospitalCodes(axRnMap.get(i.getRecTypeDetail()));
+            });
+            recordModuleService.updateBatchById(uptRecordModuleList);
+        }
     }
 
     private Set<String> getKeys(String xml, String nodePath) throws Exception {
