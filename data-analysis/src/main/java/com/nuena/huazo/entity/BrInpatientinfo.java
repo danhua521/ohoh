@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-05-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -93,9 +93,6 @@ public class BrInpatientinfo implements Serializable {
 
     @TableField("CJCXRQ")
     private Date cjcxrq;
-
-    @TableField("CJLSHM")
-    private String cjlshm;
 
 
 }

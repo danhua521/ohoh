@@ -44,12 +44,19 @@ public class OracleCodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:oracle:thin:@192.168.2.246:1521:orcl");
+        /////长兴-1///////
+//        dsc.setUrl("jdbc:oracle:thin:@192.168.2.246:1521:orcl");
+//        dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
+//        dsc.setUsername("ETRACKMRQCNEW");
+//        dsc.setPassword("ETRACKMRQCNEW");
+        /////长兴-2///////
+        dsc.setUrl("jdbc:oracle:thin:@223.93.170.82:24621:orcl");
         dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
-        /////长兴///////
-        dsc.setUsername("ETRACKMRQCNEW");
-        dsc.setPassword("ETRACKMRQCNEW");
+        dsc.setUsername("ltzk");
+        dsc.setPassword("ltzk");
         /////台州///////
+//        dsc.setUrl("jdbc:oracle:thin:@192.168.2.246:1521:orcl");
+//        dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
 //        dsc.setUsername("ETRACKMRQCTZ");
 //        dsc.setPassword("ETRACKMRQCTZ");
         mpg.setDataSource(dsc);

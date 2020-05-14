@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 病人手术信息 Mapper 接口
+ * 病案首页手术 Mapper 接口
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-05-14
  */
 public interface BrRecoperationMapper extends BaseMapper<BrRecoperation> {
 

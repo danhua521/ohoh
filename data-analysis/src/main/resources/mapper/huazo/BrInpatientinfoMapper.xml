@@ -25,10 +25,9 @@
         <result column="ZZYSID" property="zzysid" />
         <result column="ZZYSXM" property="zzysxm" />
         <result column="CJCXRQ" property="cjcxrq" />
-        <result column="CJLSHM" property="cjlshm" />
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        BRZYID, ZZJGDM, BRDAXM, BRJZHM, ZYBQID, ZYBQMC, ZYKSID, ZYKSMC, ZYCWID, ZYCWHM, BRLBID, BRXZID, BRRYRQ, BRCYRQ, BRDABH, BRDAXB, BRCSRQ, JBDMID, JBMSXX, ZZYSID, ZZYSXM, CJCXRQ, CJLSHM
+        BRZYID, ZZJGDM, BRDAXM, BRJZHM, ZYBQID, ZYBQMC, ZYKSID, ZYKSMC, ZYCWID, ZYCWHM, BRLBID, BRXZID, BRRYRQ, BRCYRQ, BRDABH, BRDAXB, BRCSRQ, JBDMID, JBMSXX, ZZYSID, ZZYSXM, CJCXRQ
     </sql>
 </mapper>

@@ -17,11 +17,9 @@
         <result column="CJCZSJ" property="cjczsj" />
         <result column="XGYHDM" property="xgyhdm" />
         <result column="XGCZSJ" property="xgczsj" />
-        <result column="CJCXRQ" property="cjcxrq" />
-        <result column="CJLSHM" property="cjlshm" />
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        BLJLID, BLCJID, ZZJGDM, BRZYID, MQZYID, BLLBID, BLMBID, BCJLSJ, BLJLMC, SFZFPB, CJYHDM, CJCZSJ, XGYHDM, XGCZSJ, CJCXRQ, CJLSHM
+        BLJLID, BLCJID, ZZJGDM, BRZYID, MQZYID, BLLBID, BLMBID, BCJLSJ, BLJLMC, SFZFPB, CJYHDM, CJCZSJ, XGYHDM, XGCZSJ
     </sql>
 </mapper>

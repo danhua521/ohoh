@@ -2,7 +2,6 @@ package com.nuena.huazo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -11,11 +10,11 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 病人手术信息
+ * 病案首页手术
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-05-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -26,37 +25,37 @@ public class BrRecoperation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 病案首页编号BASYID
+     * 病案首页编号
      */
-    @TableId("BASYID")
+    @TableField("BASYID")
     private String basyid;
 
     /**
-     * 病人手术序号BRSSXH
+     * 病人手术序号
      */
     @TableField("BRSSXH")
     private String brssxh;
 
     /**
-     * 病人手术日期BRSSRQ
+     * 病人手术日期
      */
     @TableField("BRSSRQ")
     private Date brssrq;
 
     /**
-     * 术前住院天数SQZYTS
+     * 术前住院天数
      */
     @TableField("SQZYTS")
     private String sqzyts;
 
     /**
-     * 病人手术组号BRSSZH
+     * 病人手术组号
      */
     @TableField("BRSSZH")
     private String brsszh;
 
     /**
-     * 手术代码编码SSDMID
+     * 手术代码id
      */
     @TableField("SSDMID")
     private String ssdmid;
@@ -74,61 +73,61 @@ public class BrRecoperation implements Serializable {
     private String nssmc;
 
     /**
-     * 手术级别ID
+     * 手术级别
      */
     @TableField("SSJBID")
     private String ssjbid;
 
     /**
-     * 手术医生编码SSYSID
+     * 手术医生id
      */
     @TableField("SSYSID")
     private String ssysid;
 
     /**
-     * 手术医生名称
+     * 手术医生姓名
      */
     @TableField("SSYSMC")
     private String ssysmc;
 
     /**
-     * 一助护士编码YZHSID
+     * 手术一助id
      */
     @TableField("YZHSID")
     private String yzhsid;
 
     /**
-     * 一助护士名称
+     * 手术一助姓名
      */
     @TableField("YZHSMC")
     private String yzhsmc;
 
     /**
-     * 二助护士编码EZHSID
+     * 手术二助id
      */
     @TableField("EZHSID")
     private String ezhsid;
 
     /**
-     * 二助护士名称
+     * 手术二助姓名
      */
     @TableField("EZHSMC")
     private String ezhsmc;
 
     /**
-     * 三助护士编码
+     * 手术三助id
      */
     @TableField("SZHSID")
     private String szhsid;
 
     /**
-     * 三助护士名称
+     * 手术三助姓名
      */
     @TableField("SZHSMC")
     private String szhsmc;
 
     /**
-     * 麻醉方法代码MZFFDM
+     * 麻醉方法代码
      */
     @TableField("MZFFDM")
     private String mzffdm;
@@ -140,19 +139,19 @@ public class BrRecoperation implements Serializable {
     private String mzffmc;
 
     /**
-     * 麻醉医生编码MZYSID
+     * 麻醉医生id
      */
     @TableField("MZYSID")
     private String mzysid;
 
     /**
-     * 麻醉医生名称
+     * 麻醉医生姓名
      */
     @TableField("MZYSMC")
     private String mzysmc;
 
     /**
-     * 麻醉医生编码2MZYSID2
+     * 麻醉医生id2
      */
     @TableField("MZYSID2")
     private String mzysid2;
@@ -164,19 +163,19 @@ public class BrRecoperation implements Serializable {
     private String mzysmc2;
 
     /**
-     * 切口等级编码QKDJDM
+     * 切口等级
      */
     @TableField("QKDJDM")
     private String qkdjdm;
 
     /**
-     * 愈合等级编码YHDJDM
+     * 愈合等级
      */
     @TableField("YHDJDM")
     private String yhdjdm;
 
     /**
-     * 手术符合判别SSFHPB
+     * 手术符合判别
      */
     @TableField("SSFHPB")
     private String ssfhpb;

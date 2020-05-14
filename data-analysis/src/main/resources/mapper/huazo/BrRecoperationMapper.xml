@@ -3,7 +3,7 @@
 <mapper namespace="com.nuena.huazo.mapper.BrRecoperationMapper">
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.nuena.huazo.entity.BrRecoperation">
-        <id column="BASYID" property="basyid" />
+        <result column="BASYID" property="basyid" />
         <result column="BRSSXH" property="brssxh" />
         <result column="BRSSRQ" property="brssrq" />
         <result column="SQZYTS" property="sqzyts" />

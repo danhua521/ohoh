@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 病人手术信息 前端控制器
+ * 病案首页手术 前端控制器
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-05-14
  */
 @RestController
 @RequestMapping("/br-recoperation")

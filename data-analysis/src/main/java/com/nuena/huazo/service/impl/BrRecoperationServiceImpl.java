@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 病人手术信息 服务实现类
+ * 病案首页手术 服务实现类
  * </p>
  *
  * @author rgb
- * @since 2020-04-22
+ * @since 2020-05-14
  */
 @Service
 public class BrRecoperationServiceImpl extends ServiceImpl<BrRecoperationMapper, BrRecoperation> implements BrRecoperationService {
