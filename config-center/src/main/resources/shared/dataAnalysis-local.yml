@@ -5,7 +5,8 @@ spring:
     druid:
       lantone:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://192.168.2.236:3306/qc?useUnicode=true&characterEncoding=utf8
+#        url: jdbc:mysql://192.168.2.236:3306/qc?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://223.93.170.82:23606/qc?useUnicode=true&characterEncoding=utf8
         username: root
         password: lantone
         initial-size: 8
