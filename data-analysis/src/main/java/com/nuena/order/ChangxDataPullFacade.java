@@ -138,15 +138,7 @@ public class ChangxDataPullFacade {
             behospitalInfo.setBehospitalCode(brInpatientinfo.getBrzyid());
             behospitalInfo.setHospitalId(1l);
             behospitalInfo.setName(StringUtil.isNotBlank(brInpatientinfo.getBrdaxm()) ? (brInpatientinfo.getBrdaxm().trim().substring(0, 1) + "**") : brInpatientinfo.getBrdaxm());
-
-            if (brInpatientinfo.getBrdaxb().equals("M")) {
-                behospitalInfo.setSex("男");
-            } else if (brInpatientinfo.getBrdaxb().equals("F")) {
-                behospitalInfo.setSex("女");
-            } else {
-                behospitalInfo.setSex("未知");
-            }
-
+            behospitalInfo.setSex(brInpatientinfo.getBrdaxb());
             behospitalInfo.setBirthday(brInpatientinfo.getBrcsrq());
             behospitalInfo.setFileCode(brInpatientinfo.getBrdabh());
             behospitalInfo.setWardCode(brInpatientinfo.getZybqid());
