@@ -26,12 +26,19 @@ spring:
         connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
         use-global-data-source-stat: true
       huazo:
+        ######长兴-1####
+#        driver-class-name: oracle.jdbc.driver.OracleDriver
+#        url: jdbc:oracle:thin:@192.168.2.246:1521:orcl
+#        username: ETRACKMRQCNEW
+#        password: ETRACKMRQCNEW
+        ######长兴-2####
         driver-class-name: oracle.jdbc.driver.OracleDriver
-        url: jdbc:oracle:thin:@192.168.2.246:1521:orcl
-        ######长兴####
-        username: ETRACKMRQCNEW
-        password: ETRACKMRQCNEW
+        url: jdbc:oracle:thin:@223.93.170.82:24621:orcl
+        username: ltzk
+        password: ltzk
         ######台州#####
+#        driver-class-name: oracle.jdbc.driver.OracleDriver
+#        url: jdbc:oracle:thin:@192.168.2.246:1521:orcl
 #        username: ETRACKMRQCTZ
 #        password: ETRACKMRQCTZ
         initial-size: 8
