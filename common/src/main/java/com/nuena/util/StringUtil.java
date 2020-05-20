@@ -47,4 +47,29 @@ public class StringUtil {
     public static boolean isNotEmpty(String str) {
         return StringUtils.isNotEmpty(str);
     }
+
+    /**
+     * 判断两个字符串是否相同
+     *
+     * @param arg1
+     * @param arg2
+     * @return
+     */
+    public static boolean equals(String arg1, String arg2) {
+        return StringUtils.equals(arg1, arg2);
+    }
+
+    /**
+     * 清除字符串中的空白
+     *
+     * @param str
+     * @return
+     */
+    public static String removeBlank(String str) {
+        if (isBlank(str)) {
+            return str;
+        }
+        return str.replaceAll("[\\s\\p{Zs}]", "");
+    }
+
 }

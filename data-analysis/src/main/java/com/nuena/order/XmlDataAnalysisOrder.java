@@ -24,10 +24,12 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Autowired
     private TaiZhouXmlDataAnalysisFacade taiZhouXmlDataAnalysisFacade;
+    @Autowired
+    private ChangxXmlDataAnalysisFacade changxXmlDataAnalysisFacade;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        changxXmlDataAnalysis();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -78,6 +80,54 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
             }
         }
         log.error("----------数据加密结束---------------------");
+    }
+
+    private void changxXmlDataAnalysis() throws Exception {
+        log.error("----------分析开始---------------------");
+        List<String> failRecTitles = Lists.newArrayList();//执行失败的模块
+        changxXmlDataAnalysisFacade.init();
+//        long[] modeIds = { 1, 2, 3, 4, 5, 7, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 35, 53, 54 };
+        long[] modeIds = { 1,5};
+        List<String> extitle = Lists.newArrayList(
+                "24小时入出院记录",
+                "入院记录（不含系统回顾Padua）",
+                "入院记录（专用）",
+                "入院记录（产科含系统回顾）",
+                "入院记录（产科）-长兴",
+                "入院记录（儿科）",
+                "入院记录（含系统回顾Caprini）",
+                "入院记录（含系统回顾Padua）",
+                "入院记录（妇科含系统回顾）",
+                "入院记录（妇科）-长兴",
+                "入院记录（心内不含系统回顾）",
+                "入院记录（心内含系统回顾）",
+                "入院记录（新生儿）",
+                "入院记录（神经内科）",
+                "入院记录（神经外科）-长兴",
+                "入院记录（耳鼻咽喉含系统回顾）",
+                "（日间）入出院记录"
+        );
+
+
+        String nodePath = "//DocObjContent/Region";
+        List<String> recTitles = null;
+        for (long modelId : modeIds) {
+            recTitles = changxXmlDataAnalysisFacade.getRecTitles(modelId);
+            recTitles.forEach(recTitle -> {
+                try {
+                    if (!extitle.contains(recTitle)){
+                        changxXmlDataAnalysisFacade.analysisByRecTitle(modelId, recTitle, nodePath);
+                    }
+                } catch (Exception e) {
+                    log.error("[" + modelId + "-" + recTitle + "]执行失败--" + e.getMessage(), e);
+                    failRecTitles.add("[" + modelId + "-" + recTitle + "]");
+                }
+            });
+        }
+        log.error("----------分析结束---------------------");
+        failRecTitles.forEach(i -> {
+            log.error("执行失败的模块：" + i);
+        });
     }
 
 }
