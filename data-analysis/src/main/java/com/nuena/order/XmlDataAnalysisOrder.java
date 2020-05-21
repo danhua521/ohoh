@@ -29,7 +29,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        changxXmlDataAnalysis();
+        changxEncrypData();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -82,31 +82,32 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         log.error("----------数据加密结束---------------------");
     }
 
+    //数据库模板生成表中入院记录模块keys需要拼上性别
     private void changxXmlDataAnalysis() throws Exception {
         log.error("----------分析开始---------------------");
         List<String> failRecTitles = Lists.newArrayList();//执行失败的模块
         changxXmlDataAnalysisFacade.init();
 //        long[] modeIds = { 1, 2, 3, 4, 5, 7, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 35, 53, 54 };
-        long[] modeIds = { 1,5};
-        List<String> extitle = Lists.newArrayList(
-                "24小时入出院记录",
-                "入院记录（不含系统回顾Padua）",
-                "入院记录（专用）",
-                "入院记录（产科含系统回顾）",
-                "入院记录（产科）-长兴",
-                "入院记录（儿科）",
-                "入院记录（含系统回顾Caprini）",
-                "入院记录（含系统回顾Padua）",
-                "入院记录（妇科含系统回顾）",
-                "入院记录（妇科）-长兴",
-                "入院记录（心内不含系统回顾）",
-                "入院记录（心内含系统回顾）",
-                "入院记录（新生儿）",
-                "入院记录（神经内科）",
-                "入院记录（神经外科）-长兴",
-                "入院记录（耳鼻咽喉含系统回顾）",
-                "（日间）入出院记录"
-        );
+        long[] modeIds = {1};
+//        List<String> extitle = Lists.newArrayList(
+//                "24小时入出院记录",
+//                "入院记录（不含系统回顾Padua）",
+//                "入院记录（专用）",
+//                "入院记录（产科含系统回顾）",
+//                "入院记录（产科）-长兴",
+//                "入院记录（儿科）",
+//                "入院记录（含系统回顾Caprini）",
+//                "入院记录（含系统回顾Padua）",
+//                "入院记录（妇科含系统回顾）",
+//                "入院记录（妇科）-长兴",
+//                "入院记录（心内不含系统回顾）",
+//                "入院记录（心内含系统回顾）",
+//                "入院记录（新生儿）",
+//                "入院记录（神经内科）",
+//                "入院记录（神经外科）-长兴",
+//                "入院记录（耳鼻咽喉含系统回顾）",
+//                "（日间）入出院记录"
+//        );
 
 
         String nodePath = "//DocObjContent/Region";
@@ -115,9 +116,9 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
             recTitles = changxXmlDataAnalysisFacade.getRecTitles(modelId);
             recTitles.forEach(recTitle -> {
                 try {
-                    if (!extitle.contains(recTitle)){
-                        changxXmlDataAnalysisFacade.analysisByRecTitle(modelId, recTitle, nodePath);
-                    }
+//                    if (!extitle.contains(recTitle)){
+                        changxXmlDataAnalysisFacade.analysisByRecTitle(modelId, recTitle, nodePath,"女");
+//                    }
                 } catch (Exception e) {
                     log.error("[" + modelId + "-" + recTitle + "]执行失败--" + e.getMessage(), e);
                     failRecTitles.add("[" + modelId + "-" + recTitle + "]");
@@ -128,6 +129,20 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         failRecTitles.forEach(i -> {
             log.error("执行失败的模块：" + i);
         });
+    }
+
+    private void changxEncrypData() throws Exception {
+        log.error("----------数据加密开始---------------------");
+        changxXmlDataAnalysisFacade.init();
+        List<MedicalRecordContent> medicalRecordContentList = null;
+        while (ListUtil.isNotEmpty(medicalRecordContentList = changxXmlDataAnalysisFacade.getNoEncrypData())) {
+            try {
+                changxXmlDataAnalysisFacade.encrypData(medicalRecordContentList);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        log.error("----------数据加密结束---------------------");
     }
 
 }

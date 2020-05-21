@@ -100,7 +100,7 @@ public class ChangxXmlDataAnalysisFacade {
     }
 
     @Transactional(transactionManager = "db1TransactionManager")
-    public void analysisByRecTitle(long modelId, String recTitle, String nodePath) throws Exception {
+    public void analysisByRecTitle(long modelId, String recTitle, String nodePath, String sex) throws Exception {
         Map<Set<String>, RecordAnalyze> alreadyExistsDataMap = Maps.newHashMap();
         QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
         recordAnalyzeQe.eq("is_deleted", "N");
@@ -126,14 +126,26 @@ public class ChangxXmlDataAnalysisFacade {
                 "behospital_code",
                 medicalRecordList.stream().map(i -> i.getBehospitalCode()).filter(i -> StringUtil.isNotBlank(i)).distinct().collect(Collectors.toList())
         );
+        behospitalInfoQe.eq(StringUtil.isNotBlank(sex), "sex", sex);
         behospitalInfoQe.eq("hospital_id", 1l);
+        behospitalInfoQe.eq("is_deleted", "N");
         Map<String, String> behospitalCodeDeptInfoMap =
                 behospitalInfoService.list(behospitalInfoQe)
                         .stream()
                         .collect(Collectors.toMap(i -> i.getBehospitalCode(), i -> i.getBehospitalCode() + "(" + i.getName() + "," + i.getBehDeptName() + ")"));
 
-        List<String> recIds = medicalRecordList.stream().map(i -> i.getRecId()).distinct().collect(Collectors.toList());
-        Map<String, String> recIdBehospitalCodeMap = medicalRecordList.stream().collect(Collectors.toMap(MedicalRecord::getRecId, i -> behospitalCodeDeptInfoMap.get(i.getBehospitalCode())));
+        List<String> recIds =
+                medicalRecordList
+                        .stream()
+                        .filter(i -> StringUtil.isNotBlank(behospitalCodeDeptInfoMap.get(i.getBehospitalCode())))
+                        .map(i -> i.getRecId())
+                        .distinct()
+                        .collect(Collectors.toList());
+        Map<String, String> recIdBehospitalCodeMap =
+                medicalRecordList
+                        .stream()
+                        .filter(i -> StringUtil.isNotBlank(behospitalCodeDeptInfoMap.get(i.getBehospitalCode())))
+                        .collect(Collectors.toMap(MedicalRecord::getRecId, i -> behospitalCodeDeptInfoMap.get(i.getBehospitalCode())));
 
         List<MedicalRecordContent> medicalRecordContentList = Lists.newArrayList();
         int index = 0;
@@ -168,7 +180,7 @@ public class ChangxXmlDataAnalysisFacade {
             }
             keysBehospitalCodeEntryList.add(
                     Maps.immutableEntry(
-                            getKeys(xmlText, nodePath),
+                            getKeys(xmlText, nodePath, sex),
                             behospitalCode
                     )
             );
@@ -186,12 +198,16 @@ public class ChangxXmlDataAnalysisFacade {
         int type = alreadyExistsDataMap.size() + 1;
         RecordAnalyze alreadyExistsRecordAnalyze = null;
         String recordAnalyzeName = null, behospitalCodes = null;
+        String sexAdd = "";
+        if (StringUtil.isNotBlank(sex)) {
+            sexAdd = sex + "-";
+        }
         for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
             alreadyExistsRecordAnalyze = alreadyExistsDataMap.get(keys);
             behospitalCodes = keysBehospitalCodesMap.get(keys);
             RecordAnalyze recordAnalyze = new RecordAnalyze();
             if (alreadyExistsRecordAnalyze == null) {
-                recordAnalyzeName = modeMap.get(modelId) + "-" + recTitle + "-" + type;
+                recordAnalyzeName = modeMap.get(modelId) + "-" + recTitle + "-" + sexAdd + type;
                 recordAnalyze.setName(recordAnalyzeName);
                 recordAnalyze.setHospitalId(1l);
                 recordAnalyze.setModeId(modelId);
@@ -258,7 +274,7 @@ public class ChangxXmlDataAnalysisFacade {
         }
     }
 
-    private Set<String> getKeys(String xml, String nodePath) throws Exception {
+    private Set<String> getKeys(String xml, String nodePath, String sex) throws Exception {
         Set<String> keys = Sets.newHashSet();
         String helpTip, controlName, key;
         Document doc = DocumentHelper.parseText(encrypDES.decryptor(xml));
@@ -285,6 +301,9 @@ public class ChangxXmlDataAnalysisFacade {
             }
             keys.add(key);
         }
+        if (keys.size() > 0 && StringUtil.isNotBlank(sex)) {
+            keys.add(sex);
+        }
         return keys;
     }
 
@@ -306,6 +325,24 @@ public class ChangxXmlDataAnalysisFacade {
             }
         }
         return flag;
+    }
+
+    public List<MedicalRecordContent> getNoEncrypData() {
+        QueryWrapper<MedicalRecordContent> medicalRecordContentQe = new QueryWrapper<>();
+        medicalRecordContentQe.eq("hospital_id", 1l);
+        medicalRecordContentQe.eq("creator", "0");
+        medicalRecordContentQe.select("rec_id", "xml_text");
+        medicalRecordContentQe.last("limit 0,1000");
+        return medicalRecordContentService.list(medicalRecordContentQe);
+    }
+
+    @Transactional(transactionManager = "db1TransactionManager")
+    public void encrypData(List<MedicalRecordContent> medicalRecordContentList) throws Exception {
+        for (MedicalRecordContent i : medicalRecordContentList) {
+            i.setXmlText(encrypDES.encrytor(i.getXmlText()));
+            i.setCreator("1");
+        }
+        medicalRecordContentService.updateBatchById(medicalRecordContentList);
     }
 
 }
