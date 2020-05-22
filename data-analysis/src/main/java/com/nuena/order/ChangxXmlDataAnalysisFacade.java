@@ -110,6 +110,7 @@ public class ChangxXmlDataAnalysisFacade {
         recordAnalyzeQe.eq("hospital_id", 1l);
         recordAnalyzeQe.eq("mode_id", modelId);
         recordAnalyzeQe.eq("rec_type", recTitle);
+        recordAnalyzeQe.like(StringUtil.isNotBlank(sex), "name", sex);
         recordAnalyzeService.list(recordAnalyzeQe).forEach(i -> {
             alreadyExistsDataMap.put(Sets.newHashSet(i.getMapKeys().split(",")), i);
         });
