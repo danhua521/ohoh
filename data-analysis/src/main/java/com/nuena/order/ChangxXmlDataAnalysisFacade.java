@@ -21,6 +21,7 @@ import com.nuena.lantone.service.impl.QcModuleInfoServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeDetailServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeServiceImpl;
 import com.nuena.lantone.service.impl.RecordModuleServiceImpl;
+import com.nuena.util.DateUtil;
 import com.nuena.util.EncrypDES;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -101,6 +103,7 @@ public class ChangxXmlDataAnalysisFacade {
 
     @Transactional(transactionManager = "db1TransactionManager")
     public void analysisByRecTitle(long modelId, String recTitle, String nodePath, String sex) throws Exception {
+        Date now = DateUtil.now();
         Map<Set<String>, RecordAnalyze> alreadyExistsDataMap = Maps.newHashMap();
         QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
         recordAnalyzeQe.eq("is_deleted", "N");
@@ -216,6 +219,8 @@ public class ChangxXmlDataAnalysisFacade {
                 recordAnalyze.setBehospitalCodes(behospitalCodes);
                 recordAnalyze.setMapType(type + "");
                 recordAnalyze.setMapKeys(keys.stream().collect(Collectors.joining(",")));
+                recordAnalyze.setGmtCreate(now);
+                recordAnalyze.setGmtModified(now);
                 addRecordAnalyzeList.add(recordAnalyze);
                 type++;
 
@@ -226,10 +231,13 @@ public class ChangxXmlDataAnalysisFacade {
                 recordModule.setModeId(modelId);
                 recordModule.setModeName(modeMap.get(modelId));
                 recordModule.setBehospitalCodes(behospitalCodes);
+                recordModule.setGmtCreate(now);
+                recordModule.setGmtModified(now);
                 addRecordModuleList.add(recordModule);
             } else {
                 recordAnalyze.setId(alreadyExistsRecordAnalyze.getId());
                 recordAnalyze.setBehospitalCodes(behospitalCodes);
+                recordAnalyze.setGmtModified(now);
                 uptRecordAnalyzeList.add(recordAnalyze);
 
                 axRnMap.put(alreadyExistsRecordAnalyze.getName(), behospitalCodes);
@@ -269,6 +277,7 @@ public class ChangxXmlDataAnalysisFacade {
             List<RecordModule> uptRecordModuleList = recordModuleService.list(uptRecordModuleQe);
             uptRecordModuleList.forEach(i -> {
                 i.setBehospitalCodes(axRnMap.get(i.getRecTypeDetail()));
+                i.setGmtModified(now);
             });
             recordModuleService.updateBatchById(uptRecordModuleList);
         }
