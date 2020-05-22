@@ -29,7 +29,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        changxEncrypData();
+        changxRyjlXmlDataAnalysis();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -87,7 +87,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         log.error("----------分析开始---------------------");
         List<String> failRecTitles = Lists.newArrayList();//执行失败的模块
         changxXmlDataAnalysisFacade.init();
-        long[] modeIds = { 2, 3, 4, 5, 7, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 35, 53, 54 };
+        long[] modeIds = { 2, 3, 4, 5, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35 };
         String nodePath = "//DocObjContent/Region";
         List<String> recTitles = null;
         for (long modelId : modeIds) {
