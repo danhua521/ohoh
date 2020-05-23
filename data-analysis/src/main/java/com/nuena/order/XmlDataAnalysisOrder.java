@@ -87,7 +87,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
         log.error("----------分析开始---------------------");
         List<String> failRecTitles = Lists.newArrayList();//执行失败的模块
         changxXmlDataAnalysisFacade.init();
-        long[] modeIds = { 2, 3, 4, 5, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35 };
+        long[] modeIds = { 2, 3, 4, 5, 10, 11, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35 };
         String nodePath = "//DocObjContent/Region";
         List<String> recTitles = null;
         for (long modelId : modeIds) {
