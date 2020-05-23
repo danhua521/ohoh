@@ -9,6 +9,7 @@ import com.nuena.lantone.entity.MedicalRecord;
 import com.nuena.lantone.entity.MedicalRecordContent;
 import com.nuena.lantone.entity.QcMode;
 import com.nuena.lantone.entity.QcModelHospital;
+import com.nuena.lantone.entity.QcModuleInfo;
 import com.nuena.lantone.entity.RecordAnalyze;
 import com.nuena.lantone.entity.RecordAnalyzeDetail;
 import com.nuena.lantone.entity.RecordModule;
@@ -23,6 +24,7 @@ import com.nuena.lantone.service.impl.RecordAnalyzeServiceImpl;
 import com.nuena.lantone.service.impl.RecordModuleServiceImpl;
 import com.nuena.util.DateUtil;
 import com.nuena.util.EncrypDES;
+import com.nuena.util.FastJsonUtils;
 import com.nuena.util.ListUtil;
 import com.nuena.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -353,6 +356,47 @@ public class ChangxXmlDataAnalysisFacade {
             i.setCreator("1");
         }
         medicalRecordContentService.updateBatchById(medicalRecordContentList);
+    }
+
+    public String getModeMappingInfo() {
+        String ret = null;
+        QueryWrapper<QcModuleInfo> qcModuleInfoQe = new QueryWrapper<>();
+        qcModuleInfoQe.eq("is_deleted", "N");
+        qcModuleInfoQe.eq("hospital_id", 1l);
+        qcModuleInfoQe.isNotNull("mode_id");
+        qcModuleInfoQe.isNotNull("record_module_id");
+        qcModuleInfoQe.select("id", "record_module_id");
+        List<QcModuleInfo> qcModuleInfoList = qcModuleInfoService.list(qcModuleInfoQe);
+        if (ListUtil.isEmpty(qcModuleInfoList)) {
+            return ret;
+        }
+
+        Map<Long, Long> recordModuleIdModuleInfoIdMap = qcModuleInfoList.stream().collect(Collectors.toMap(QcModuleInfo::getRecordModuleId, i -> i.getId()));
+        List<Long> recordModuleIds = qcModuleInfoList.stream().map(i -> i.getRecordModuleId()).collect(Collectors.toList());
+        List<RecordModule> recordModuleList = (List) recordModuleService.listByIds(recordModuleIds);
+
+        List<String> recordAnalyzeNames = Lists.newArrayList();
+        for (RecordModule recordModule : recordModuleList) {
+            recordAnalyzeNames.addAll(Arrays.asList(recordModule.getWithRecordAnalyzeNames().split(",")));
+        }
+
+        QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
+        recordAnalyzeQe.eq("is_deleted", "N");
+        recordAnalyzeQe.eq("hospital_id", 1l);
+        recordAnalyzeQe.in("name", recordAnalyzeNames);
+        recordAnalyzeQe.select("name", "map_keys");
+        List<RecordAnalyze> recordAnalyzeList = recordAnalyzeService.list(recordAnalyzeQe);
+        Map<String, String> recordAnalyzeNameMapKeysMap = recordAnalyzeList.stream().collect(Collectors.toMap(RecordAnalyze::getName, RecordAnalyze::getMapKeys));
+
+        Map<String, Long> mapKeysModuleInfoIdMap = Maps.newHashMap();
+        for (RecordModule recordModule : recordModuleList) {
+            for (String recordAnalyzeName : recordModule.getWithRecordAnalyzeNames().split(",")) {
+                mapKeysModuleInfoIdMap.put(recordAnalyzeNameMapKeysMap.get(recordAnalyzeName), recordModuleIdModuleInfoIdMap.get(recordModule.getId()));
+            }
+        }
+        ret = FastJsonUtils.getBeanToJson(mapKeysModuleInfoIdMap);
+        //        FileUtil.fileWrite("C:\\Users\\Administrator\\Desktop", "module_mapping.json", ret);
+        return ret;
     }
 
 }

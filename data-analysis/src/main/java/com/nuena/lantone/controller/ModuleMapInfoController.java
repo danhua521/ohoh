@@ -1,6 +1,7 @@
 package com.nuena.lantone.controller;
 
 
+import com.nuena.order.ChangxXmlDataAnalysisFacade;
 import com.nuena.order.TaiZhouXmlDataAnalysisFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +22,16 @@ public class ModuleMapInfoController {
 
     @Autowired
     private TaiZhouXmlDataAnalysisFacade taiZhouXmlDataAnalysisFacade;
+    @Autowired
+    private ChangxXmlDataAnalysisFacade changxXmlDataAnalysisFacade;
 
     @GetMapping("/getModuleMapInfoJson")
-    public String getModuleMapInfoJson() {
-        return taiZhouXmlDataAnalysisFacade.getModeMappingInfo();
+    public String getModuleMapInfoJson(String id) {
+        if (id.equals("1")) {
+            return changxXmlDataAnalysisFacade.getModeMappingInfo();
+        } else {
+            return taiZhouXmlDataAnalysisFacade.getModeMappingInfo();
+        }
     }
 
 }

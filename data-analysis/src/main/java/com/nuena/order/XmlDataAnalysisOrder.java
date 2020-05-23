@@ -29,7 +29,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        changxRyjlXmlDataAnalysis();
+
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
@@ -145,6 +145,12 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
             }
         }
         log.error("----------数据加密结束---------------------");
+    }
+
+    private void changxGetModeMappingInfo() {
+        log.error("----------生成模板映射json文件开始---------------------");
+        changxXmlDataAnalysisFacade.getModeMappingInfo();
+        log.error("----------生成模板映射json文件结束---------------------");
     }
 
 }

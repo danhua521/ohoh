@@ -14,17 +14,17 @@ spring:
 #        username: root
 #        password: lantone
         ##121数据库 内网
-#        url: jdbc:mysql://192.168.2.121:3306/qc?useUnicode=true&characterEncoding=utf8
-#        username: root
-#        password: QuGDHNG35r
+        url: jdbc:mysql://192.168.2.121:3306/qc?useUnicode=true&characterEncoding=utf8
+        username: root
+        password: QuGDHNG35r
         ##121数据库 外网
 #        url: jdbc:mysql://223.93.170.82:23606/qc?useUnicode=true&characterEncoding=utf8
 #        username: root
 #        password: QuGDHNG35r
         ##190数据库 内网
-        url: jdbc:mysql://192.168.2.190:3306/qc?useUnicode=true&characterEncoding=utf8
-        username: root
-        password: lantone
+#        url: jdbc:mysql://192.168.2.190:3306/qc?useUnicode=true&characterEncoding=utf8
+#        username: root
+#        password: lantone
         initial-size: 8
         min-idle: 1
         max-active: 20
