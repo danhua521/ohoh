@@ -210,6 +210,9 @@ public class ChangxXmlDataAnalysisFacade {
             sexAdd = sex + "-";
         }
         for (Set<String> keys : keysBehospitalCodesMap.keySet()) {
+            if (keys.size() == 0) {
+                continue;
+            }
             alreadyExistsRecordAnalyze = alreadyExistsDataMap.get(keys);
             behospitalCodes = keysBehospitalCodesMap.get(keys);
             RecordAnalyze recordAnalyze = new RecordAnalyze();
