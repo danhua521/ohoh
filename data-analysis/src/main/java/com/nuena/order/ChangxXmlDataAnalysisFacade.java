@@ -449,6 +449,7 @@ public class ChangxXmlDataAnalysisFacade {
     @Transactional(transactionManager = "db1TransactionManager")
     public void mobanTran(long hospid) {
         QueryWrapper<ModuleMapping> moduleMappingQe = new QueryWrapper<>();
+        moduleMappingQe.eq("hospital_id", hospid);
         moduleMappingService.remove(moduleMappingQe);
 
         QueryWrapper<QcModuleInfo> qcModuleInfoQe = new QueryWrapper<>();
