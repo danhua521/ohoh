@@ -42,7 +42,7 @@ public class MysqlCodeGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://192.168.2.236:3306/qc?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://223.93.170.82:23606/qc?useUnicode=true&useSSL=false&characterEncoding=utf8");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("lantone");
@@ -87,13 +87,8 @@ public class MysqlCodeGenerator {
         strategy.setRestControllerStyle(true);
         strategy.setTablePrefix("med_");
         strategy.setInclude(
-                "med_behospital_info",
-                "med_medical_record",
-                "med_medical_record_content",
-                "med_home_page",
-                "med_home_operation_info",
-                "med_home_diagnose_info",
-                "med_doctor_advice"
+                "med_module_mapping",
+                "med_record_analyze_example"
         );
         mpg.setStrategy(strategy);
 

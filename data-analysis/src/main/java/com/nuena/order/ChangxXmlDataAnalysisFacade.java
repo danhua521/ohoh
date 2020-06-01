@@ -7,19 +7,23 @@ import com.google.common.collect.Sets;
 import com.nuena.lantone.entity.BehospitalInfo;
 import com.nuena.lantone.entity.MedicalRecord;
 import com.nuena.lantone.entity.MedicalRecordContent;
+import com.nuena.lantone.entity.ModuleMapping;
 import com.nuena.lantone.entity.QcMode;
 import com.nuena.lantone.entity.QcModelHospital;
 import com.nuena.lantone.entity.QcModuleInfo;
 import com.nuena.lantone.entity.RecordAnalyze;
 import com.nuena.lantone.entity.RecordAnalyzeDetail;
+import com.nuena.lantone.entity.RecordAnalyzeExample;
 import com.nuena.lantone.entity.RecordModule;
 import com.nuena.lantone.service.impl.BehospitalInfoServiceImpl;
 import com.nuena.lantone.service.impl.MedicalRecordContentServiceImpl;
 import com.nuena.lantone.service.impl.MedicalRecordServiceImpl;
+import com.nuena.lantone.service.impl.ModuleMappingServiceImpl;
 import com.nuena.lantone.service.impl.QcModeServiceImpl;
 import com.nuena.lantone.service.impl.QcModelHospitalServiceImpl;
 import com.nuena.lantone.service.impl.QcModuleInfoServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeDetailServiceImpl;
+import com.nuena.lantone.service.impl.RecordAnalyzeExampleServiceImpl;
 import com.nuena.lantone.service.impl.RecordAnalyzeServiceImpl;
 import com.nuena.lantone.service.impl.RecordModuleServiceImpl;
 import com.nuena.util.DateUtil;
@@ -79,6 +83,12 @@ public class ChangxXmlDataAnalysisFacade {
     @Autowired
     @Qualifier("behospitalInfoServiceImpl")
     private BehospitalInfoServiceImpl behospitalInfoService;
+    @Autowired
+    @Qualifier("recordAnalyzeExampleServiceImpl")
+    private RecordAnalyzeExampleServiceImpl recordAnalyzeExampleService;
+    @Autowired
+    @Qualifier("moduleMappingServiceImpl")
+    private ModuleMappingServiceImpl moduleMappingService;
     private EncrypDES encrypDES = null;
     private Map<Long, String> modeMap = null;
 
@@ -400,6 +410,72 @@ public class ChangxXmlDataAnalysisFacade {
         ret = FastJsonUtils.getBeanToJson(mapKeysModuleInfoIdMap);
         //        FileUtil.fileWrite("C:\\Users\\Administrator\\Desktop", "module_mapping.json", ret);
         return ret;
+    }
+
+    @Transactional(transactionManager = "db1TransactionManager")
+    public void shiliTran() {
+        List<RecordAnalyzeExample> recordAnalyzeExampleList = Lists.newArrayList();
+        List<RecordAnalyzeDetail> recordAnalyzeDetailList = Lists.newArrayList();
+        QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
+        recordAnalyzeQe.select("id", "behospital_codes", "map_keys");
+        List<RecordAnalyze> recordAnalyzeList = recordAnalyzeService.list(recordAnalyzeQe);
+        recordAnalyzeList.forEach(recordAnalyze -> {
+            if (StringUtil.isNotBlank(recordAnalyze.getMapKeys())) {
+                for (String mapKey : recordAnalyze.getMapKeys().split(",")) {
+                    RecordAnalyzeDetail recordAnalyzeDetail = new RecordAnalyzeDetail();
+                    recordAnalyzeDetail.setMapKey(mapKey);
+                    recordAnalyzeDetail.setRecordAnalyzeId(recordAnalyze.getId());
+                    recordAnalyzeDetailList.add(recordAnalyzeDetail);
+                }
+            }
+            if (StringUtil.isNotBlank(recordAnalyze.getBehospitalCodes())) {
+                for (String behospitalCode : recordAnalyze.getBehospitalCodes().split(",")) {
+                    RecordAnalyzeExample recordAnalyzeExample = new RecordAnalyzeExample();
+                    recordAnalyzeExample.setRecordAnalyzeId(recordAnalyze.getId());
+                    recordAnalyzeExample.setBehospitalCode(behospitalCode);
+                    recordAnalyzeExampleList.add(recordAnalyzeExample);
+                }
+            }
+        });
+        recordAnalyzeDetailService.saveBatch(recordAnalyzeDetailList);
+        recordAnalyzeExampleService.saveBatch(recordAnalyzeExampleList);
+    }
+
+    public void mobanTran(long hospid) {
+        QueryWrapper<QcModuleInfo> qcModuleInfoQe = new QueryWrapper<>();
+        qcModuleInfoQe.eq("is_deleted", "N");
+        qcModuleInfoQe.eq("hospital_id", hospid);
+        qcModuleInfoQe.select("id", "record_module_id");
+        List<QcModuleInfo> qcModuleInfoList = qcModuleInfoService.list(qcModuleInfoQe);
+
+        Map<Long, Long> recordModuleIdModuleInfoIdMap = qcModuleInfoList.stream().collect(Collectors.toMap(QcModuleInfo::getRecordModuleId, i -> i.getId()));
+        List<Long> recordModuleIds = qcModuleInfoList.stream().map(i -> i.getRecordModuleId()).collect(Collectors.toList());
+        List<RecordModule> recordModuleList = (List) recordModuleService.listByIds(recordModuleIds);
+
+        List<String> recordAnalyzeNames = Lists.newArrayList();
+        for (RecordModule recordModule : recordModuleList) {
+            recordAnalyzeNames.addAll(Arrays.asList(recordModule.getWithRecordAnalyzeNames().split(",")));
+        }
+
+        QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
+        recordAnalyzeQe.eq("is_deleted", "N");
+        recordAnalyzeQe.eq("hospital_id", hospid);
+        recordAnalyzeQe.in("name", recordAnalyzeNames);
+        recordAnalyzeQe.select("name", "id");
+        List<RecordAnalyze> recordAnalyzeList = recordAnalyzeService.list(recordAnalyzeQe);
+        Map<String, Long> recordAnalyzeNameAnaIdMap = recordAnalyzeList.stream().collect(Collectors.toMap(RecordAnalyze::getName, RecordAnalyze::getId));
+
+        List<ModuleMapping> moduleMappingList = Lists.newArrayList();
+        for (RecordModule recordModule : recordModuleList) {
+            for (String recordAnalyzeName : recordModule.getWithRecordAnalyzeNames().split(",")) {
+                ModuleMapping moduleMapping = new ModuleMapping();
+                moduleMapping.setHospitalId(hospid);
+                moduleMapping.setModuleId(recordModuleIdModuleInfoIdMap.get(recordModule.getId()));
+                moduleMapping.setRecordId(recordAnalyzeNameAnaIdMap.get(recordAnalyzeName));
+                moduleMappingList.add(moduleMapping);
+            }
+        }
+        moduleMappingService.saveBatch(moduleMappingList);
     }
 
 }

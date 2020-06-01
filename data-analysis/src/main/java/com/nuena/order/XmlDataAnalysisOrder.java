@@ -29,7 +29,7 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        changxXmlDataAnalysisFacade.shiliTran();
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
