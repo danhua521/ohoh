@@ -36,23 +36,23 @@ public class XmlDataAnalysisOrder implements ApplicationRunner {
      * 旧模板方式数据迁移
      */
     private void datran() {
-        log.info("----------旧模板数据迁移开始");
+        log.error("----------旧模板数据迁移开始");
         try {
             changxXmlDataAnalysisFacade.shiliTran();
         } catch (Exception e) {
-            log.info(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         try {
             changxXmlDataAnalysisFacade.mobanTran(1l);
         } catch (Exception e) {
-            log.info(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         try {
             changxXmlDataAnalysisFacade.mobanTran(3l);
         } catch (Exception e) {
-            log.info(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
-        log.info("----------旧模板数据迁移结束");
+        log.error("----------旧模板数据迁移结束");
     }
 
     private void taiZhouXmlDataAnalysis() throws Exception {
