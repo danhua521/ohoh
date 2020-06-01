@@ -6,9 +6,9 @@ spring:
       lantone:
         driver-class-name: com.mysql.jdbc.Driver
         ##236数据库 内网
-        url: jdbc:mysql://192.168.2.236:3306/qc?useUnicode=true&characterEncoding=utf8
-        username: root
-        password: lantone
+#        url: jdbc:mysql://192.168.2.236:3306/qc?useUnicode=true&characterEncoding=utf8
+#        username: root
+#        password: lantone
         ##236数据库 外网
 #        url: jdbc:mysql://223.93.170.82:23606/qc?useUnicode=true&characterEncoding=utf8
 #        username: root
@@ -25,6 +25,10 @@ spring:
 #        url: jdbc:mysql://192.168.2.190:3306/qc?useUnicode=true&characterEncoding=utf8
 #        username: root
 #        password: lantone
+        ##241数据库 内网
+        url: jdbc:mysql://192.168.2.241:3306/qc?useUnicode=true&characterEncoding=utf8
+        username: root
+        password: lantone
         initial-size: 8
         min-idle: 1
         max-active: 20
