@@ -414,6 +414,11 @@ public class ChangxXmlDataAnalysisFacade {
 
     @Transactional(transactionManager = "db1TransactionManager")
     public void shiliTran() {
+        QueryWrapper<RecordAnalyzeDetail> recordAnalyzeDetailQe = new QueryWrapper<>();
+        recordAnalyzeDetailService.remove(recordAnalyzeDetailQe);
+        QueryWrapper<RecordAnalyzeExample> recordAnalyzeExampleQe = new QueryWrapper<>();
+        recordAnalyzeExampleService.remove(recordAnalyzeExampleQe);
+
         List<RecordAnalyzeExample> recordAnalyzeExampleList = Lists.newArrayList();
         List<RecordAnalyzeDetail> recordAnalyzeDetailList = Lists.newArrayList();
         QueryWrapper<RecordAnalyze> recordAnalyzeQe = new QueryWrapper<>();
@@ -441,7 +446,11 @@ public class ChangxXmlDataAnalysisFacade {
         recordAnalyzeExampleService.saveBatch(recordAnalyzeExampleList);
     }
 
+    @Transactional(transactionManager = "db1TransactionManager")
     public void mobanTran(long hospid) {
+        QueryWrapper<ModuleMapping> moduleMappingQe = new QueryWrapper<>();
+        moduleMappingService.remove(moduleMappingQe);
+
         QueryWrapper<QcModuleInfo> qcModuleInfoQe = new QueryWrapper<>();
         qcModuleInfoQe.eq("is_deleted", "N");
         qcModuleInfoQe.eq("hospital_id", hospid);
