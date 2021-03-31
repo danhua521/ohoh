@@ -39,7 +39,7 @@
         <freemarker.version>2.3.29</freemarker.version>
         <beetl.version>3.0.13.RELEASE</beetl.version>
         <lombok.version>1.18.8</lombok.version>
-        <guava.version>28.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <txlcn-tc.version>5.0.2.RELEASE</txlcn-tc.version>
         <txlcn-txmsg-netty.version>5.0.2.RELEASE</txlcn-txmsg-netty.version>
     </properties>
